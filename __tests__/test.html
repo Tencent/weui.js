@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Test</title>
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.0.2/weui.min.css">
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+    <style type="text/css">
+        .weui-tab__content{
+            display: none;
+        }
+    </style>
+</head>
+<body ontouchstart>
+<div id="mocha"></div>
+<div id="test"></div>
+<script src="../node_modules/zepto/dist/zepto.min.js"></script>
+<script type="text/javascript" src="lib/assert.js"></script>
+<script type="text/javascript" src="../node_modules/mocha/mocha.js"></script>
+<script type="text/javascript" src="../dist/weui.min.js"></script>
+<script>
+    mocha.setup('bdd');
+    window.closeDur = 400; // 动画关闭时间为300ms，额外等待多100ms以确保结束
+</script>
+
+<script type="text/javascript" src="actionsheet.js"></script>
+<script type="text/javascript" src="alert.js"></script>
+<script type="text/javascript" src="confirm.js"></script>
+<script type="text/javascript" src="form.js"></script>
+<script type="text/javascript" src="gallery.js"></script>
+<script type="text/javascript" src="loading.js"></script>
+<script type="text/javascript" src="picker.js"></script>
+<script type="text/javascript" src="searchbar.js"></script>
+<script type="text/javascript" src="tab.js"></script>
+<script type="text/javascript" src="toast.js"></script>
+<script type="text/javascript" src="toptips.js"></script>
+
+<!--由于uploader测试需要点击测试和上传服务器，故先注释，由人工测试代替-->
+<!--<script type="text/javascript" src="uploader.js"></script>-->
+
+<script type="text/javascript">
+    mocha.checkLeaks();
+    mocha.globals(['Zepto']);
+    mocha.run();
+</script>
+</body>
+</html>

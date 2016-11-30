@@ -1,0 +1,59 @@
+{
+  "name": "weui.js",
+  "version": "1.0.0",
+  "description": "weui.js",
+  "main": "./dist/weui.min.js",
+  "scripts": {
+    "start": "webpack-dev-server --config ./build/webpack.example.config.js --content-base dist/example --progress --colors --host 0.0.0.0 --port 8001",
+    "build": "npm run clean && webpack --config ./build/webpack.example.config.js && node build/build.js",
+    "docs": "node ./build/docs.js",
+    "deploy": "npm run docs && gh-pages -d docs/_book",
+    "lint": "eslint ./src/**/*.js",
+    "clean": "rimraf ./dist",
+    "server": "node uploader-server/index.js"
+  },
+  "keywords": [
+    "weui",
+    "jquery",
+    "javascript",
+    "zepto"
+  ],
+  "homepage": "https://weui.io",
+  "author": "wechat ui team",
+  "license": "MIT",
+  "dependencies": {
+    "balajs": "^0.1.9",
+    "element-closest": "^2.0.1",
+    "object-assign": "^4.1.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.5.0",
+    "babel-core": "^6.9.0",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-3": "^6.5.0",
+    "css-loader": "^0.25.0",
+    "eslint": "^3.7.1",
+    "express": "^4.14.0",
+    "fastclick": "^1.0.6",
+    "formidable": "^1.0.17",
+    "gh-pages": "^0.12.0",
+    "gitbook-cli": "^2.3.0",
+    "glob": "^7.1.1",
+    "html-loader": "^0.4.4",
+    "html-webpack-plugin": "^2.22.0",
+    "jest-cli": "^16.0.1",
+    "jsdoc-to-markdown": "^2.0.0",
+    "less-loader": "^2.2.3",
+    "mocha": "^3.1.2",
+    "node-uuid": "^1.4.7",
+    "open-browser-webpack-plugin": "0.0.2",
+    "postcss-loader": "^0.13.0",
+    "rimraf": "^2.5.4",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2",
+    "zepto": "^1.2.0"
+  }
+}

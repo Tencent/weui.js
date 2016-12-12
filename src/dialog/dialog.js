@@ -54,6 +54,9 @@ function dialog(options = {}) {
     const $dialogWrap = $($.render(tpl, options));
     const $dialog = $dialogWrap.find('.weui-dialog');
     const $mask = $dialogWrap.find('.weui-mask');
+    if (options.className != null && options.className != ''){
+        $dialogWrap.addClass(options.className);
+    }
 
     $dialogWrap.setClose = function (close) {
         isClose = close;

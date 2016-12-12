@@ -40,6 +40,7 @@ let temp = {};
  * picker 多列选择器。
  * @param {array} items picker的数据，即用于生成picker的数据，picker的层级可以自己定义，但建议最多三层。数据格式参考example。
  * @param {Object} options 配置项
+ * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
  * @param {string=} [options.id=default] 作为picker的唯一标识
  * @param {function=} options.onChange 在picker选中的值发生变化的时候回调
  * @param {function=} options.onConfirm 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
@@ -148,7 +149,7 @@ function picker(items = [], options) {
     const result  = [];
     const lineTemp = temp[defaults.id];
     const $picker = $(pickerTpl);
-    let depth = util.depthOf(items[0]), groups = '';
+    let depth = options.depth || util.depthOf(items[0]), groups = '';
 
     while(depth--){
         groups += groupTpl;

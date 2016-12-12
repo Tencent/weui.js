@@ -66,6 +66,7 @@ let temp = {};
  *     value: 4,
  * }
  * ], {
+ *    className: 'custom-classname',
  *    onChange: function (result) {
  *        console.log(result)
  *    },
@@ -126,6 +127,7 @@ let temp = {};
  *     ]
  * }
  * ], {
+ *    className: 'custom-classname',
  *    onChange: function (result) {
  *        console.log(result)
  *    },
@@ -140,6 +142,7 @@ function picker(items = [], options) {
 
     const defaults = $.extend({
         id: 'default',
+        className: '',
         onChange: $.noop,
         onConfirm: $.noop
     }, options);
@@ -148,7 +151,7 @@ function picker(items = [], options) {
     temp[defaults.id] = temp[defaults.id] || [];
     const result  = [];
     const lineTemp = temp[defaults.id];
-    const $picker = $(pickerTpl);
+    const $picker = $($.render(pickerTpl, defaults));
     let depth = options.depth || util.depthOf(items[0]), groups = '';
 
     while(depth--){

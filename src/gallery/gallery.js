@@ -8,10 +8,12 @@ let _sington;
  * gallery 带删除按钮的图片预览，主要是配合图片上传使用
  * @param {string} url gallery显示的图片的url
  * @param {object=} options 配置项
+ * @param {string=} options.className 自定义类名
  * @param {function=} options.onDelete 点击删除图片时的回调
  *
  * @example
  * var gallery = weui.gallery(url, {
+ *     className: 'custom-classname',
  *     onDelete: function(){
  *         if(confirm('确定删除该图片？')){ console.log('删除'); }
  *         gallery.hide();
@@ -21,11 +23,14 @@ let _sington;
 function gallery(url, options = {}) {
     if(_sington) return _sington;
 
-    const $gallery = $($.render(tpl, {url}));
-
     options = $.extend({
+        className: '',
         onDelete: $.noop
     }, options);
+
+    const $gallery = $($.render(tpl, $.extend({
+        url: url
+    }, options)));
 
     function hide(){
         $gallery

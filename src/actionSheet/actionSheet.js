@@ -14,6 +14,9 @@ let _sington;
  * @param {string} actions[].label 选项的文字
  * @param {function} actions[].onClick 选项点击时的回调
  *
+ * @param {object=} options 配置项
+ * @param {string=} options.className 自定义类名
+ *
  * @example
  * weui.actionSheet([
  *     {
@@ -39,17 +42,21 @@ let _sington;
  *             console.log('取消');
  *         }
  *     }
- * ]);
+ * ], {
+ *     className: 'custom-classname'
+ * });
  */
-function actionSheet(menus = [], actions = []) {
+function actionSheet(menus = [], actions = [], options = {}) {
     if(_sington) return _sington;
 
     const isAndroid = $.os.android;
-    const $actionSheetWrap = $($.render(tpl, {
+    options = $.extend({
         menus: menus,
         actions: actions,
+        className: '',
         isAndroid: isAndroid
-    }));
+    }, options);
+    const $actionSheetWrap = $($.render(tpl, options));
     const $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
     const $actionSheetMask = $actionSheetWrap.find('.weui-mask');
 

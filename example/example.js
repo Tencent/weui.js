@@ -29,7 +29,10 @@ document.querySelector('#confirmBtn').addEventListener('click', function () {
 
 /* toast */
 document.querySelector('#toastBtn').addEventListener('click', function () {
-    weui.toast('操作成功', 3000);
+    weui.toast('操作成功', {
+        duration: 3000,
+        className: "bears"
+    });
 });
 
 
@@ -68,14 +71,17 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
                 console.log('取消');
             }
         }
-    ]);
+    ], {
+        className: "custom-classname"
+    });
 });
 
 
-/* tipTips */
+/* topTips */
 document.querySelector('#topTipsBtn').addEventListener('click', function () {
     weui.topTips('请填写正确的字段', {
         duration: 3000,
+        className: "custom-classname",
         callback: function () {
             console.log('close');
         }
@@ -147,6 +153,7 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
             label: '其他',
             value: 9
     }], {
+        className: 'custom-classname',
         onChange: function (result) {
             //console.log(item, index);
             console.log(result);
@@ -268,6 +275,7 @@ document.querySelector('#uploaderFiles').addEventListener('click', function(e){
         url = url.match(/url\((.*?)\)/)[1];
     }
     var gallery = weui.gallery(url, {
+        className: 'custom-name',
         onDelete: function(){
             weui.confirm('确定删除该图片？', function(){
                 --uploadCount;

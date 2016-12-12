@@ -17,6 +17,7 @@ let _toptips = null;
  * weui.topTips('请填写正确的字段', function(){ console.log('close') });
  * weui.topTips('请填写正确的字段', {
  *     duration: 3000,
+ *     className: 'custom-classname',
  *     callback: function(){ console.log('close') }
  * });
  */
@@ -34,11 +35,13 @@ function topTips(content, options = {}) {
     }
 
     options = $.extend({
+        content: content,
         duration: 3000,
-        callback: $.noop
+        callback: $.noop,
+        className: ''
     }, options);
 
-    const $topTips = $($.render(tpl, {content}));
+    const $topTips = $($.render(tpl, options));
     function hide(){
         $topTips.remove();
         options.callback();

@@ -7,7 +7,7 @@ let _sington;
 /**
  * dialog，弹窗，alert和confirm的父类
  *
- * @param {Object=} options 配置项
+ * @param {object=} options 配置项
  * @param {string=} options.title 弹窗的标题
  * @param {string=} options.content 弹窗的内容
  * @param {string=} options.className 弹窗的自定义类名

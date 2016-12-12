@@ -8,6 +8,7 @@ import dialog from '../dialog/dialog';
  * @param {function=} no  点击取消按钮的回调
  * @param {object=} options 配置项
  * @param {string=} options.title 弹窗的标题
+ * @param {string=} options.className 自定义类名
  * @param {array=} options.buttons 按钮配置项，详情参考dialog
  *
  * @example

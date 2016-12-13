@@ -261,24 +261,18 @@ function datePicker(options) {
         end: 2030
     }, options);
 
-    //年份最小为1900，最大为2050
-    /*
-    defaults.start = defaults.start < 1900 ? 1900 : defaults.start;
-    defaults.end = defaults.end > 2050 ? 2050 : defaults.end;
-    */
-
     const date = [];
     const daysTotal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];           //所有月份的天数
-    for(let i = defaults.start; i <= defaults.end; i++){
+    for (let i = defaults.start; i <= defaults.end; i++) {
         const months = [];
-        if((i % 4 ==0 && i % 100 != 0) || i % 400 ==0){                     //判定为闰年
+        if ((i % 4 == 0 && i % 100 != 0) || i % 400 == 0) {                     //判定为闰年
             daysTotal[1] = 29;
-        }else {
+        } else {
             daysTotal[1] = 28;
         }
-        for(let j = 0; j < 12; j++){
+        for (let j = 0; j < 12; j++) {
             const dates = [];
-            for(let k = 1; k < daysTotal[j] +1; k++){
+            for (let k = 1; k < daysTotal[j] + 1; k++) {
                 const date = {
                     label: k + '日',
                     value: k
@@ -286,8 +280,8 @@ function datePicker(options) {
                 dates.push(date);
             }
             months.push({
-                label: j+1 + '月',
-                value: j,
+                label: j + 1 + '月',
+                value: j + 1,
                 children: dates,
             });
         }

@@ -1,7 +1,6 @@
 import $ from '../util/util';
 import tpl from './actionSheet.html';
 
-const $body = $('body');
 let _sington;
 
 /**
@@ -69,7 +68,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
                 _sington = false;
             });
     }
-    $body.append($actionSheetWrap);
+    $('body').append($actionSheetWrap);
 
     // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
     $.getStyle($actionSheet[0], 'transform');

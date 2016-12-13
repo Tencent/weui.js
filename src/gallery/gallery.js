@@ -1,7 +1,6 @@
 import $ from '../util/util';
 import tpl from './gallery.html';
 
-const $body = $('body');
 let _sington;
 
 /**
@@ -41,7 +40,7 @@ function gallery(url, options = {}) {
             });
     }
 
-    $body.append($gallery);
+    $('body').append($gallery);
     $gallery.find('.weui-gallery__img').on('click', hide);
     $gallery.find('.weui-gallery__del').on('click', function () {
         options.onDelete.call(this, url);

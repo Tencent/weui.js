@@ -4,7 +4,6 @@ import * as util from './util';
 import pickerTpl from './picker.html';
 import groupTpl from './group.html';
 
-const $body = $('body');
 let _sington;
 
 const destroy = ($picker) => {
@@ -15,7 +14,7 @@ const destroy = ($picker) => {
 };
 
 const show = ($picker) => {
-    $body.append($picker);
+    $('body').append($picker);
 
     // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
     $.getStyle($picker[0], 'transform');

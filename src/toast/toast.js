@@ -1,7 +1,6 @@
 import $ from '../util/util';
 import tpl from './toast.html';
 
-const $body = $('body');
 let _sington;
 
 /**
@@ -42,7 +41,7 @@ function toast(content = '', options = {}) {
     }, options);
 
     let $toast = $($.render(tpl, options));
-    $body.append($toast);
+    $('body').append($toast);
     $toast.addClass('weui-animate-fade-in');
 
     setTimeout(() => {

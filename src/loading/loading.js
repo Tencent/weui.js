@@ -1,7 +1,6 @@
 import $ from '../util/util';
 import tpl from './loading.html';
 
-const $body = $('body');
 let _sington;
 
 /**
@@ -35,7 +34,7 @@ function loading(content = '', options = {}) {
                 _sington = false;
             });
     }
-    $body.append($loading);
+    $('body').append($loading);
     $loading.addClass('weui-animate-fade-in');
 
     $loading.hide = hide;

@@ -1,7 +1,6 @@
 import $ from '../util/util';
 import tpl from './topTips.html';
 
-const $body = $('body');
 let _toptips = null;
 
 /**
@@ -48,7 +47,7 @@ function topTips(content, options = {}) {
         _toptips = null;
     }
 
-    $body.append($topTips);
+    $('body').append($topTips);
     if(_toptips){
         clearTimeout(_toptips.timeout);
         _toptips.hide();

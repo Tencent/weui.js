@@ -1,7 +1,6 @@
 import $ from '../util/util';
 import tpl from './dialog.html';
 
-const $body = $('body');
 let _sington;
 
 /**
@@ -64,7 +63,7 @@ function dialog(options = {}) {
             });
     }
 
-    $body.append($dialogWrap);
+    $('body').append($dialogWrap);
     // 不能直接把.weui-animate-fade-in加到$dialog，会导致mask的z-index有问题
     $mask.addClass('weui-animate-fade-in');
     $dialog.addClass('weui-animate-fade-in');

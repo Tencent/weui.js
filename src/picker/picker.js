@@ -66,6 +66,7 @@ let temp = {};
  * }
  * ], {
  *    className: 'custom-classname',
+ *    defaultValue: [3],
  *    onChange: function (result) {
  *        console.log(result)
  *    },
@@ -127,6 +128,7 @@ let temp = {};
  * }
  * ], {
  *    className: 'custom-classname',
+ *    defaultValue: [1, 3],
  *    onChange: function (result) {
  *        console.log(result)
  *    },
@@ -162,9 +164,23 @@ function picker(items = [], options) {
 
     // 初始化滚动
     function scroll(items, level) {
+        if(lineTemp[level] === undefined && defaults.defaultValue && defaults.defaultValue[level] !== undefined){
+            // 没有缓存选项，而且存在defaultValue
+            const defaultVal = defaults.defaultValue[level];
+            let index = 0, len = items.length;
+
+            for (; index < len; ++index) {
+                if(defaultVal == items[index].value) break;
+            }
+            if(index < len){
+                lineTemp[level] = index;
+            }else{
+                console.warn("Picker has not match defaultValue: " + defaultVal);
+            }
+        }
         $picker.find('.weui-picker__group').eq(level).scroll({
             items: items,
-            temp:lineTemp[level],
+            temp: lineTemp[level],
             onChange: function (item, index) {
                 //为当前的result赋值。
                 if(item){

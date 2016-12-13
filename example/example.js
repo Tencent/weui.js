@@ -95,6 +95,7 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
     weui.datePicker({
         start: 1990,
         end: 2000,
+        defaultValue: [1991, 6, 9],
         onChange: function (result) {
             console.log(result);
         },
@@ -153,6 +154,7 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
             label: '其他',
             value: 9
     }], {
+        defaultValue: [8],
         className: 'custom-classname',
         onChange: function (result) {
             //console.log(item, index);

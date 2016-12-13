@@ -1,7 +1,6 @@
 // import 'weui';
 import FastClick from 'fastclick';
 import weui from '../src/weui';
-import city from './city';
 
 FastClick.attach(document.body);
 
@@ -90,6 +89,54 @@ document.querySelector('#topTipsBtn').addEventListener('click', function () {
 
 
 /* picker */
+// 普通选择器
+document.querySelector('#pickerBtn').addEventListener('click', function () {
+    weui.picker([{
+        label: '飞机票',
+        value: 0
+    }, {
+        label: '火车票',
+        disabled: true,
+        value: 1
+    }, {
+        label: '的士票',
+        disabled: true,
+        value: 2
+    }, {
+        label: '住宿费',
+        value: 3
+    }, {
+        label: '礼品费',
+        value: 4
+    }, {
+        label: '活动费',
+        value: 5
+    }, {
+        label: '通讯费',
+        value: 6
+    }, {
+        label: '补助',
+        value: 7
+    }, {
+        label: '通讯费',
+        value: 8
+    }, {
+        label: '其他',
+        value: 9
+    }], {
+        defaultValue: [8],
+        className: 'custom-classname',
+        onChange: function (result) {
+            //console.log(item, index);
+            console.log(result);
+        },
+        onConfirm: function (result) {
+            console.log(result);
+        },
+        id: 'picker'
+    });
+});
+
 // 时间选择器
 document.querySelector('#datePickerBtn').addEventListener('click', function () {
     weui.datePicker({
@@ -102,68 +149,84 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
         onConfirm: function (result) {
             console.log(result);
         },
-        id: 'DatePicker'
+        id: 'datePicker'
     });
 });
 
-// 城市选择器
-document.querySelector('#cityPickerBtn').addEventListener('click', function () {
-    weui.picker(city, {
+// 级联选择器
+document.querySelector('#cascadePickerBtn').addEventListener('click', function () {
+    weui.picker([
+        {
+            label: '广东',
+            value: 0,
+            children: [
+                {
+                    label: '广州',
+                    value: 0,
+                    children: [
+                        {
+                            label: '海珠',
+                            value: 0
+                        }, {
+                            label: '番禺',
+                            value: 1
+                        }
+                    ]
+                }, {
+                    label: '佛山',
+                    value: 1,
+                    children: [
+                        {
+                            label: '禅城',
+                            value: 0
+                        }, {
+                            label: '南海',
+                            value: 1
+                        }
+                    ]
+                }
+            ]
+        }, {
+            label: '广西',
+            value: 1,
+            children: [
+                {
+                    label: '南宁',
+                    value: 0,
+                    children: [
+                        {
+                            label: '青秀',
+                            value: 0
+                        }, {
+                            label: '兴宁',
+                            value: 1
+                        }
+                    ]
+                }, {
+                    label: '桂林',
+                    value: 1,
+                    children: [
+                        {
+                            label: '象山',
+                            value: 0
+                        }, {
+                            label: '秀峰',
+                            value: 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ], {
+        depth: 3,
+        defaultValue: [0, 1, 1],
         onChange: function (result) {
             console.log(result);
         },
         onConfirm: function (result) {
             console.log(result);
         },
-        id: 'districtPicker'
-    });
-});
-
-// 普通选择器
-document.querySelector('#pickerBtn').addEventListener('click', function () {
-    weui.picker([{
-            label: '飞机票',
-            value: 0
-        }, {
-            label: '火车票',
-            disabled: true,
-            value: 1
-        }, {
-            label: '的士票',
-            disabled: true,
-            value: 2
-        }, {
-            label: '住宿费',
-            value: 3
-        }, {
-            label: '礼品费',
-            value: 4
-        }, {
-            label: '活动费',
-            value: 5
-        }, {
-            label: '通讯费',
-            value: 6
-        }, {
-            label: '补助',
-            value: 7
-        }, {
-            label: '通讯费',
-            value: 8
-        }, {
-            label: '其他',
-            value: 9
-    }], {
-        defaultValue: [8],
-        className: 'custom-classname',
-        onChange: function (result) {
-            //console.log(item, index);
-            console.log(result);
-        },
-        onConfirm: function (result) {
-            console.log(result);
-        },
-        id: 'singleLinePicker'
+        id: 'cascadePicker'
     });
 });
 

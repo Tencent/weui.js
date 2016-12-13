@@ -95,11 +95,11 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
         label: '飞机票',
         value: 0
     }, {
-        label: '火车票',
+        label: '火车票(disabled)',
         disabled: true,
         value: 1
     }, {
-        label: '的士票',
+        label: '的士票(disabled)',
         disabled: true,
         value: 2
     }, {

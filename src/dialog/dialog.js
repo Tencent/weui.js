@@ -36,6 +36,7 @@ let _sington;
 function dialog(options = {}) {
     if(_sington) return _sington;
 
+    var isClose = true;
     const isAndroid = $.os.android;
     options = $.extend({
         title: null,
@@ -46,23 +47,29 @@ function dialog(options = {}) {
             type: 'primary',
             onClick: $.noop
         }],
-        isAndroid: isAndroid
+        isAndroid: isAndroid,
+        setClose: $.noop
     }, options);
 
     const $dialogWrap = $($.render(tpl, options));
     const $dialog = $dialogWrap.find('.weui-dialog');
     const $mask = $dialogWrap.find('.weui-mask');
+    if (options.className != null && options.className != ''){
+        $dialogWrap.addClass(options.className);
+    }
 
-    function hide(callback = $.noop){
+    $dialogWrap.setClose = function (close) {
+        isClose = close;
+    };
+
+    $dialogWrap.close = function(){
         $mask.addClass('weui-animate-fade-out');
-        $dialog
-            .addClass('weui-animate-fade-out')
+        $dialog.addClass('weui-animate-fade-out')
             .on('animationend webkitAnimationEnd', function () {
                 $dialogWrap.remove();
                 _sington = false;
-                callback();
             });
-    }
+    };
 
     $body.append($dialogWrap);
     // 不能直接把.weui-animate-fade-in加到$dialog，会导致mask的z-index有问题
@@ -71,12 +78,14 @@ function dialog(options = {}) {
 
     $dialogWrap.on('click', '.weui-dialog__btn', function (evt) {
         const index = $(this).index();
-        hide(() => {
-            options.buttons[index].onClick && options.buttons[index].onClick.call(this, evt);
-        });
+        options.buttons[index].onClick && options.buttons[index].onClick.call(this, $dialogWrap, evt);
+        if(isClose){
+            $dialogWrap.close();
+        }
+        //调用一次后设置回true
+        isClose = true;
     });
 
-    $dialogWrap.hide = hide;
     _sington = $dialogWrap;
     return $dialogWrap;
 }

@@ -203,10 +203,17 @@ function picker(items = [], options) {
                     $picker.find('.weui-picker__group').eq(level + 1).show();
                     scroll(item.children, level + 1);
                 }else{
-                    //如果子列表test不通过，子列表的长度减1。
+                    //如果子列表test不通过，子孙列表都隐藏。
+                    const $items = $picker.find('.weui-picker__group');
+
                     result[level + 1] = null;
                     result.length = level + 1;
-                    $picker.find('.weui-picker__group').eq(level + 1).hide();
+
+                    $items.forEach((ele, index) => {
+                        if(index > level){
+                            $(ele).hide();
+                        }
+                    });
 
                     //仅在没有值列表的时候调用onChange回调函数。
                     defaults.onChange(result);

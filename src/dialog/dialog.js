@@ -78,9 +78,9 @@ function dialog(options = {}) {
 
     $dialogWrap.on('click', '.weui-dialog__btn', function (evt) {
         const index = $(this).index();
-        var call = options.buttons[index].onClick($dialogWrap, this, evt) && options.buttons[index].onClick.call($dialogWrap, this, evt);
-        if( typeof call == "function" ){
-            call();
+        if (typeof options.buttons[index].onClick == "function"){
+            options.buttons[index].onClick($dialogWrap, this, evt)
+            && options.buttons[index].onClick.call($dialogWrap, this, evt);
         }
         if(isClose){
             $dialogWrap.close();

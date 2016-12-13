@@ -41,10 +41,10 @@ let temp = {};
  * @param {Object} options 配置项
  * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
  * @param {string=} [options.id=default] 作为picker的唯一标识
- * @param {string=} options.className 自定义类名
- * @param {array=} options.defaultValue 默认选项的value数组
- * @param {function=} options.onChange 在picker选中的值发生变化的时候回调
- * @param {function=} options.onConfirm 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+ * @param {string=} [options.className] 自定义类名
+ * @param {array=} [options.defaultValue] 默认选项的value数组
+ * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
+ * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
  *
  * @example
  * // 单列picker
@@ -238,8 +238,8 @@ function picker(items = [], options) {
  * @param {string=} [options.id=datePicker] 作为picker的唯一标识
  * @param {number=} [options.start=2000] 起始年份
  * @param {number=} [options.end=2030] 结束年份
- * @param {function=} options.onChange 在picker选中的值发生变化的时候回调
- * @param {function=} options.onConfirm 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+ * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
+ * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
  *
  *@example
  * weui.datePicker({

@@ -7,7 +7,7 @@ dialog，弹窗，alert和confirm的父类
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [options] | <code>Object</code> |  | 配置项 |
+| [options] | <code>object</code> |  | 配置项 |
 | [options.title] | <code>string</code> |  | 弹窗的标题 |
 | [options.content] | <code>string</code> |  | 弹窗的内容 |
 | [options.className] | <code>string</code> |  | 弹窗的自定义类名 |
@@ -18,18 +18,5 @@ dialog，弹窗，alert和confirm的父类
 
 **Example**  
 ```js
-weui.dialog({
-    title: 'dialog标题',
-    content: 'dialog内容',
-    className: 'custom-classname',
-    buttons: [{
-        label: '取消',
-        type: 'default',
-        onClick: function () { alert('取消') }
-    }, {
-        label: '确定',
-        type: 'primary',
-        onClick: function () { alert('确定') }
-    }]
-});
+weui.dialog({    title: 'dialog标题',    content: 'dialog内容',    className: 'custom-classname',    buttons: [{        label: '取消',        type: 'default',        onClick: function () { alert('取消') }    }, {        label: '确定',        type: 'primary',        onClick: function () { alert('确定') }    }]});
 ```

@@ -14,10 +14,5 @@ tab tab导航栏
 
 **Example**  
 ```js
-weui.tab('#tab',{
-    defaultIndex: 0,
-    onChange: function(index){
-        console.log(index);
-    }
-});
+weui.tab('#tab',{    defaultIndex: 0,    onChange: function(index){        console.log(index);    }});
 ```

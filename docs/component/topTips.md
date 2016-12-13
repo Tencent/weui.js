@@ -14,11 +14,5 @@ toptips 顶部报错提示
 
 **Example**  
 ```js
-weui.topTips('请填写正确的字段');
-weui.topTips('请填写正确的字段', 3000);
-weui.topTips('请填写正确的字段', function(){ console.log('close') });
-weui.topTips('请填写正确的字段', {
-    duration: 3000,
-    callback: function(){ console.log('close') }
-});
+weui.topTips('请填写正确的字段');weui.topTips('请填写正确的字段', 3000);weui.topTips('请填写正确的字段', function(){ console.log('close') });weui.topTips('请填写正确的字段', {    duration: 3000,    className: 'custom-classname',    callback: function(){ console.log('close') }});
 ```

@@ -155,13 +155,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var $body = (0, _util2.default)('body');
 	var _sington = void 0;
 
 	/**
 	 * dialog，弹窗，alert和confirm的父类
 	 *
-	 * @param {Object=} options 配置项
+	 * @param {object=} options 配置项
 	 * @param {string=} options.title 弹窗的标题
 	 * @param {string=} options.content 弹窗的内容
 	 * @param {string=} options.className 弹窗的自定义类名
@@ -220,7 +219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    }
 
-	    $body.append($dialogWrap);
+	    (0, _util2.default)('body').append($dialogWrap);
 	    // 不能直接把.weui-animate-fade-in加到$dialog，会导致mask的z-index有问题
 	    $mask.addClass('weui-animate-fade-in');
 	    $dialog.addClass('weui-animate-fade-in');
@@ -598,35 +597,37 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// element-closest | CC0-1.0 | github.com/jonathantneal/closest
 
-	if (typeof Element.prototype.matches !== 'function') {
-		Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.webkitMatchesSelector || function matches(selector) {
-			var element = this;
-			var elements = (element.document || element.ownerDocument).querySelectorAll(selector);
-			var index = 0;
+	(function (ElementProto) {
+		if (typeof ElementProto.matches !== 'function') {
+			ElementProto.matches = ElementProto.msMatchesSelector || ElementProto.mozMatchesSelector || ElementProto.webkitMatchesSelector || function matches(selector) {
+				var element = this;
+				var elements = (element.document || element.ownerDocument).querySelectorAll(selector);
+				var index = 0;
 
-			while (elements[index] && elements[index] !== element) {
-				++index;
-			}
-
-			return Boolean(elements[index]);
-		};
-	}
-
-	if (typeof Element.prototype.closest !== 'function') {
-		Element.prototype.closest = function closest(selector) {
-			var element = this;
-
-			while (element && element.nodeType === 1) {
-				if (element.matches(selector)) {
-					return element;
+				while (elements[index] && elements[index] !== element) {
+					++index;
 				}
 
-				element = element.parentNode;
-			}
+				return Boolean(elements[index]);
+			};
+		}
 
-			return null;
-		};
-	}
+		if (typeof ElementProto.closest !== 'function') {
+			ElementProto.closest = function closest(selector) {
+				var element = this;
+
+				while (element && element.nodeType === 1) {
+					if (element.matches(selector)) {
+						return element;
+					}
+
+					element = element.parentNode;
+				}
+
+				return null;
+			};
+		}
+	})(window.Element.prototype);
 
 
 /***/ },
@@ -778,7 +779,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "<div> <div class=weui-mask></div> <div class=\"weui-dialog <% if(isAndroid){ %> weui-skin_android <% } %>\"> <% if(title){ %> <div class=weui-dialog__hd><strong class=weui-dialog__title><%=title%></strong></div> <% } %> <div class=weui-dialog__bd><%=content%></div> <div class=weui-dialog__ft> <% for(var i = 0; i < buttons.length; i++){ %> <a href=javascript:; class=\"weui-dialog__btn weui-dialog__btn_<%=buttons[i]['type']%>\"><%=buttons[i]['label']%></a> <% } %> </div> </div> </div> ";
+	module.exports = "<div class=\"<%=className%>\"> <div class=weui-mask></div> <div class=\"weui-dialog <% if(isAndroid){ %> weui-skin_android <% } %>\"> <% if(title){ %> <div class=weui-dialog__hd><strong class=weui-dialog__title><%=title%></strong></div> <% } %> <div class=weui-dialog__bd><%=content%></div> <div class=weui-dialog__ft> <% for(var i = 0; i < buttons.length; i++){ %> <a href=javascript:; class=\"weui-dialog__btn weui-dialog__btn_<%=buttons[i]['type']%>\"><%=buttons[i]['label']%></a> <% } %> </div> </div> </div> ";
 
 /***/ },
 /* 7 */
@@ -808,6 +809,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {function=} yes 点击确定按钮的回调
 	 * @param {object=} options 配置项
 	 * @param {string=} options.title 弹窗的标题
+	 * @param {string=} options.className 自定义类名
 	 * @param {array=} options.buttons 按钮配置项，详情参考dialog
 	 *
 	 * @example
@@ -881,6 +883,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {function=} no  点击取消按钮的回调
 	 * @param {object=} options 配置项
 	 * @param {string=} options.title 弹窗的标题
+	 * @param {string=} options.className 自定义类名
 	 * @param {array=} options.buttons 按钮配置项，详情参考dialog
 	 *
 	 * @example
@@ -952,7 +955,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var $body = (0, _util2.default)('body');
 	var _sington = void 0;
 
 	/**
@@ -961,11 +963,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Object|function=} options 配置项或回调
 	 * @param {number=} [options.duration=3000] 多少毫秒后关闭toast
 	 * @param {function=} options.callback 关闭后的回调
+	 * @param {string=} options.className 自定义类名
 	 *
 	 * @example
 	 * weui.toast('操作成功', 3000);
 	 * weui.toast('操作成功', {
 	 *     duration: 3000,
+	 *     className: 'custom-classname',
 	 *     callback: function(){ console.log('close') }
 	 * });
 	 */
@@ -987,12 +991,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    options = _util2.default.extend({
+	        content: content,
 	        duration: 3000,
-	        callback: _util2.default.noop
+	        callback: _util2.default.noop,
+	        className: ''
 	    }, options);
 
-	    var $toast = (0, _util2.default)(_util2.default.render(_toast2.default, { content: content }));
-	    $body.append($toast);
+	    var $toast = (0, _util2.default)(_util2.default.render(_toast2.default, options));
+	    (0, _util2.default)('body').append($toast);
 	    $toast.addClass('weui-animate-fade-in');
 
 	    setTimeout(function () {
@@ -1013,7 +1019,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 10 */
 /***/ function(module, exports) {
 
-	module.exports = "<div> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-icon_toast weui-icon-success-no-circle\"></i> <p class=weui-toast__content><%=content%></p> </div> </div>";
+	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-icon_toast weui-icon-success-no-circle\"></i> <p class=weui-toast__content><%=content%></p> </div> </div> ";
 
 /***/ },
 /* 11 */
@@ -1035,32 +1041,41 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var $body = (0, _util2.default)('body');
 	var _sington = void 0;
 
 	/**
 	 * loading
 	 * @param {string} content loading的文字
+	 * @param {object=} options 配置项
+	 * @param {string=} options.className 自定义类名
 	 *
 	 * @example
-	 * var loading = weui.loading('loading');
+	 * var loading = weui.loading('loading', {
+	 *     className: 'custom-classname'
+	 * });
 	 * setTimeout(function () {
 	 *     loading.hide();
 	 * }, 3000);
 	 */
 	function loading() {
 	    var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 	    if (_sington) return _sington;
 
-	    var $loading = (0, _util2.default)(_util2.default.render(_loading2.default, { content: content }));
+	    options = _util2.default.extend({
+	        content: content,
+	        className: ''
+	    }, options);
+
+	    var $loading = (0, _util2.default)(_util2.default.render(_loading2.default, options));
 	    function hide() {
 	        $loading.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $loading.remove();
 	            _sington = false;
 	        });
 	    }
-	    $body.append($loading);
+	    (0, _util2.default)('body').append($loading);
 	    $loading.addClass('weui-animate-fade-in');
 
 	    $loading.hide = hide;
@@ -1074,7 +1089,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=weui-loading_toast> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-loading weui-icon_toast\"></i> <p class=weui-toast__content><%=content%></p> </div> </div>";
+	module.exports = "<div class=\"weui-loading_toast <%= className %>\"> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-loading weui-icon_toast\"></i> <p class=weui-toast__content><%=content%></p> </div> </div> ";
 
 /***/ },
 /* 13 */
@@ -1096,11 +1111,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var $body = (0, _util2.default)('body');
 	var _sington = void 0;
 
 	/**
-	 * actionsheet
+	 * actionsheet 弹出式菜单
 	 * @param {array} menus 上层的选项
 	 * @param {string} menus[].label 选项的文字
 	 * @param {function} menus[].onClick 选项点击时的回调
@@ -1108,6 +1122,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {array} actions 下层的选项
 	 * @param {string} actions[].label 选项的文字
 	 * @param {function} actions[].onClick 选项点击时的回调
+	 *
+	 * @param {object=} options 配置项
+	 * @param {string=} options.className 自定义类名
 	 *
 	 * @example
 	 * weui.actionSheet([
@@ -1134,20 +1151,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *             console.log('取消');
 	 *         }
 	 *     }
-	 * ]);
+	 * ], {
+	 *     className: 'custom-classname'
+	 * });
 	 */
 	function actionSheet() {
 	    var menus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	    var actions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+	    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
 	    if (_sington) return _sington;
 
 	    var isAndroid = _util2.default.os.android;
-	    var $actionSheetWrap = (0, _util2.default)(_util2.default.render(_actionSheet2.default, {
+	    options = _util2.default.extend({
 	        menus: menus,
 	        actions: actions,
+	        className: '',
 	        isAndroid: isAndroid
-	    }));
+	    }, options);
+	    var $actionSheetWrap = (0, _util2.default)(_util2.default.render(_actionSheet2.default, options));
 	    var $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
 	    var $actionSheetMask = $actionSheetWrap.find('.weui-mask');
 
@@ -1158,7 +1180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _sington = false;
 	        });
 	    }
-	    $body.append($actionSheetWrap);
+	    (0, _util2.default)('body').append($actionSheetWrap);
 
 	    // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
 	    _util2.default.getStyle($actionSheet[0], 'transform');
@@ -1187,7 +1209,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"<% if(isAndroid){ %> weui-skin_android <% } %>\"> <div class=weui-mask></div> <div class=weui-actionsheet> <div class=weui-actionsheet__menu> <% for(var i = 0; i < menus.length; i++){ %> <div class=weui-actionsheet__cell><%= menus[i].label %></div> <% } %> </div> <div class=weui-actionsheet__action> <% for(var j = 0; j < actions.length; j++){ %> <div class=weui-actionsheet__cell><%= actions[j].label %></div> <% } %> </div> </div> </div> ";
+	module.exports = "<div class=\"<% if(isAndroid){ %>weui-skin_android <% } %><%= className %>\"> <div class=weui-mask></div> <div class=weui-actionsheet> <div class=weui-actionsheet__menu> <% for(var i = 0; i < menus.length; i++){ %> <div class=weui-actionsheet__cell><%= menus[i].label %></div> <% } %> </div> <div class=weui-actionsheet__action> <% for(var j = 0; j < actions.length; j++){ %> <div class=weui-actionsheet__cell><%= actions[j].label %></div> <% } %> </div> </div> </div> ";
 
 /***/ },
 /* 15 */
@@ -1209,7 +1231,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var $body = (0, _util2.default)('body');
 	var _toptips = null;
 
 	/**
@@ -1225,6 +1246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * weui.topTips('请填写正确的字段', function(){ console.log('close') });
 	 * weui.topTips('请填写正确的字段', {
 	 *     duration: 3000,
+	 *     className: 'custom-classname',
 	 *     callback: function(){ console.log('close') }
 	 * });
 	 */
@@ -1244,18 +1266,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    options = _util2.default.extend({
+	        content: content,
 	        duration: 3000,
-	        callback: _util2.default.noop
+	        callback: _util2.default.noop,
+	        className: ''
 	    }, options);
 
-	    var $topTips = (0, _util2.default)(_util2.default.render(_topTips2.default, { content: content }));
+	    var $topTips = (0, _util2.default)(_util2.default.render(_topTips2.default, options));
 	    function hide() {
 	        $topTips.remove();
 	        options.callback();
 	        _toptips = null;
 	    }
 
-	    $body.append($topTips);
+	    (0, _util2.default)('body').append($topTips);
 	    if (_toptips) {
 	        clearTimeout(_toptips.timeout);
 	        _toptips.hide();
@@ -1276,7 +1300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"weui-toptips weui-toptips_warn\" style=display:block><%= content %></div>";
+	module.exports = "<div class=\"weui-toptips weui-toptips_warn <%= className %>\" style=display:block><%= content %></div> ";
 
 /***/ },
 /* 17 */
@@ -2098,16 +2122,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.default = upload;
 	function upload(options) {
-	    var url = options.url;
-	    var file = options.file;
-	    var fileVal = options.fileVal;
-	    var onBeforeSend = options.onBeforeSend;
-	    var onProgress = options.onProgress;
-	    var onError = options.onError;
-	    var onSuccess = options.onSuccess;
-	    var name = file.name;
-	    var type = file.type;
-	    var lastModifiedDate = file.lastModifiedDate;
+	    var url = options.url,
+	        file = options.file,
+	        fileVal = options.fileVal,
+	        onBeforeSend = options.onBeforeSend,
+	        onProgress = options.onProgress,
+	        onError = options.onError,
+	        onSuccess = options.onSuccess;
+	    var name = file.name,
+	        type = file.type,
+	        lastModifiedDate = file.lastModifiedDate;
 
 	    var data = {
 	        name: name,
@@ -2202,7 +2226,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var $body = (0, _util2.default)('body');
 	var _sington = void 0;
 
 	var destroy = function destroy($picker) {
@@ -2213,7 +2236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var show = function show($picker) {
-	    $body.append($picker);
+	    (0, _util2.default)('body').append($picker);
 
 	    // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
 	    _util2.default.getStyle($picker[0], 'transform');
@@ -2236,9 +2259,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * picker 多列选择器。
 	 * @param {array} items picker的数据，即用于生成picker的数据，picker的层级可以自己定义，但建议最多三层。数据格式参考example。
 	 * @param {Object} options 配置项
+	 * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
 	 * @param {string=} [options.id=default] 作为picker的唯一标识
-	 * @param {function=} options.onChange 在picker选中的值发生变化的时候回调
-	 * @param {function=} options.onConfirm 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+	 * @param {string=} [options.className] 自定义类名
+	 * @param {array=} [options.defaultValue] 默认选项的value数组
+	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
+	 * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
 	 *
 	 * @example
 	 * // 单列picker
@@ -2261,6 +2287,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *     value: 4,
 	 * }
 	 * ], {
+	 *    className: 'custom-classname',
+	 *    defaultValue: [3],
 	 *    onChange: function (result) {
 	 *        console.log(result)
 	 *    },
@@ -2272,6 +2300,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @example
 	 * // 多列picker
+	 * weui.picker([
+	 *     {
+	 *         label: '1',
+	 *         value: '1'
+	 *     }, {
+	 *         label: '2',
+	 *         value: '2'
+	 *     }, {
+	 *         label: '3',
+	 *         value: '3'
+	 *     }
+	 * ], [
+	 *     {
+	 *         label: 'A',
+	 *         value: 'A'
+	 *     }, {
+	 *         label: 'B',
+	 *         value: 'B'
+	 *     }, {
+	 *         label: 'C',
+	 *         value: 'C'
+	 *     }
+	 * ], {
+	 *     defaultValue: ['3', 'A'],
+	 *     onChange: function (result) {
+	 *         console.log(result);
+	 *     },
+	 *     onConfirm: function (result) {
+	 *         console.log(result);
+	 *     },
+	 *     id: 'multiPickerBtn'
+	 * });
+	 *
+	 * @example
+	 * // 级联picker
 	 * weui.picker([
 	 * {
 	 *     label: '飞机票',
@@ -2321,6 +2384,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *     ]
 	 * }
 	 * ], {
+	 *    className: 'custom-classname',
+	 *    defaultValue: [1, 3],
 	 *    onChange: function (result) {
 	 *        console.log(result)
 	 *    },
@@ -2331,23 +2396,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * });
 	 */
 	function picker() {
-	    var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	    var options = arguments[1];
-
 	    if (_sington) return _sington;
 
+	    var isMulti = false; // 是否多列的类型
+
+	    // 数据
+	    var items = void 0;
+	    if (arguments.length > 2) {
+	        var i = 0;
+	        items = [];
+	        while (i < arguments.length - 1) {
+	            items.push(arguments[i++]);
+	        }
+	        isMulti = true;
+	    } else {
+	        items = arguments[0];
+	    }
+
+	    // 配置项
+	    var options = arguments[arguments.length - 1];
 	    var defaults = _util2.default.extend({
 	        id: 'default',
+	        className: '',
 	        onChange: _util2.default.noop,
 	        onConfirm: _util2.default.noop
 	    }, options);
 
-	    //获取缓存
+	    // 获取缓存
 	    temp[defaults.id] = temp[defaults.id] || [];
 	    var result = [];
 	    var lineTemp = temp[defaults.id];
-	    var $picker = (0, _util2.default)(_picker2.default);
-	    var depth = util.depthOf(items[0]),
+	    var $picker = (0, _util2.default)(_util2.default.render(_picker2.default, defaults));
+	    var depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])),
 	        groups = '';
 
 	    while (depth--) {
@@ -2359,6 +2439,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // 初始化滚动
 	    function scroll(items, level) {
+	        if (lineTemp[level] === undefined && defaults.defaultValue && defaults.defaultValue[level] !== undefined) {
+	            // 没有缓存选项，而且存在defaultValue
+	            var defaultVal = defaults.defaultValue[level];
+	            var index = 0,
+	                len = items.length;
+
+	            for (; index < len; ++index) {
+	                if (defaultVal == items[index].value) break;
+	            }
+	            if (index < len) {
+	                lineTemp[level] = index;
+	            } else {
+	                console.warn('Picker has not match defaultValue: ' + defaultVal);
+	            }
+	        }
 	        $picker.find('.weui-picker__group').eq(level).scroll({
 	            items: items,
 	            temp: lineTemp[level],
@@ -2371,30 +2466,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                lineTemp[level] = index;
 
-	                /**
-	                 * @子列表处理 1.在没有子列表，或者值列表的数组长度为0时，隐藏掉子列表。
-	                 *            2.滑动之后发现重新有子列表时，再次显示子列表。
-	                 *
-	                 * @回调处理 1.因为滑动实际上是一层一层传递的：父列表滚动完成之后，会call子列表的onChange，从而带动子列表的滑动。
-	                 *            2.所以，使用者的传进来onChange回调应该在最后一个子列表滑动时再call
-	                 */
-	                if (item.children && item.children.length > 0) {
-	                    $picker.find('.weui-picker__group').eq(level + 1).show();
-	                    scroll(item.children, level + 1);
-	                } else {
-	                    //如果子列表test不通过，子列表的长度减1。
-	                    result[level + 1] = null;
-	                    result.length = level + 1;
-	                    $picker.find('.weui-picker__group').eq(level + 1).hide();
-
-	                    //仅在没有值列表的时候调用onChange回调函数。
+	                if (isMulti) {
 	                    defaults.onChange(result);
+	                } else {
+	                    /**
+	                     * @子列表处理
+	                     * 1. 在没有子列表，或者值列表的数组长度为0时，隐藏掉子列表。
+	                     * 2. 滑动之后发现重新有子列表时，再次显示子列表。
+	                     *
+	                     * @回调处理
+	                     * 1. 因为滑动实际上是一层一层传递的：父列表滚动完成之后，会call子列表的onChange，从而带动子列表的滑动。
+	                     * 2. 所以，使用者的传进来onChange回调应该在最后一个子列表滑动时再call
+	                     */
+	                    if (item.children && item.children.length > 0) {
+	                        $picker.find('.weui-picker__group').eq(level + 1).show();
+	                        !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
+	                    } else {
+	                        //如果子列表test不通过，子孙列表都隐藏。
+	                        var $items = $picker.find('.weui-picker__group');
+	                        $items.forEach(function (ele, index) {
+	                            if (index > level) {
+	                                (0, _util2.default)(ele).hide();
+	                            }
+	                        });
+
+	                        result.splice(level + 1);
+
+	                        defaults.onChange(result);
+	                    }
 	                }
 	            },
 	            onConfirm: defaults.onConfirm
 	        });
 	    }
-	    scroll(items, 0);
+	    if (isMulti) {
+	        items.forEach(function (item, index) {
+	            scroll(item, index);
+	        });
+	    } else {
+	        scroll(items, 0);
+	    }
 
 	    $picker.on('click', '.weui-mask', function () {
 	        hide($picker);
@@ -2417,8 +2528,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {string=} [options.id=datePicker] 作为picker的唯一标识
 	 * @param {number=} [options.start=2000] 起始年份
 	 * @param {number=} [options.end=2030] 结束年份
-	 * @param {function=} options.onChange 在picker选中的值发生变化的时候回调
-	 * @param {function=} options.onConfirm 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
+	 * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
 	 *
 	 *@example
 	 * weui.datePicker({
@@ -2442,12 +2553,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        end: 2030
 	    }, options);
 
-	    //年份最小为1900，最大为2050
-	    /*
-	    defaults.start = defaults.start < 1900 ? 1900 : defaults.start;
-	    defaults.end = defaults.end > 2050 ? 2050 : defaults.end;
-	    */
-
 	    var date = [];
 	    var daysTotal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //所有月份的天数
 	    for (var i = defaults.start; i <= defaults.end; i++) {
@@ -2469,7 +2574,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            months.push({
 	                label: j + 1 + '月',
-	                value: j,
+	                value: j + 1,
 	                children: dates
 	            });
 	        }
@@ -2726,7 +2831,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 27 */
 /***/ function(module, exports) {
 
-	module.exports = "<div> <div class=weui-mask></div> <div class=weui-picker> <div class=weui-picker__hd> <a href=javascript:; data-action=cancel class=weui-picker__action>取消</a> <a href=javascript:; data-action=select class=weui-picker__action id=weui-picker-confirm>确定</a> </div> <div class=weui-picker__bd> </div> </div> </div>";
+	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=weui-picker> <div class=weui-picker__hd> <a href=javascript:; data-action=cancel class=weui-picker__action>取消</a> <a href=javascript:; data-action=select class=weui-picker__action id=weui-picker-confirm>确定</a> </div> <div class=weui-picker__bd></div> </div> </div> ";
 
 /***/ },
 /* 28 */
@@ -2754,17 +2859,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var $body = (0, _util2.default)('body');
 	var _sington = void 0;
 
 	/**
 	 * gallery 带删除按钮的图片预览，主要是配合图片上传使用
 	 * @param {string} url gallery显示的图片的url
 	 * @param {object=} options 配置项
+	 * @param {string=} options.className 自定义类名
 	 * @param {function=} options.onDelete 点击删除图片时的回调
 	 *
 	 * @example
 	 * var gallery = weui.gallery(url, {
+	 *     className: 'custom-classname',
 	 *     onDelete: function(){
 	 *         if(confirm('确定删除该图片？')){ console.log('删除'); }
 	 *         gallery.hide();
@@ -2776,11 +2882,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (_sington) return _sington;
 
-	    var $gallery = (0, _util2.default)(_util2.default.render(_gallery2.default, { url: url }));
-
 	    options = _util2.default.extend({
+	        className: '',
 	        onDelete: _util2.default.noop
 	    }, options);
+
+	    var $gallery = (0, _util2.default)(_util2.default.render(_gallery2.default, _util2.default.extend({
+	        url: url
+	    }, options)));
 
 	    function hide() {
 	        $gallery.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
@@ -2789,7 +2898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    }
 
-	    $body.append($gallery);
+	    (0, _util2.default)('body').append($gallery);
 	    $gallery.find('.weui-gallery__img').on('click', hide);
 	    $gallery.find('.weui-gallery__del').on('click', function () {
 	        options.onDelete.call(this, url);
@@ -2808,7 +2917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=weui-gallery> <span class=weui-gallery__img style=background-image:url(<%=url%>)></span> <div class=weui-gallery__opr> <a href=javascript: class=weui-gallery__del> <i class=\"weui-icon-delete weui-icon_gallery-delete\"></i> </a> </div> </div> ";
+	module.exports = "<div class=\"weui-gallery <%= className %>\"> <span class=weui-gallery__img style=\"background-image:url(<%= url %>)\"><%= url %></span> <div class=weui-gallery__opr> <a href=javascript: class=weui-gallery__del> <i class=\"weui-icon-delete weui-icon_gallery-delete\"></i> </a> </div> </div> ";
 
 /***/ }
 /******/ ])

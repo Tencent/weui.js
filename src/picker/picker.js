@@ -81,6 +81,41 @@ let temp = {};
  * @example
  * // 多列picker
  * weui.picker([
+ *     {
+ *         label: '1',
+ *         value: '1'
+ *     }, {
+ *         label: '2',
+ *         value: '2'
+ *     }, {
+ *         label: '3',
+ *         value: '3'
+ *     }
+ * ], [
+ *     {
+ *         label: 'A',
+ *         value: 'A'
+ *     }, {
+ *         label: 'B',
+ *         value: 'B'
+ *     }, {
+ *         label: 'C',
+ *         value: 'C'
+ *     }
+ * ], {
+ *     defaultValue: ['3', 'A'],
+ *     onChange: function (result) {
+ *         console.log(result);
+ *     },
+ *     onConfirm: function (result) {
+ *         console.log(result);
+ *     },
+ *     id: 'multiPickerBtn'
+ * });
+ *
+ * @example
+ * // 级联picker
+ * weui.picker([
  * {
  *     label: '飞机票',
  *     value: 0,
@@ -140,9 +175,27 @@ let temp = {};
  *    id: 'doubleLinePicker'
  * });
  */
-function picker(items = [], options) {
+function picker() {
     if(_sington) return _sington;
 
+    let isMulti = false; // 是否多列的类型
+
+    // 数据
+    let items;
+    if(arguments.length > 2){
+        let i = 0;
+        items = [];
+        while(i < arguments.length - 1){
+            items.push(arguments[i++]);
+        }
+        isMulti = true;
+    }else{
+        items = arguments[0];
+    }
+
+
+    // 配置项
+    const options = arguments[arguments.length - 1];
     const defaults = $.extend({
         id: 'default',
         className: '',
@@ -150,12 +203,12 @@ function picker(items = [], options) {
         onConfirm: $.noop
     }, options);
 
-    //获取缓存
+    // 获取缓存
     temp[defaults.id] = temp[defaults.id] || [];
     const result  = [];
     const lineTemp = temp[defaults.id];
     const $picker = $($.render(pickerTpl, defaults));
-    let depth = options.depth || util.depthOf(items[0]), groups = '';
+    let depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])), groups = '';
 
     while(depth--){
         groups += groupTpl;
@@ -177,7 +230,7 @@ function picker(items = [], options) {
             if(index < len){
                 lineTemp[level] = index;
             }else{
-                console.warn("Picker has not match defaultValue: " + defaultVal);
+                console.warn('Picker has not match defaultValue: ' + defaultVal);
             }
         }
         $picker.find('.weui-picker__group').eq(level).scroll({
@@ -192,37 +245,46 @@ function picker(items = [], options) {
                 }
                 lineTemp[level] = index;
 
-                /**
-                 * @子列表处理 1.在没有子列表，或者值列表的数组长度为0时，隐藏掉子列表。
-                 *            2.滑动之后发现重新有子列表时，再次显示子列表。
-                 *
-                 * @回调处理 1.因为滑动实际上是一层一层传递的：父列表滚动完成之后，会call子列表的onChange，从而带动子列表的滑动。
-                 *            2.所以，使用者的传进来onChange回调应该在最后一个子列表滑动时再call
-                 */
-                if (item.children && item.children.length > 0) {
-                    $picker.find('.weui-picker__group').eq(level + 1).show();
-                    scroll(item.children, level + 1);
-                }else{
-                    //如果子列表test不通过，子孙列表都隐藏。
-                    const $items = $picker.find('.weui-picker__group');
-
-                    result[level + 1] = null;
-                    result.length = level + 1;
-
-                    $items.forEach((ele, index) => {
-                        if(index > level){
-                            $(ele).hide();
-                        }
-                    });
-
-                    //仅在没有值列表的时候调用onChange回调函数。
+                if(isMulti){
                     defaults.onChange(result);
+                }else{
+                    /**
+                     * @子列表处理
+                     * 1. 在没有子列表，或者值列表的数组长度为0时，隐藏掉子列表。
+                     * 2. 滑动之后发现重新有子列表时，再次显示子列表。
+                     *
+                     * @回调处理
+                     * 1. 因为滑动实际上是一层一层传递的：父列表滚动完成之后，会call子列表的onChange，从而带动子列表的滑动。
+                     * 2. 所以，使用者的传进来onChange回调应该在最后一个子列表滑动时再call
+                     */
+                    if (item.children && item.children.length > 0) {
+                        $picker.find('.weui-picker__group').eq(level + 1).show();
+                        !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
+                    } else {
+                        //如果子列表test不通过，子孙列表都隐藏。
+                        const $items = $picker.find('.weui-picker__group');
+                        $items.forEach((ele, index) => {
+                            if(index > level){
+                                $(ele).hide();
+                            }
+                        });
+
+                        result.splice(level + 1);
+
+                        defaults.onChange(result);
+                    }
                 }
             },
             onConfirm: defaults.onConfirm
         });
     }
-    scroll(items, 0);
+    if(isMulti){
+        items.forEach((item, index) => {
+            scroll(item, index);
+        });
+    }else{
+        scroll(items, 0);
+    }
 
     $picker.on('click', '.weui-mask', function () {
         hide($picker);

@@ -153,6 +153,42 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
     });
 });
 
+//多列选择器
+document.querySelector('#multiPickerBtn').addEventListener('click', function () {
+    weui.picker([
+        {
+            label: '1',
+            value: '1'
+        }, {
+            label: '2',
+            value: '2'
+        }, {
+            label: '3',
+            value: '3'
+        }
+    ], [
+        {
+            label: 'A',
+            value: 'A'
+        }, {
+            label: 'B',
+            value: 'B'
+        }, {
+            label: 'C',
+            value: 'C'
+        }
+    ], {
+        defaultValue: ['3', 'A'],
+        onChange: function (result) {
+            console.log(result);
+        },
+        onConfirm: function (result) {
+            console.log(result);
+        },
+        id: 'multiPickerBtn'
+    });
+});
+
 // 级联选择器
 document.querySelector('#cascadePickerBtn').addEventListener('click', function () {
     weui.picker([

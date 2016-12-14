@@ -1,16 +1,19 @@
 describe('actionsheet', function(){
     this.timeout(0);
 
-    before(function(){
-        weui.actionSheet(
-            [ {label: '拍照'}, {label: '从相册选择'}],
-            [ {label: '确定'}, {label: '取消'}]
-        );
-    });
+    var actionsheetWrp;
 
     it('should render actionsheet', () => {
+        actionsheetWrp = weui.actionSheet(
+            [ {label: '拍照'}, {label: '从相册选择'}],
+            [ {label: '确定'}, {label: '取消'}],
+            {
+                className: 'test'
+            }
+        );
         const $actionsheet = $('.weui-actionsheet');
         assert($actionsheet.length === 1);
+        assert(actionsheetWrp.classList.contains('test'));
     });
     it('should render menus', () => {
         const $menu = $('.weui-actionsheet__menu');

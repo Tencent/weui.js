@@ -30,8 +30,9 @@ describe('toptips', function(){
 
     it('test duration & callback', (done) => {
         let called = false;
-        weui.topTips('顶部报错提示', {
+        let topTips = weui.topTips('顶部报错提示', {
             duration: dur,
+            className: 'test',
             callback: () => {
                 called = true;
             }
@@ -40,6 +41,7 @@ describe('toptips', function(){
         setTimeout(() => {
             assert($('.weui-toptips').length === 0);
             assert(called);
+            assert(topTips.classList.contains('test'));
             done();
         }, dur + 10);
     });

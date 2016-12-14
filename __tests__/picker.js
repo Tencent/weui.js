@@ -92,6 +92,53 @@ describe('picker', function () {
         }, closeDur);
     });
 
+    it('test mutli picker', (done) => {
+        changeRet = confirmRet = null;
+        const picker = weui.picker([
+            {
+                label: '1',
+                value: '1'
+            }, {
+                label: '2',
+                value: '2'
+            }, {
+                label: '3',
+                value: '3'
+            }
+        ], [
+            {
+                label: 'A',
+                value: 'A'
+            }, {
+                label: 'B',
+                value: 'B'
+            }, {
+                label: 'C',
+                value: 'C'
+            }
+        ], {
+            className: 'test',
+            defaultValue: ['3', 'A'],
+            onChange: function (result) {
+                changeRet = result;
+            },
+            onConfirm: function (result) {
+                confirmRet = result;
+            },
+            id: 'multiPickerBtn'
+        });
+        $('#weui-picker-confirm').click();
+        assert(picker.classList.contains('test'));
+        assert(JSON.stringify(changeRet) === '["3","A"]');
+        assert(JSON.stringify(confirmRet) === '["3","A"]');
+
+        setTimeout(() => {
+            assert($('.weui-picker').length === 0);
+
+            done();
+        }, closeDur);
+    });
+
     it('test mask click', (done) => {
         changeRet = confirmRet = null;
         weui.datePicker({

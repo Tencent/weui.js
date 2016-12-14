@@ -18,13 +18,15 @@ describe('alert', function(){
         close(done);
     });
 
-    it('should render custom title', (done) => {
-        const title = 'custom title';
-        weui.alert('test render custom title', {
-            title: title
+    it('should render custom title & className', (done) => {
+        const title = 'custom title', className = 'test';
+        const alert = weui.alert('test render custom title', {
+            title: title,
+            className: className
         });
 
         assert($('.weui-dialog__title').html() === title);
+        assert(alert.classList.contains(className));
 
         close(done);
     });

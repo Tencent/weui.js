@@ -18,13 +18,15 @@ describe('confirm', function(){
         close(done);
     });
 
-    it('should render custom title', (done) => {
-        const title = 'custom title';
-        weui.confirm('test render custom title', {
-            title: title
+    it('should render custom title & className', (done) => {
+        const title = 'custom title', className = 'test';
+        const confirm = weui.confirm('test render custom title', {
+            title: title,
+            className: className
         });
 
         assert($('.weui-dialog__title').html() === title);
+        assert(confirm.classList.contains(className));
 
         close(done);
     });

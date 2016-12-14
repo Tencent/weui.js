@@ -17,8 +17,9 @@ describe('toast', function(){
 
     it('test run callback', (done) => {
         let called = false;
-        weui.toast('操作成功', {
+        let toast = weui.toast('操作成功', {
             duration: dur,
+            className: 'test',
             callback: () => {
                 called = true;
             }
@@ -27,6 +28,7 @@ describe('toast', function(){
         setTimeout(() => {
             assert($('.weui-toast').length === 0);
             assert(called);
+            assert(toast.classList.contains('test'));
             done();
         }, dur + closeDur + 10);
     });

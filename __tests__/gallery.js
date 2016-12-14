@@ -1,8 +1,9 @@
 describe('gallery', function(){
     const url = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
-    let called = false;
+    let called = false, gallery;
     before(() => {
-        weui.gallery(url, {
+        gallery = weui.gallery(url, {
+            className: 'test',
             onDelete: function(){
                 called = true;
             }
@@ -14,6 +15,7 @@ describe('gallery', function(){
         assert($('.weui-gallery').length === 1);
         assert($img.length === 1);
         assert($img.attr('style').match(/\((.*?)\)/)[1] === url);
+        assert(gallery.classList.contains('test'));
     });
 
     it('test mask click', (done) => {

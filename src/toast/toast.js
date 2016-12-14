@@ -54,7 +54,7 @@ function toast(content = '', options = {}) {
             });
     }, options.duration);
 
-    _sington = $toast;
-    return $toast;
+    _sington = $toast[0];
+    return $toast[0];
 }
 export default toast;

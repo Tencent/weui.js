@@ -58,7 +58,7 @@ function topTips(content, options = {}) {
     };
     _toptips.timeout = setTimeout(hide, options.duration);
 
-    $topTips.hide = hide;
-    return $topTips;
+    $topTips[0].hide = hide;
+    return $topTips[0];
 }
 export default topTips;

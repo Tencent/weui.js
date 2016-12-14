@@ -88,8 +88,8 @@ function actionSheet(menus = [], actions = [], options = {}) {
         hide();
     });
 
-    $actionSheetWrap.hide = hide;
-    _sington = $actionSheetWrap;
-    return $actionSheetWrap;
+    _sington = $actionSheetWrap[0];
+    _sington.hide = hide;
+    return _sington;
 }
 export default actionSheet;

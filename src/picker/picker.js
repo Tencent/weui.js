@@ -294,11 +294,11 @@ function picker() {
         defaults.onConfirm(result);
     });
 
-    $picker.hide = () => {
+    _sington = $picker[0];
+    _sington.hide = () => {
         hide($picker);
     };
-    _sington = $picker;
-    return $picker;
+    return _sington;
 }
 
 /**

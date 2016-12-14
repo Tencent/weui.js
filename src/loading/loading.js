@@ -37,8 +37,8 @@ function loading(content = '', options = {}) {
     $('body').append($loading);
     $loading.addClass('weui-animate-fade-in');
 
-    $loading.hide = hide;
-    _sington = $loading;
-    return $loading;
+    _sington = $loading[0];
+    _sington.hide = hide;
+    return _sington;
 }
 export default loading;

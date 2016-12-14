@@ -75,8 +75,8 @@ function dialog(options = {}) {
         });
     });
 
-    $dialogWrap.hide = hide;
-    _sington = $dialogWrap;
-    return $dialogWrap;
+    _sington = $dialogWrap[0];
+    _sington.hide = hide;
+    return _sington;
 }
 export default dialog;

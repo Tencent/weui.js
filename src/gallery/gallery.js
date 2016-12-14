@@ -48,8 +48,8 @@ function gallery(url, options = {}) {
 
     $gallery.show().addClass('weui-animate-fade-in');
 
-    $gallery.hide = hide;
-    _sington = $gallery;
-    return $gallery;
+    _sington = $gallery[0];
+    _sington.hide = hide;
+    return _sington;
 }
 export default gallery;

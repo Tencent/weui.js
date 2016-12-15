@@ -9,6 +9,7 @@
 - [loading](component/loading.md)
 - [picker](component/picker.md)
 - [searchBar](component/searchBar.md)
+- [slider](component/slider.md)
 - [tab](component/tab.md)
 - [toast](component/toast.md)
 - [topTips](component/topTips.md)

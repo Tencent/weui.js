@@ -11,6 +11,7 @@ import form from './form/form';
 import uploader from './uploader/uploader';
 import {picker, datePicker} from './picker/picker';
 import gallery from './gallery/gallery';
+import slider from './slider/slider';
 
 export default {
     dialog,
@@ -26,5 +27,6 @@ export default {
     uploader,
     picker,
     datePicker,
-    gallery
+    gallery,
+    slider
 };

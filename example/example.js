@@ -153,7 +153,7 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
     });
 });
 
-//多列选择器
+// 多列选择器
 document.querySelector('#multiPickerBtn').addEventListener('click', function () {
     weui.picker([
         {
@@ -441,4 +441,38 @@ document.querySelector('#uploaderCustomFiles').addEventListener('click', functio
             });
         }
     });
+});
+
+
+/* 滑块 */
+// 普通slider
+var sliderValue = document.getElementById("sliderValue");
+weui.slider('#slider', {
+    defaultValue: 50,
+    onChange: function(percent){
+        sliderValue.innerHTML = Math.round(percent);
+        console.log(percent);
+    }
+});
+
+// 带step的slider
+var sliderStepValue = document.getElementById("sliderStepValue");
+weui.slider('#sliderStep', {
+    step: 10,
+    defaultValue: 40,
+    onChange: function(percent){
+        sliderStepValue.innerHTML = Math.round(percent);
+        console.log(percent);
+    }
+});
+
+// 分块的slider
+var sliderBlockValue = document.getElementById("sliderBlockValue");
+weui.slider('#sliderBlock', {
+    step: 100 / 3,
+    defaultValue: 33.333,
+    onChange: function(percent){
+        sliderBlockValue.innerHTML = Math.round(percent);
+        console.log(percent);
+    }
 });

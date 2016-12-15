@@ -198,7 +198,7 @@
 	    });
 	});
 
-	//多列选择器
+	// 多列选择器
 	document.querySelector('#multiPickerBtn').addEventListener('click', function () {
 	    _weui2.default.picker([{
 	        label: '1',
@@ -464,6 +464,39 @@
 	            });
 	        }
 	    });
+	});
+
+	/* 滑块 */
+	// 普通slider
+	var sliderValue = document.getElementById("sliderValue");
+	_weui2.default.slider('#slider', {
+	    defaultValue: 50,
+	    onChange: function onChange(percent) {
+	        sliderValue.innerHTML = Math.round(percent);
+	        console.log(percent);
+	    }
+	});
+
+	// 带step的slider
+	var sliderStepValue = document.getElementById("sliderStepValue");
+	_weui2.default.slider('#sliderStep', {
+	    step: 10,
+	    defaultValue: 40,
+	    onChange: function onChange(percent) {
+	        sliderStepValue.innerHTML = Math.round(percent);
+	        console.log(percent);
+	    }
+	});
+
+	// 分块的slider
+	var sliderBlockValue = document.getElementById("sliderBlockValue");
+	_weui2.default.slider('#sliderBlock', {
+	    step: 100 / 3,
+	    defaultValue: 33.333,
+	    onChange: function onChange(percent) {
+	        sliderBlockValue.innerHTML = Math.round(percent);
+	        console.log(percent);
+	    }
 	});
 
 /***/ },
@@ -1373,6 +1406,10 @@
 
 	var _gallery2 = _interopRequireDefault(_gallery);
 
+	var _slider = __webpack_require__(33);
+
+	var _slider2 = _interopRequireDefault(_slider);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
@@ -1389,7 +1426,8 @@
 	    uploader: _uploader2.default,
 	    picker: _picker.picker,
 	    datePicker: _picker.datePicker,
-	    gallery: _gallery2.default
+	    gallery: _gallery2.default,
+	    slider: _slider2.default
 	};
 	module.exports = exports['default'];
 
@@ -1491,9 +1529,9 @@
 	        });
 	    });
 
-	    $dialogWrap.hide = hide;
-	    _sington = $dialogWrap;
-	    return $dialogWrap;
+	    _sington = $dialogWrap[0];
+	    _sington.hide = hide;
+	    return _sington;
 	}
 	exports.default = dialog;
 	module.exports = exports['default'];
@@ -2267,8 +2305,8 @@
 	        });
 	    }, options.duration);
 
-	    _sington = $toast;
-	    return $toast;
+	    _sington = $toast[0];
+	    return $toast[0];
 	}
 	exports.default = toast;
 	module.exports = exports['default'];
@@ -2336,9 +2374,9 @@
 	    (0, _util2.default)('body').append($loading);
 	    $loading.addClass('weui-animate-fade-in');
 
-	    $loading.hide = hide;
-	    _sington = $loading;
-	    return $loading;
+	    _sington = $loading[0];
+	    _sington.hide = hide;
+	    return _sington;
 	}
 	exports.default = loading;
 	module.exports = exports['default'];
@@ -2456,9 +2494,9 @@
 	        hide();
 	    });
 
-	    $actionSheetWrap.hide = hide;
-	    _sington = $actionSheetWrap;
-	    return $actionSheetWrap;
+	    _sington = $actionSheetWrap[0];
+	    _sington.hide = hide;
+	    return _sington;
 	}
 	exports.default = actionSheet;
 	module.exports = exports['default'];
@@ -2548,8 +2586,8 @@
 	    };
 	    _toptips.timeout = setTimeout(hide, options.duration);
 
-	    $topTips.hide = hide;
-	    return $topTips;
+	    $topTips[0].hide = hide;
+	    return $topTips[0];
 	}
 	exports.default = topTips;
 	module.exports = exports['default'];
@@ -3773,11 +3811,11 @@
 	        defaults.onConfirm(result);
 	    });
 
-	    $picker.hide = function () {
+	    _sington = $picker[0];
+	    _sington.hide = function () {
 	        hide($picker);
 	    };
-	    _sington = $picker;
-	    return $picker;
+	    return _sington;
 	}
 
 	/**
@@ -4164,9 +4202,9 @@
 
 	    $gallery.show().addClass('weui-animate-fade-in');
 
-	    $gallery.hide = hide;
-	    _sington = $gallery;
-	    return $gallery;
+	    _sington = $gallery[0];
+	    _sington.hide = hide;
+	    return _sington;
 	}
 	exports.default = gallery;
 	module.exports = exports['default'];
@@ -4176,6 +4214,128 @@
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"weui-gallery <%= className %>\"> <span class=weui-gallery__img style=\"background-image:url(<%= url %>)\"><%= url %></span> <div class=weui-gallery__opr> <a href=javascript: class=weui-gallery__del> <i class=\"weui-icon-delete weui-icon_gallery-delete\"></i> </a> </div> </div> ";
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _util = __webpack_require__(4);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * slider slider滑块，单位是百分比
+	 * @param {string} selector slider的selector
+	 * @param {object=} options 配置项
+	 * @param {number=} options.step slider的step，每次移动的百分比，取值范围 [0-100]
+	 * @param {number=} [options.defaultValue=0] slider的默认百分比值，取值范围 [0-100]
+	 * @param {function=} options.onChange slider发生改变时返回对应的百分比，取值范围 [0-100]
+	 *
+	 * @example
+	 * weui.slider('#sliderStep', {
+	 *     step: 10,
+	 *     defaultValue: 40,
+	 *     onChange: function(percent){
+	 *         console.log(percent);
+	 *     }
+	 * });
+	 */
+	function slider(selector) {
+	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	    var $eles = (0, _util2.default)(selector);
+	    options = _util2.default.extend({
+	        step: undefined,
+	        defaultValue: 0,
+	        onChange: _util2.default.noop
+	    }, options);
+
+	    if (options.step !== undefined) {
+	        options.step = parseFloat(options.step);
+	        if (!options.step || options.step < 0) {
+	            throw new Error('Slider step must be a positive number.');
+	        }
+	    }
+	    if (options.defaultValue !== undefined && options.defaultValue < 0 || options.defaultValue > 100) {
+	        throw new Error('Slider defaultValue must be >= 0 and <= 100.');
+	    }
+
+	    $eles.forEach(function (ele) {
+	        var $slider = (0, _util2.default)(ele);
+	        var $sliderInner = $slider.find('.weui-slider__inner');
+	        var $sliderTrack = $slider.find('.weui-slider__track');
+	        var $sliderHandler = $slider.find('.weui-slider__handler');
+
+	        var sliderLength = parseInt(_util2.default.getStyle($sliderInner[0], 'width')); // slider的长度
+	        var sliderLeft = $sliderInner[0].offsetLeft; // slider相对于页面的offset
+	        var handlerStartPos = 0; // handler起始位置
+	        var handlerStartX = 0; // handler touchstart的X
+	        var stepWidth = void 0; // 每个step的宽度
+
+	        function getHandlerPos() {
+	            var pos = _util2.default.getStyle($sliderHandler[0], 'left');
+
+	            if (/%/.test(pos)) {
+	                pos = sliderLength * parseFloat(pos) / 100;
+	            } else {
+	                pos = parseFloat(pos);
+	            }
+	            return pos;
+	        }
+	        function setHandler(distance) {
+	            var dist = void 0,
+	                // handler的目标位置
+	            percent = void 0; // 所在位置的百分比
+
+	            if (options.step) {
+	                distance = Math.round(distance / stepWidth) * stepWidth;
+	            }
+
+	            dist = handlerStartPos + distance;
+	            dist = dist < 0 ? 0 : dist > sliderLength ? sliderLength : dist;
+
+	            percent = 100 * dist / sliderLength;
+
+	            $sliderTrack.css({ width: percent + '%' });
+	            $sliderHandler.css({ left: percent + '%' });
+	            options.onChange.call(ele, percent);
+	        }
+
+	        if (options.step) {
+	            stepWidth = sliderLength * options.step / 100;
+	        }
+	        if (options.defaultValue) {
+	            setHandler(sliderLength * options.defaultValue / 100);
+	        }
+
+	        $slider.on('click', function (evt) {
+	            evt.preventDefault();
+
+	            handlerStartPos = getHandlerPos();
+	            setHandler(evt.pageX - sliderLeft - handlerStartPos);
+	        });
+	        $sliderHandler.on('touchstart', function (evt) {
+	            handlerStartPos = getHandlerPos();
+	            handlerStartX = evt.changedTouches[0].clientX;
+	        }).on('touchmove', function (evt) {
+	            evt.preventDefault();
+
+	            setHandler(evt.changedTouches[0].clientX - handlerStartX);
+	        });
+	    });
+
+	    return this;
+	}
+	exports.default = slider;
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

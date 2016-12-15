@@ -2941,7 +2941,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * slider slider滑块，单位是百分比
+	 * slider slider滑块，单位是百分比。注意，因为需要获取slider的长度，所以必须要在slider可见的情况下来调用。
 	 * @param {string} selector slider的selector
 	 * @param {object=} options 配置项
 	 * @param {number=} options.step slider的step，每次移动的百分比，取值范围 [0-100]

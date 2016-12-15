@@ -1,7 +1,7 @@
 <a name="slider"></a>
 
 ## slider(selector, [options])
-slider slider滑块，单位是百分比
+slider slider滑块，单位是百分比。注意，因为需要获取slider的长度，所以必须要在slider可见的情况下来调用。
 
 **Kind**: global function  
 

@@ -296,11 +296,54 @@
 	/* searchbar */
 	_weui2.default.searchBar('#searchBar');
 
+	/* slider 因为需要获取长度，所以必须要在slider显示的时候来调用weui.slider*/
+	var isSetSlider = false;
+	function setSlider() {
+	    if (isSetSlider) return;
+	    isSetSlider = true;
+
+	    // 普通slider
+	    var sliderValue = document.getElementById("sliderValue");
+	    _weui2.default.slider('#slider', {
+	        defaultValue: 50,
+	        onChange: function onChange(percent) {
+	            sliderValue.innerHTML = Math.round(percent);
+	            console.log(percent);
+	        }
+	    });
+
+	    // 带step的slider
+	    var sliderStepValue = document.getElementById("sliderStepValue");
+	    _weui2.default.slider('#sliderStep', {
+	        step: 10,
+	        defaultValue: 40,
+	        onChange: function onChange(percent) {
+	            sliderStepValue.innerHTML = Math.round(percent);
+	            console.log(percent);
+	        }
+	    });
+
+	    // 分块的slider
+	    var sliderBlockValue = document.getElementById("sliderBlockValue");
+	    _weui2.default.slider('#sliderBlock', {
+	        step: 100 / 3,
+	        defaultValue: 33.333,
+	        onChange: function onChange(percent) {
+	            sliderBlockValue.innerHTML = Math.round(percent);
+	            console.log(percent);
+	        }
+	    });
+	}
+
 	/* tab */
 	_weui2.default.tab('#tab', {
 	    defaultIndex: 0,
 	    onChange: function onChange(index) {
 	        console.log(index);
+
+	        if (index == 3) {
+	            setSlider(); // 设置slider
+	        }
 	    }
 	});
 
@@ -464,39 +507,6 @@
 	            });
 	        }
 	    });
-	});
-
-	/* 滑块 */
-	// 普通slider
-	var sliderValue = document.getElementById("sliderValue");
-	_weui2.default.slider('#slider', {
-	    defaultValue: 50,
-	    onChange: function onChange(percent) {
-	        sliderValue.innerHTML = Math.round(percent);
-	        console.log(percent);
-	    }
-	});
-
-	// 带step的slider
-	var sliderStepValue = document.getElementById("sliderStepValue");
-	_weui2.default.slider('#sliderStep', {
-	    step: 10,
-	    defaultValue: 40,
-	    onChange: function onChange(percent) {
-	        sliderStepValue.innerHTML = Math.round(percent);
-	        console.log(percent);
-	    }
-	});
-
-	// 分块的slider
-	var sliderBlockValue = document.getElementById("sliderBlockValue");
-	_weui2.default.slider('#sliderBlock', {
-	    step: 100 / 3,
-	    defaultValue: 33.333,
-	    onChange: function onChange(percent) {
-	        sliderBlockValue.innerHTML = Math.round(percent);
-	        console.log(percent);
-	    }
 	});
 
 /***/ },
@@ -4232,7 +4242,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * slider slider滑块，单位是百分比
+	 * slider slider滑块，单位是百分比。注意，因为需要获取slider的长度，所以必须要在slider可见的情况下来调用。
 	 * @param {string} selector slider的selector
 	 * @param {object=} options 配置项
 	 * @param {number=} options.step slider的step，每次移动的百分比，取值范围 [0-100]

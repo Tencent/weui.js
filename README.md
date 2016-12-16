@@ -1,6 +1,11 @@
 weui.js
 =====
 
+[![npm version](https://img.shields.io/npm/v/weui.js.svg)](https://www.npmjs.org/package/weui.js/)
+
+
+### 概述
+
 [WeUI](https://github.com/weui/weui.git) 的轻量级 js 封装
 
 

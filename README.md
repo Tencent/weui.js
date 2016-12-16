@@ -3,10 +3,6 @@ weui.js
 
 [WeUI](https://github.com/weui/weui.git) 的轻量级 js 封装
 
-### 注意
-
-**weui.js目前正在处于测试阶段，不建议在正式环境上使用。**
-
 
 ### 手机预览
 

@@ -10,9 +10,9 @@ weui.js
 
 ### 手机预览
 
-![https://weui.io](https://cloud.githubusercontent.com/assets/2395166/20741202/b3da6c8a-b703-11e6-8cb1-1d5995c60579.png)
+![https://weui.io](https://cloud.githubusercontent.com/assets/2395166/20742697/96705822-b70c-11e6-9486-c03a5939a1d6.png)
 
-[https://weui.io/weui.js](https://weui.io/weui.js)
+[https://weui.io/weui.js/](https://weui.io/weui.js/)
 
 
 ### 开发

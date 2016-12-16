@@ -296,7 +296,7 @@
 	/* searchbar */
 	_weui2.default.searchBar('#searchBar');
 
-	/* slider 因为需要获取长度，所以必须要在slider显示的时候来调用weui.slider*/
+	/* slider 因为需要获取长度，所以必须要在slider显示的时候才调用weui.slider*/
 	var isSetSlider = false;
 	function setSlider() {
 	    if (isSetSlider) return;

@@ -1,8 +1,15 @@
 weui.js
 =====
 
-[WeUI](https://github.com/weui/weui.git) 的轻量级 js 封装
+[![npm version](https://img.shields.io/npm/v/weui.js.svg)](https://www.npmjs.org/package/weui.js/)
+[![QQ](http://pub.idqqimg.com/wpa/images/group.png)](http://jq.qq.com/?_wv=1027&k=413HLfV)
 
+
+### 概述
+
+[WeUI](https://github.com/weui/weui.git) 的轻量级 js 封装。
+
+注意：由于微信小程序不支持dom操作，所以weui.js并不适用于小程序。不过WeUI也为小程序开发了另外的版本，详情请看：https://github.com/weui/weui-wxss/
 
 ### 手机预览
 

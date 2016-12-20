@@ -307,13 +307,16 @@ function picker() {
  * @param {string=} [options.id=datePicker] 作为picker的唯一标识
  * @param {number=} [options.start=2000] 起始年份
  * @param {number=} [options.end=2030] 结束年份
+ * @param {string=} [options.className] 自定义类名
+ * @param {array=} [options.defaultValue] 默认选项的value数组, 如 [1991, 6, 9]
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
  * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
  *
  *@example
  * weui.datePicker({
- *     start: 2010,
- *     end: 2016,
+ *     start: 1990,
+ *     end: 2000,
+ *     defaultValue: [1991, 6, 9],
  *     onChange: function(result){
  *         console.log(result);
  *     },

@@ -40,21 +40,26 @@ function toast(content = '', options = {}) {
         className: ''
     }, options);
 
-    let $toast = $($.render(tpl, options));
-    $('body').append($toast);
+    const $toastWrap = $($.render(tpl, options));
+    const $toast = $toastWrap.find('.weui-toast');
+    const $mask = $toastWrap.find('.weui-mask');
+
+    $('body').append($toastWrap);
     $toast.addClass('weui-animate-fade-in');
+    $mask.addClass('weui-animate-fade-in');
 
     setTimeout(() => {
+        $mask.addClass('weui-animate-fade-out');
         $toast
             .addClass('weui-animate-fade-out')
             .on('animationend webkitAnimationEnd', function () {
-                $toast.remove();
+                $toastWrap.remove();
                 _sington = false;
                 options.callback();
             });
     }, options.duration);
 
-    _sington = $toast[0];
-    return $toast[0];
+    _sington = $toastWrap[0];
+    return $toastWrap[0];
 }
 export default toast;

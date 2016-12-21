@@ -25,19 +25,25 @@ function loading(content = '', options = {}) {
         className: ''
     }, options);
 
-    const $loading = $($.render(tpl, options));
+    const $loadingWrap = $($.render(tpl, options));
+    const $loading = $loadingWrap.find('.weui-toast');
+    const $mask = $loadingWrap.find('.weui-mask');
+
     function hide() {
+        $mask.addClass('weui-animate-fade-out');
         $loading
             .addClass('weui-animate-fade-out')
             .on('animationend webkitAnimationEnd', function () {
-                $loading.remove();
+                $loadingWrap.remove();
                 _sington = false;
             });
     }
-    $('body').append($loading);
-    $loading.addClass('weui-animate-fade-in');
 
-    _sington = $loading[0];
+    $('body').append($loadingWrap);
+    $loading.addClass('weui-animate-fade-in');
+    $mask.addClass('weui-animate-fade-in');
+
+    _sington = $loadingWrap[0];
     _sington.hide = hide;
     return _sington;
 }

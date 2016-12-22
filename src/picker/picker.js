@@ -4,7 +4,12 @@ import * as util from './util';
 import pickerTpl from './picker.html';
 import groupTpl from './group.html';
 
-let _sington;
+function Result(item){
+    this.label = item.label;
+    this.value = item.value;
+}
+Result.prototype.toString = function(){ return this.value };
+Result.prototype.valueOf = function(){ return this.value };
 
 const destroy = ($picker) => {
     if ($picker) {
@@ -12,7 +17,6 @@ const destroy = ($picker) => {
         _sington = false;
     }
 };
-
 const show = ($picker) => {
     $('body').append($picker);
 
@@ -22,7 +26,6 @@ const show = ($picker) => {
     $picker.find('.weui-mask').addClass('weui-animate-fade-in');
     $picker.find('.weui-picker').addClass('weui-animate-slide-up');
 };
-
 const hide = ($picker) => {
     $picker.find('.weui-mask').addClass('weui-animate-fade-out');
     $picker.find('.weui-picker')
@@ -31,9 +34,8 @@ const hide = ($picker) => {
             destroy($picker);
         });
 };
-
-// temp 存在上一次滑动的位置
-let temp = {};
+let _sington;
+let temp = {}; // temp 存在上一次滑动的位置
 
 /**
  * picker 多列选择器。
@@ -239,7 +241,7 @@ function picker() {
             onChange: function (item, index) {
                 //为当前的result赋值。
                 if(item){
-                    result[level] = item.value;
+                    result[level] = new Result(item);
                 }else{
                     result[level] = null;
                 }

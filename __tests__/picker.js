@@ -76,14 +76,28 @@ describe('picker', function () {
     });
 
     it('test change callback', () => {
-        assert(JSON.stringify(changeRet) === '[2,"W"]');
+        assert(changeRet.length === 2);
+        assert(changeRet[0].label === '的士票');
+        assert(changeRet[0].value === 2);
+        console.log(changeRet);
+        assert(changeRet[1].label === '西');
+        assert(changeRet[1].value === 'W');
         assert(confirmRet === null);
     });
 
     it('test confirmBtn click', (done) => {
         $('#weui-picker-confirm').click();
-        assert(JSON.stringify(changeRet) === '[2,"W"]');
-        assert(JSON.stringify(confirmRet) === '[2,"W"]');
+        assert(changeRet.length === 2);
+        assert(changeRet[0].label === '的士票');
+        assert(changeRet[0].value === 2);
+        assert(changeRet[1].label === '西');
+        assert(changeRet[1].value === 'W');
+
+        assert(confirmRet.length === 2);
+        assert(confirmRet[0].label === '的士票');
+        assert(confirmRet[0].value === 2);
+        assert(confirmRet[1].label === '西');
+        assert(confirmRet[1].value === 'W');
 
         setTimeout(() => {
             assert($('.weui-picker').length === 0);
@@ -129,8 +143,18 @@ describe('picker', function () {
         });
         $('#weui-picker-confirm').click();
         assert(picker.classList.contains('test'));
-        assert(JSON.stringify(changeRet) === '["3","A"]');
-        assert(JSON.stringify(confirmRet) === '["3","A"]');
+
+        assert(changeRet.length === 2);
+        assert(changeRet[0].label === '3');
+        assert(changeRet[0].value === '3');
+        assert(changeRet[1].label === 'A');
+        assert(changeRet[1].value === 'A');
+
+        assert(confirmRet.length === 2);
+        assert(confirmRet[0].label === '3');
+        assert(confirmRet[0].value === '3');
+        assert(confirmRet[1].label === 'A');
+        assert(confirmRet[1].value === 'A');
 
         setTimeout(() => {
             assert($('.weui-picker').length === 0);

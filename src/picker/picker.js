@@ -402,6 +402,15 @@ function datePicker(options) {
         defaults.end = new Date(defaults.end);
     }
 
+    const findBy = (array, key, value) => {
+        for(let i = 0, len = array.length; i < len; i++){
+            const obj = array[i];
+            if(obj[key] == value){
+                return obj;
+            }
+        }
+    };
+
     const date = [];
     const interval = cron.parse(defaults.cron, defaults.start, defaults.end);
     let obj;
@@ -412,7 +421,7 @@ function datePicker(options) {
         const month = obj.value.getMonth() + 1;
         const day = obj.value.getDate();
 
-        let Y = date.find((y) => y.value == year);
+        let Y = findBy(date, 'value', year);
         if (!Y) {
             Y = {
                 label: year + '年',
@@ -421,7 +430,7 @@ function datePicker(options) {
             };
             date.push(Y);
         }
-        let M = Y.children.find((m) => m.value == month);
+        let M = findBy(Y.children, 'value', month);
         if (!M) {
             M = {
                 label: month + '月',

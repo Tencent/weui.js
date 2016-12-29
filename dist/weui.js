@@ -2640,20 +2640,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        defaults.end = new Date(defaults.end);
 	    }
 
+	    var findBy = function findBy(array, key, value) {
+	        for (var i = 0, len = array.length; i < len; i++) {
+	            var _obj = array[i];
+	            if (_obj[key] == value) {
+	                return _obj;
+	            }
+	        }
+	    };
+
 	    var date = [];
 	    var interval = _cron2.default.parse(defaults.cron, defaults.start, defaults.end);
 	    var obj = void 0;
-
-	    var _loop = function _loop() {
+	    do {
 	        obj = interval.next();
 
 	        var year = obj.value.getFullYear();
 	        var month = obj.value.getMonth() + 1;
 	        var day = obj.value.getDate();
 
-	        var Y = date.find(function (y) {
-	            return y.value == year;
-	        });
+	        var Y = findBy(date, 'value', year);
 	        if (!Y) {
 	            Y = {
 	                label: year + '年',
@@ -2662,9 +2668,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 	            date.push(Y);
 	        }
-	        var M = Y.children.find(function (m) {
-	            return m.value == month;
-	        });
+	        var M = findBy(Y.children, 'value', month);
 	        if (!M) {
 	            M = {
 	                label: month + '月',
@@ -2677,10 +2681,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            label: day + '日',
 	            value: day
 	        });
-	    };
-
-	    do {
-	        _loop();
 	    } while (!obj.done);
 
 	    return picker(date, defaults);
@@ -2837,7 +2837,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    field = field.replace(/\*/g, low + '-' + high);
 
 	    // 处理 1,2,5-9 这种情况
-	    field.split(',').map(function (f) {
+	    var fields = field.split(',');
+	    for (var i = 0, len = fields.length; i < len; i++) {
+	        var f = fields[i];
 	        if (f.match(regex)) {
 	            f.replace(regex, function ($0, lower, upper, step) {
 	                // ref to `cron-parser`
@@ -2857,7 +2859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } while (pointer <= upper);
 	            });
 	        }
-	    });
+	    }
 	    return result;
 	}
 
@@ -2870,9 +2872,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function parse(expr, start, end) {
 	    var atoms = expr.replace(/^\s\s*|\s\s*$/g, '').split(/\s+/);
-	    var fields = atoms.map(function (atom, index) {
+	    var fields = [];
+	    atoms.forEach(function (atom, index) {
 	        var constraint = constraints[index];
-	        return parseField(atom, constraint);
+	        fields.push(parseField(atom, constraint));
 	    });
 	    return new Schedule(fields, start, end);
 	}

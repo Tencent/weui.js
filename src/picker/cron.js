@@ -116,7 +116,9 @@ function parseField(field, constraints) {
     field = field.replace(/\*/g, low + '-' + high);
 
     // 处理 1,2,5-9 这种情况
-    field.split(',').map((f) => {
+    const fields = field.split(',');
+    for (let i = 0, len = fields.length; i < len; i++){
+        const f = fields[i];
         if (f.match(regex)) {
             f.replace(regex, function ($0, lower, upper, step) {
                 // ref to `cron-parser`
@@ -136,7 +138,7 @@ function parseField(field, constraints) {
                 } while (pointer <= upper);
             });
         }
-    });
+    }
     return result;
 }
 
@@ -149,9 +151,10 @@ function parseField(field, constraints) {
  */
 function parse(expr, start, end) {
     const atoms = expr.replace(/^\s\s*|\s\s*$/g, '').split(/\s+/);
-    const fields = atoms.map((atom, index) => {
+    const fields = [];
+    atoms.forEach((atom, index) => {
         const constraint = constraints[index];
-        return parseField(atom, constraint);
+        fields.push(parseField(atom, constraint));
     });
     return new Schedule(fields, start, end);
 }

@@ -15,11 +15,5 @@ slider slider滑块，单位是百分比。注意，因为需要获取slider的�
 
 **Example**  
 ```js
-weui.slider('#sliderStep', {
-    step: 10,
-    defaultValue: 40,
-    onChange: function(percent){
-        console.log(percent);
-    }
-});
+weui.slider('#sliderStep', {    step: 10,    defaultValue: 40,    onChange: function(percent){        console.log(percent);    }});
 ```

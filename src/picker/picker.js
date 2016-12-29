@@ -1,15 +1,20 @@
 import $ from '../util/util';
+import cron from './cron';
 import './scroll';
 import * as util from './util';
 import pickerTpl from './picker.html';
 import groupTpl from './group.html';
 
-function Result(item){
+function Result(item) {
     this.label = item.label;
     this.value = item.value;
 }
-Result.prototype.toString = function(){ return this.value };
-Result.prototype.valueOf = function(){ return this.value };
+Result.prototype.toString = function () {
+    return this.value
+};
+Result.prototype.valueOf = function () {
+    return this.value
+};
 
 const destroy = ($picker) => {
     if ($picker) {
@@ -178,20 +183,20 @@ let temp = {}; // temp 存在上一次滑动的位置
  * });
  */
 function picker() {
-    if(_sington) return _sington;
+    if (_sington) return _sington;
 
     let isMulti = false; // 是否多列的类型
 
     // 数据
     let items;
-    if(arguments.length > 2){
+    if (arguments.length > 2) {
         let i = 0;
         items = [];
-        while(i < arguments.length - 1){
+        while (i < arguments.length - 1) {
             items.push(arguments[i++]);
         }
         isMulti = true;
-    }else{
+    } else {
         items = arguments[0];
     }
 
@@ -207,12 +212,12 @@ function picker() {
 
     // 获取缓存
     temp[defaults.id] = temp[defaults.id] || [];
-    const result  = [];
+    const result = [];
     const lineTemp = temp[defaults.id];
     const $picker = $($.render(pickerTpl, defaults));
     let depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])), groups = '';
 
-    while(depth--){
+    while (depth--) {
         groups += groupTpl;
     }
 
@@ -221,17 +226,17 @@ function picker() {
 
     // 初始化滚动
     function scroll(items, level) {
-        if(lineTemp[level] === undefined && defaults.defaultValue && defaults.defaultValue[level] !== undefined){
+        if (lineTemp[level] === undefined && defaults.defaultValue && defaults.defaultValue[level] !== undefined) {
             // 没有缓存选项，而且存在defaultValue
             const defaultVal = defaults.defaultValue[level];
             let index = 0, len = items.length;
 
             for (; index < len; ++index) {
-                if(defaultVal == items[index].value) break;
+                if (defaultVal == items[index].value) break;
             }
-            if(index < len){
+            if (index < len) {
                 lineTemp[level] = index;
-            }else{
+            } else {
                 console.warn('Picker has not match defaultValue: ' + defaultVal);
             }
         }
@@ -240,16 +245,16 @@ function picker() {
             temp: lineTemp[level],
             onChange: function (item, index) {
                 //为当前的result赋值。
-                if(item){
+                if (item) {
                     result[level] = new Result(item);
-                }else{
+                } else {
                     result[level] = null;
                 }
                 lineTemp[level] = index;
 
-                if(isMulti){
+                if (isMulti) {
                     defaults.onChange(result);
-                }else{
+                } else {
                     /**
                      * @子列表处理
                      * 1. 在没有子列表，或者值列表的数组长度为0时，隐藏掉子列表。
@@ -266,7 +271,7 @@ function picker() {
                         //如果子列表test不通过，子孙列表都隐藏。
                         const $items = $picker.find('.weui-picker__group');
                         $items.forEach((ele, index) => {
-                            if(index > level){
+                            if (index > level) {
                                 $(ele).hide();
                             }
                         });
@@ -280,11 +285,12 @@ function picker() {
             onConfirm: defaults.onConfirm
         });
     }
-    if(isMulti){
+
+    if (isMulti) {
         items.forEach((item, index) => {
             scroll(item, index);
         });
-    }else{
+    } else {
         scroll(items, 0);
     }
 
@@ -307,8 +313,9 @@ function picker() {
  * dataPicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
  * @param options 配置项
  * @param {string=} [options.id=datePicker] 作为picker的唯一标识
- * @param {number=} [options.start=2000] 起始年份
- * @param {number=} [options.end=2030] 结束年份
+ * @param {number=|string|Date} [options.start=2000] 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date
+ * @param {number=|string|Date} [options.end=2030] 结束年份，同上
+ * @param {string=} [options.cron='* * *'] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[0-11] 和 dayOfWeek[0-6]，
  * @param {string=} [options.className] 自定义类名
  * @param {array=} [options.defaultValue] 默认选项的value数组, 如 [1991, 6, 9]
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
@@ -334,42 +341,58 @@ function datePicker(options) {
         onChange: $.noop,
         onConfirm: $.noop,
         start: 2000,
-        end: 2030
+        end: 2030,
+        cron: '* * *'
     }, options);
 
-    const date = [];
-    const daysTotal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];           //所有月份的天数
-    for (let i = defaults.start; i <= defaults.end; i++) {
-        const months = [];
-        if ((i % 4 == 0 && i % 100 != 0) || i % 400 == 0) {                     //判定为闰年
-            daysTotal[1] = 29;
-        } else {
-            daysTotal[1] = 28;
-        }
-        for (let j = 0; j < 12; j++) {
-            const dates = [];
-            for (let k = 1; k < daysTotal[j] + 1; k++) {
-                const date = {
-                    label: k + '日',
-                    value: k
-                };
-                dates.push(date);
-            }
-            months.push({
-                label: j + 1 + '月',
-                value: j + 1,
-                children: dates,
-            });
-        }
-
-        const year = {
-            label: i + '年',
-            value: i,
-            children: months
-        };
-
-        date.push(year);
+    // 兼容原来的 start、end 传 Number 的用法
+    if (typeof defaults.start === 'number') {
+        defaults.start = new Date(`${defaults.start}-01-01`);
     }
+    else if (typeof defaults.start === 'string') {
+        defaults.start = new Date(defaults.start);
+    }
+    if (typeof defaults.end === 'number') {
+        defaults.end = new Date(`${defaults.end}-12-31`);
+    }
+    else if (typeof defaults.end === 'string') {
+        defaults.end = new Date(defaults.end);
+    }
+
+    const date = [];
+    const interval = cron.parse(defaults.cron, defaults.start, defaults.end);
+    let obj;
+    do {
+        obj = interval.next();
+
+        const year = obj.value.getFullYear();
+        const month = obj.value.getMonth() + 1;
+        const day = obj.value.getDate();
+
+        let Y = date.find((y) => y.value == year);
+        if (!Y) {
+            Y = {
+                label: year + '年',
+                value: year,
+                children: []
+            };
+            date.push(Y);
+        }
+        let M = Y.children.find((m) => m.value == month);
+        if (!M) {
+            M = {
+                label: month + '月',
+                value: month,
+                children: []
+            };
+            Y.children.push(M);
+        }
+        M.children.push({
+            label: day + '日',
+            value: day
+        });
+    }
+    while (!obj.done);
 
     return picker(date, defaults);
 }

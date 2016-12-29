@@ -140,9 +140,10 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
 // 时间选择器
 document.querySelector('#datePickerBtn').addEventListener('click', function () {
     weui.datePicker({
-        start: 1990,
-        end: 2000,
-        defaultValue: [1991, 6, 9],
+        start: '2016-12-29',
+        end: '2030-12-29',
+        cron: '* * *',
+        defaultValue: [2017, 6, 9],
         onChange: function (result) {
             console.log(result);
         },

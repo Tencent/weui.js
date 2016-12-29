@@ -111,11 +111,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _picker = __webpack_require__(24);
 
-	var _gallery = __webpack_require__(29);
+	var _gallery = __webpack_require__(30);
 
 	var _gallery2 = _interopRequireDefault(_gallery);
 
-	var _slider = __webpack_require__(31);
+	var _slider = __webpack_require__(32);
 
 	var _slider2 = _interopRequireDefault(_slider);
 
@@ -1002,20 +1002,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        className: ''
 	    }, options);
 
-	    var $toast = (0, _util2.default)(_util2.default.render(_toast2.default, options));
-	    (0, _util2.default)('body').append($toast);
+	    var $toastWrap = (0, _util2.default)(_util2.default.render(_toast2.default, options));
+	    var $toast = $toastWrap.find('.weui-toast');
+	    var $mask = $toastWrap.find('.weui-mask');
+
+	    (0, _util2.default)('body').append($toastWrap);
 	    $toast.addClass('weui-animate-fade-in');
+	    $mask.addClass('weui-animate-fade-in');
 
 	    setTimeout(function () {
+	        $mask.addClass('weui-animate-fade-out');
 	        $toast.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
-	            $toast.remove();
+	            $toastWrap.remove();
 	            _sington = false;
 	            options.callback();
 	        });
 	    }, options.duration);
 
-	    _sington = $toast[0];
-	    return $toast[0];
+	    _sington = $toastWrap[0];
+	    return $toastWrap[0];
 	}
 	exports.default = toast;
 	module.exports = exports['default'];
@@ -1073,17 +1078,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        className: ''
 	    }, options);
 
-	    var $loading = (0, _util2.default)(_util2.default.render(_loading2.default, options));
+	    var $loadingWrap = (0, _util2.default)(_util2.default.render(_loading2.default, options));
+	    var $loading = $loadingWrap.find('.weui-toast');
+	    var $mask = $loadingWrap.find('.weui-mask');
+
 	    function hide() {
+	        $mask.addClass('weui-animate-fade-out');
 	        $loading.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
-	            $loading.remove();
+	            $loadingWrap.remove();
 	            _sington = false;
 	        });
 	    }
-	    (0, _util2.default)('body').append($loading);
-	    $loading.addClass('weui-animate-fade-in');
 
-	    _sington = $loading[0];
+	    (0, _util2.default)('body').append($loadingWrap);
+	    $loading.addClass('weui-animate-fade-in');
+	    $mask.addClass('weui-animate-fade-in');
+
+	    _sington = $loadingWrap[0];
 	    _sington.hide = hide;
 	    return _sington;
 	}
@@ -2213,17 +2224,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _util2 = _interopRequireDefault(_util);
 
-	__webpack_require__(25);
+	var _cron = __webpack_require__(25);
 
-	var _util3 = __webpack_require__(26);
+	var _cron2 = _interopRequireDefault(_cron);
+
+	__webpack_require__(26);
+
+	var _util3 = __webpack_require__(27);
 
 	var util = _interopRequireWildcard(_util3);
 
-	var _picker = __webpack_require__(27);
+	var _picker = __webpack_require__(28);
 
 	var _picker2 = _interopRequireDefault(_picker);
 
-	var _group = __webpack_require__(28);
+	var _group = __webpack_require__(29);
 
 	var _group2 = _interopRequireDefault(_group);
 
@@ -2231,7 +2246,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _sington = void 0;
+	function Result(item) {
+	    this.label = item.label;
+	    this.value = item.value;
+	}
+	Result.prototype.toString = function () {
+	    return this.value;
+	};
+	Result.prototype.valueOf = function () {
+	    return this.value;
+	};
 
 	var destroy = function destroy($picker) {
 	    if ($picker) {
@@ -2239,7 +2263,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _sington = false;
 	    }
 	};
-
 	var show = function show($picker) {
 	    (0, _util2.default)('body').append($picker);
 
@@ -2249,16 +2272,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $picker.find('.weui-mask').addClass('weui-animate-fade-in');
 	    $picker.find('.weui-picker').addClass('weui-animate-slide-up');
 	};
-
 	var hide = function hide($picker) {
 	    $picker.find('.weui-mask').addClass('weui-animate-fade-out');
 	    $picker.find('.weui-picker').addClass('weui-animate-slide-down').on('animationend webkitAnimationEnd', function () {
 	        destroy($picker);
 	    });
 	};
-
-	// temp 存在上一次滑动的位置
-	var temp = {};
+	var _sington = void 0;
+	var temp = {}; // temp 存在上一次滑动的位置
 
 	/**
 	 * picker 多列选择器。
@@ -2465,7 +2486,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            onChange: function onChange(item, index) {
 	                //为当前的result赋值。
 	                if (item) {
-	                    result[level] = item.value;
+	                    result[level] = new Result(item);
 	                } else {
 	                    result[level] = null;
 	                }
@@ -2504,6 +2525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            onConfirm: defaults.onConfirm
 	        });
 	    }
+
 	    if (isMulti) {
 	        items.forEach(function (item, index) {
 	            scroll(item, index);
@@ -2531,15 +2553,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * dataPicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
 	 * @param options 配置项
 	 * @param {string=} [options.id=datePicker] 作为picker的唯一标识
-	 * @param {number=} [options.start=2000] 起始年份
-	 * @param {number=} [options.end=2030] 结束年份
+	 * @param {number=|string|Date} [options.start=2000] 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date
+	 * @param {number=|string|Date} [options.end=2030] 结束年份，同上
+	 * @param {string=} [options.cron='* * *'] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[0-11] 和 dayOfWeek[0-6]，
+	 * @param {string=} [options.className] 自定义类名
+	 * @param {array=} [options.defaultValue] 默认选项的value数组, 如 [1991, 6, 9]
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
 	 * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
 	 *
 	 *@example
 	 * weui.datePicker({
-	 *     start: 2010,
-	 *     end: 2016,
+	 *     start: 1990,
+	 *     end: 2000,
+	 *     defaultValue: [1991, 6, 9],
 	 *     onChange: function(result){
 	 *         console.log(result);
 	 *     },
@@ -2555,43 +2581,64 @@ return /******/ (function(modules) { // webpackBootstrap
 	        onChange: _util2.default.noop,
 	        onConfirm: _util2.default.noop,
 	        start: 2000,
-	        end: 2030
+	        end: 2030,
+	        cron: '* * *'
 	    }, options);
 
-	    var date = [];
-	    var daysTotal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //所有月份的天数
-	    for (var i = defaults.start; i <= defaults.end; i++) {
-	        var months = [];
-	        if (i % 4 == 0 && i % 100 != 0 || i % 400 == 0) {
-	            //判定为闰年
-	            daysTotal[1] = 29;
-	        } else {
-	            daysTotal[1] = 28;
-	        }
-	        for (var j = 0; j < 12; j++) {
-	            var dates = [];
-	            for (var k = 1; k < daysTotal[j] + 1; k++) {
-	                var _date = {
-	                    label: k + '日',
-	                    value: k
-	                };
-	                dates.push(_date);
-	            }
-	            months.push({
-	                label: j + 1 + '月',
-	                value: j + 1,
-	                children: dates
-	            });
-	        }
-
-	        var year = {
-	            label: i + '年',
-	            value: i,
-	            children: months
-	        };
-
-	        date.push(year);
+	    // 兼容原来的 start、end 传 Number 的用法
+	    if (typeof defaults.start === 'number') {
+	        defaults.start = new Date(defaults.start + '-01-01');
+	    } else if (typeof defaults.start === 'string') {
+	        defaults.start = new Date(defaults.start);
 	    }
+	    if (typeof defaults.end === 'number') {
+	        defaults.end = new Date(defaults.end + '-12-31');
+	    } else if (typeof defaults.end === 'string') {
+	        defaults.end = new Date(defaults.end);
+	    }
+
+	    var date = [];
+	    var interval = _cron2.default.parse(defaults.cron, defaults.start, defaults.end);
+	    var obj = void 0;
+
+	    var _loop = function _loop() {
+	        obj = interval.next();
+
+	        var year = obj.value.getFullYear();
+	        var month = obj.value.getMonth() + 1;
+	        var day = obj.value.getDate();
+
+	        var Y = date.find(function (y) {
+	            return y.value == year;
+	        });
+	        if (!Y) {
+	            Y = {
+	                label: year + '年',
+	                value: year,
+	                children: []
+	            };
+	            date.push(Y);
+	        }
+	        var M = Y.children.find(function (m) {
+	            return m.value == month;
+	        });
+	        if (!M) {
+	            M = {
+	                label: month + '月',
+	                value: month,
+	                children: []
+	            };
+	            Y.children.push(M);
+	        }
+	        M.children.push({
+	            label: day + '日',
+	            value: day
+	        });
+	    };
+
+	    do {
+	        _loop();
+	    } while (!obj.done);
 
 	    return picker(date, defaults);
 	}
@@ -2604,6 +2651,195 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 25 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var regex = /^(\d+)(?:-(\d+))?(?:\/(\d+))?$/g;
+	var constraints = [[1, 31], [0, 11], [0, 6]];
+
+	/**
+	 * Schedule
+	 */
+
+	var Schedule = function () {
+	    function Schedule(fields, start, end) {
+	        _classCallCheck(this, Schedule);
+
+	        /**
+	         * dayOfMonth
+	         * @type {Array}
+	         */
+	        this._dates = fields[0];
+
+	        /**
+	         * month
+	         * @type {Array}
+	         */
+	        this._months = fields[1];
+
+	        /**
+	         * dayOfWeek
+	         * @type {Array}
+	         */
+	        this._days = fields[2];
+
+	        /**
+	         * start
+	         * @type {Date}
+	         */
+	        this._start = start;
+
+	        /**
+	         * end
+	         * @type {Date}
+	         */
+	        this._end = end;
+
+	        /**
+	         * cursor
+	         * @type {Date}
+	         * @private
+	         */
+	        this._pointer = start;
+	    }
+
+	    _createClass(Schedule, [{
+	        key: '_findNext',
+	        value: function _findNext() {
+	            var next = void 0;
+	            while (true) {
+	                if (this._end.getTime() - this._pointer.getTime() <= 0) {
+	                    throw new Error('out of range, end is ' + this._end + ', current is ' + this._pointer);
+	                }
+
+	                var month = this._pointer.getMonth();
+	                var date = this._pointer.getDate();
+	                var day = this._pointer.getDay();
+
+	                if (this._months.indexOf(month) === -1) {
+	                    this._pointer.setMonth(month + 1);
+	                    this._pointer.setDate(1);
+	                    continue;
+	                }
+
+	                if (this._dates.indexOf(date) === -1) {
+	                    this._pointer.setDate(date + 1);
+	                    continue;
+	                }
+
+	                if (this._days.indexOf(day) === -1) {
+	                    this._pointer.setDate(date + 1);
+	                    continue;
+	                }
+
+	                next = new Date(this._pointer);
+
+	                break;
+	            }
+	            return next;
+	        }
+
+	        /**
+	         * fetch next data
+	         */
+
+	    }, {
+	        key: 'next',
+	        value: function next() {
+	            var value = this._findNext();
+	            // move next date
+	            this._pointer.setDate(this._pointer.getDate() + 1);
+	            return {
+	                value: value,
+	                done: !this.hasNext()
+	            };
+	        }
+
+	        /**
+	         * has next
+	         * @returns {boolean}
+	         */
+
+	    }, {
+	        key: 'hasNext',
+	        value: function hasNext() {
+	            try {
+	                this._findNext();
+	                return true;
+	            } catch (e) {
+	                return false;
+	            }
+	        }
+	    }]);
+
+	    return Schedule;
+	}();
+
+	function parseField(field, constraints) {
+	    var low = constraints[0];
+	    var high = constraints[1];
+	    var result = [];
+	    var pointer = void 0;
+
+	    // * 号等于最低到最高
+	    field = field.replace(/\*/g, low + '-' + high);
+
+	    // 处理 1,2,5-9 这种情况
+	    field.split(',').map(function (f) {
+	        if (f.match(regex)) {
+	            f.replace(regex, function ($0, lower, upper, step) {
+	                step = parseInt(step) || 1;
+	                // Positive integer higher than constraints[0]
+	                lower = Math.min(Math.max(low, ~~Math.abs(lower)), high);
+
+	                // Positive integer lower than constraints[1]
+	                upper = upper ? Math.min(high, ~~Math.abs(upper)) : lower;
+
+	                // Count from the lower barrier to the upper
+	                pointer = lower;
+
+	                do {
+	                    result.push(pointer);
+	                    pointer += step;
+	                } while (pointer <= upper);
+	            });
+	        }
+	    });
+	    return result;
+	}
+
+	/**
+	 *
+	 * @param expr
+	 * @param start
+	 * @param end
+	 * @returns {*}
+	 */
+	function parse(expr, start, end) {
+	    var atoms = expr.replace(/^\s\s*|\s\s*$/g, '').split(/\s+/);
+	    var fields = atoms.map(function (atom, index) {
+	        var constraint = constraints[index];
+	        return parseField(atom, constraint);
+	    });
+	    return new Schedule(fields, start, end);
+	}
+
+	exports.default = {
+	    parse: parse
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2816,7 +3052,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2833,19 +3069,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=weui-picker> <div class=weui-picker__hd> <a href=javascript:; data-action=cancel class=weui-picker__action>取消</a> <a href=javascript:; data-action=select class=weui-picker__action id=weui-picker-confirm>确定</a> </div> <div class=weui-picker__bd></div> </div> </div> ";
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=weui-picker__group> <div class=weui-picker__mask></div> <div class=weui-picker__indicator></div> <div class=weui-picker__content></div> </div>";
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2858,7 +3094,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _gallery = __webpack_require__(30);
+	var _gallery = __webpack_require__(31);
 
 	var _gallery2 = _interopRequireDefault(_gallery);
 
@@ -2919,13 +3155,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"weui-gallery <%= className %>\"> <span class=weui-gallery__img style=\"background-image:url(<%= url %>)\"><%= url %></span> <div class=weui-gallery__opr> <a href=javascript: class=weui-gallery__del> <i class=\"weui-icon-delete weui-icon_gallery-delete\"></i> </a> </div> </div> ";
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

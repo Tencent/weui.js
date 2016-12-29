@@ -2555,7 +2555,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {string=} [options.id=datePicker] 作为picker的唯一标识
 	 * @param {number=|string|Date} [options.start=2000] 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date
 	 * @param {number=|string|Date} [options.end=2030] 结束年份，同上
-	 * @param {string=} [options.cron='* * *'] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[0-11] 和 dayOfWeek[0-6]，
+	 * @param {string=} [options.cron=* * *] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[1-12] 和 dayOfWeek[0-6]，
 	 * @param {string=} [options.className] 自定义类名
 	 * @param {array=} [options.defaultValue] 默认选项的value数组, 如 [1991, 6, 9]
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
@@ -2664,7 +2664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var regex = /^(\d+)(?:-(\d+))?(?:\/(\d+))?$/g;
-	var constraints = [[1, 31], [0, 11], [0, 6]];
+	var constraints = [[1, 31], [1, 12], [0, 6]];
 
 	/**
 	 * Schedule
@@ -2725,7 +2725,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var date = this._pointer.getDate();
 	                var day = this._pointer.getDay();
 
-	                if (this._months.indexOf(month) === -1) {
+	                if (this._months.indexOf(month + 1) === -1) {
 	                    this._pointer.setMonth(month + 1);
 	                    this._pointer.setDate(1);
 	                    continue;
@@ -2797,6 +2797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    field.split(',').map(function (f) {
 	        if (f.match(regex)) {
 	            f.replace(regex, function ($0, lower, upper, step) {
+	                // ref to `cron-parser`
 	                step = parseInt(step) || 1;
 	                // Positive integer higher than constraints[0]
 	                lower = Math.min(Math.max(low, ~~Math.abs(lower)), high);

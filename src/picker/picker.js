@@ -315,7 +315,7 @@ function picker() {
  * @param {string=} [options.id=datePicker] 作为picker的唯一标识
  * @param {number=|string|Date} [options.start=2000] 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date
  * @param {number=|string|Date} [options.end=2030] 结束年份，同上
- * @param {string=} [options.cron='* * *'] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[0-11] 和 dayOfWeek[0-6]，
+ * @param {string=} [options.cron=* * *] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[1-12] 和 dayOfWeek[0-6]，
  * @param {string=} [options.className] 自定义类名
  * @param {array=} [options.defaultValue] 默认选项的value数组, 如 [1991, 6, 9]
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调

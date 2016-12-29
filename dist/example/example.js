@@ -187,7 +187,20 @@
 	    _weui2.default.datePicker({
 	        start: '2016-12-29',
 	        end: '2030-12-29',
-	        cron: '* * *',
+	        /**
+	         * https://zh.wikipedia.org/wiki/Cron
+	         * cron 表达式后三位
+	         * 示例：
+	         *  * * *                每天
+	         *  5 * *                每个月的5日
+	         *  1-10 * *             每个月的前10日
+	         *  1,5,10 * *           每个月的1号、5号、10号
+	         *  *\/2 * *             每个月的 1、3、5、7...日，注意写的时候斜杠“/”前面没有反斜杠“\”，这是因为是注释所以需要转义
+	         *  * 2 0                2月的每个周日
+	         *  * * 0,6              每个周末
+	         *  * * 3                每周三
+	         */
+	        cron: '* */2 0',
 	        defaultValue: [2017, 6, 9],
 	        onChange: function onChange(result) {
 	            console.log(result);
@@ -3857,7 +3870,7 @@
 	 * @param {string=} [options.id=datePicker] 作为picker的唯一标识
 	 * @param {number=|string|Date} [options.start=2000] 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date
 	 * @param {number=|string|Date} [options.end=2030] 结束年份，同上
-	 * @param {string=} [options.cron='* * *'] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[0-11] 和 dayOfWeek[0-6]，
+	 * @param {string=} [options.cron=* * *] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[1-12] 和 dayOfWeek[0-6]，
 	 * @param {string=} [options.className] 自定义类名
 	 * @param {array=} [options.defaultValue] 默认选项的value数组, 如 [1991, 6, 9]
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
@@ -3966,7 +3979,7 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var regex = /^(\d+)(?:-(\d+))?(?:\/(\d+))?$/g;
-	var constraints = [[1, 31], [0, 11], [0, 6]];
+	var constraints = [[1, 31], [1, 12], [0, 6]];
 
 	/**
 	 * Schedule
@@ -4027,7 +4040,7 @@
 	                var date = this._pointer.getDate();
 	                var day = this._pointer.getDay();
 
-	                if (this._months.indexOf(month) === -1) {
+	                if (this._months.indexOf(month + 1) === -1) {
 	                    this._pointer.setMonth(month + 1);
 	                    this._pointer.setDate(1);
 	                    continue;
@@ -4099,6 +4112,7 @@
 	    field.split(',').map(function (f) {
 	        if (f.match(regex)) {
 	            f.replace(regex, function ($0, lower, upper, step) {
+	                // ref to `cron-parser`
 	                step = parseInt(step) || 1;
 	                // Positive integer higher than constraints[0]
 	                lower = Math.min(Math.max(low, ~~Math.abs(lower)), high);

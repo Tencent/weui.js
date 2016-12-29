@@ -156,7 +156,7 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
          *  * * 3                每周三
          */
         cron: '* */2 0',
-        defaultValue: [2017, 6, 9],
+        defaultValue: [2017, 7, 9],
         onChange: function (result) {
             console.log(result);
         },

@@ -201,7 +201,7 @@
 	         *  * * 3                每周三
 	         */
 	        cron: '* */2 0',
-	        defaultValue: [2017, 6, 9],
+	        defaultValue: [2017, 7, 9],
 	        onChange: function onChange(result) {
 	            console.log(result);
 	        },
@@ -3870,13 +3870,14 @@
 	 * @param {string=} [options.id=datePicker] 作为picker的唯一标识
 	 * @param {number=|string|Date} [options.start=2000] 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date
 	 * @param {number=|string|Date} [options.end=2030] 结束年份，同上
-	 * @param {string=} [options.cron=* * *] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[1-12] 和 dayOfWeek[0-6]，
+	 * @param {string=} [options.cron=* * *] cron 表达式，三位，分别是 dayOfMonth[1-31]，month[1-12] 和 dayOfWeek[0-6]（周日-周六）
 	 * @param {string=} [options.className] 自定义类名
 	 * @param {array=} [options.defaultValue] 默认选项的value数组, 如 [1991, 6, 9]
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
 	 * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
 	 *
 	 *@example
+	 * // 示例1：
 	 * weui.datePicker({
 	 *     start: 1990,
 	 *     end: 2000,
@@ -3889,6 +3890,48 @@
 	 *     },
 	 *     id: 'datePicker'
 	 * });
+	 *
+	 * // 示例2：
+	 * weui.datePicker({
+	 *      start: new Date(), // 从今天开始
+	 *      end: 2030,
+	 *      defaultValue: [2020, 6, 9],
+	 *      onChange: function(result){
+	 *          console.log(result);
+	 *      },
+	 *      onConfirm: function(result){
+	 *          console.log(result);
+	 *      },
+	 *      id: 'datePicker'
+	 *  });
+	 *
+	 *  // 示例3：
+	 * weui.datePicker({
+	 *      start: new Date(), // 从今天开始
+	 *      end: 2030,
+	 *      cron: '* * 0,6',  // 每逢周日、周六
+	 *      onChange: function(result){
+	 *          console.log(result);
+	 *      },
+	 *      onConfirm: function(result){
+	 *          console.log(result);
+	 *      },
+	 *      id: 'datePicker'
+	 *  });
+	 *
+	 *  // 示例4：
+	 * weui.datePicker({
+	 *      start: new Date(), // 从今天开始
+	 *      end: 2030,
+	 *      cron: '1-10 * *',  // 每月1日-10日
+	 *      onChange: function(result){
+	 *          console.log(result);
+	 *      },
+	 *      onConfirm: function(result){
+	 *          console.log(result);
+	 *      },
+	 *      id: 'datePicker'
+	 *  });
 	 */
 	function datePicker(options) {
 	    var defaults = _util2.default.extend({

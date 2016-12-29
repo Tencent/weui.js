@@ -1,5 +1,5 @@
 const regex = /^(\d+)(?:-(\d+))?(?:\/(\d+))?$/g;
-const constraints = [[1, 31], [0, 11], [0, 6]];
+const constraints = [[1, 31], [1, 12], [0, 6]];
 
 /**
  * Schedule
@@ -55,7 +55,7 @@ class Schedule {
             const date = this._pointer.getDate();
             const day = this._pointer.getDay();
 
-            if (this._months.indexOf(month) === -1) {
+            if (this._months.indexOf(month + 1) === -1) {
                 this._pointer.setMonth(month + 1);
                 this._pointer.setDate(1);
                 continue;
@@ -119,6 +119,7 @@ function parseField(field, constraints) {
     field.split(',').map((f) => {
         if (f.match(regex)) {
             f.replace(regex, function ($0, lower, upper, step) {
+                // ref to `cron-parser`
                 step = parseInt(step) || 1;
                 // Positive integer higher than constraints[0]
                 lower = Math.min(Math.max(low, ~~Math.abs(lower)), high);

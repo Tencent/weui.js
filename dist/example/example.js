@@ -4347,14 +4347,12 @@
 	        defaults.onChange.call(_this, defaults.items[index], index);
 	    };
 
-	    /**
-	     * 因为现在没有移除匿名函数的方法，所以先暴力移除（offAll），并且改变$scrollable。
-	     */
-	    $scrollable = (0, _util2.default)(this).offAll().on('touchstart', function (evt) {
-	        start = evt.changedTouches[0].pageY;
+	    function _start(pageY) {
+	        start = pageY;
 	        startTime = +new Date();
-	    }).on('touchmove', function (evt) {
-	        end = evt.changedTouches[0].pageY;
+	    }
+	    function _move(pageY) {
+	        end = pageY;
 	        var diff = end - start;
 
 	        setTransition($scrollable, 0);
@@ -4364,9 +4362,8 @@
 	        if (points.length > 40) {
 	            points.shift();
 	        }
-
-	        evt.preventDefault();
-	    }).on('touchend', function (evt) {
+	    }
+	    function _end(pageY) {
 	        /**
 	         * 思路:
 	         * 0. touchstart 记录按下的点和时间
@@ -4376,8 +4373,8 @@
 	         *    速度乘以惯性滑动的时间, 例如 300ms, 计算出应该滑动的距离
 	         */
 	        var endTime = new Date().getTime();
-	        end = evt.changedTouches[0].pageY;
 	        var relativeY = windowHeight - defaults.bodyHeight / 2;
+	        end = pageY;
 
 	        // 如果上次时间距离松开手的时间超过 100ms, 则停止了, 没有惯性滑动
 	        if (endTime - startTime > 100) {
@@ -4410,6 +4407,34 @@
 	                stop(relativeY - end);
 	            }
 	        }
+
+	        start = null;
+	    }
+
+	    /**
+	     * 因为现在没有移除匿名函数的方法，所以先暴力移除（offAll），并且改变$scrollable。
+	     */
+	    $scrollable = (0, _util2.default)(this).offAll().on('touchstart', function (evt) {
+	        _start(evt.changedTouches[0].pageY);
+	    }).on('touchmove', function (evt) {
+	        _move(evt.changedTouches[0].pageY);
+	        evt.preventDefault();
+	    }).on('touchend', function (evt) {
+	        _end(evt.changedTouches[0].pageY);
+	    }).on('mousedown', function (evt) {
+	        _start(evt.pageY);
+	        evt.stopPropagation();
+	        evt.preventDefault();
+	    }).on('mousemove', function (evt) {
+	        if (!start) return;
+
+	        _move(evt.pageY);
+	        evt.stopPropagation();
+	        evt.preventDefault();
+	    }).on('mouseup', function (evt) {
+	        _end(evt.pageY);
+	        evt.stopPropagation();
+	        evt.preventDefault();
 	    }).find(defaults.scrollable);
 	};
 

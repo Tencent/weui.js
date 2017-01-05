@@ -134,15 +134,12 @@ $.fn.scroll = function (options) {
         defaults.onChange.call(this, defaults.items[index], index);
     };
 
-
-    /**
-     * 因为现在没有移除匿名函数的方法，所以先暴力移除（offAll），并且改变$scrollable。
-     */
-    $scrollable = $(this).offAll().on('touchstart', function (evt) {
-        start = evt.changedTouches[0].pageY;
+    function _start(pageY){
+        start = pageY;
         startTime = +new Date();
-    }).on('touchmove', function (evt) {
-        end = evt.changedTouches[0].pageY;
+    }
+    function _move(pageY){
+        end = pageY;
         const diff = end - start;
 
         setTransition($scrollable, 0);
@@ -152,9 +149,8 @@ $.fn.scroll = function (options) {
         if (points.length > 40) {
             points.shift();
         }
-
-        evt.preventDefault();
-    }).on('touchend', function (evt) {
+    }
+    function _end(pageY){
         /**
          * 思路:
          * 0. touchstart 记录按下的点和时间
@@ -164,19 +160,19 @@ $.fn.scroll = function (options) {
          *    速度乘以惯性滑动的时间, 例如 300ms, 计算出应该滑动的距离
          */
         const endTime = new Date().getTime();
-        end = evt.changedTouches[0].pageY;
         const relativeY = windowHeight - (defaults.bodyHeight / 2);
+        end = pageY;
 
         // 如果上次时间距离松开手的时间超过 100ms, 则停止了, 没有惯性滑动
         if (endTime - startTime > 100) {
             //如果end和start相差小于10，则视为
-            if(Math.abs(end - start) > 10) {
+            if (Math.abs(end - start) > 10) {
                 stop(end - start);
-            }else{
+            } else {
                 stop(relativeY - end);
             }
-        }else{
-            if(Math.abs(end - start) > 10){
+        } else {
+            if (Math.abs(end - start) > 10) {
                 const endPos = points.length - 1;
                 let startPos = endPos;
                 for (let i = endPos; i > 0 && startTime - points[i].time < 100; i--) {
@@ -195,9 +191,45 @@ $.fn.scroll = function (options) {
                 else {
                     stop(0);
                 }
-            }else{
+            } else {
                 stop(relativeY - end);
             }
         }
-    }).find(defaults.scrollable);
+
+        start = null;
+    }
+
+    /**
+     * 因为现在没有移除匿名函数的方法，所以先暴力移除（offAll），并且改变$scrollable。
+     */
+    $scrollable = $(this)
+        .offAll()
+        .on('touchstart', function (evt) {
+            _start(evt.changedTouches[0].pageY);
+        })
+        .on('touchmove', function (evt) {
+            _move(evt.changedTouches[0].pageY);
+            evt.preventDefault();
+        })
+        .on('touchend', function (evt) {
+            _end(evt.changedTouches[0].pageY);
+        })
+        .on('mousedown', function(evt){
+            _start(evt.pageY);
+            evt.stopPropagation();
+            evt.preventDefault();
+        })
+        .on('mousemove', function(evt){
+            if(!start) return;
+
+            _move(evt.pageY);
+            evt.stopPropagation();
+            evt.preventDefault();
+        })
+        .on('mouseup', function(evt){
+            _end(evt.pageY);
+            evt.stopPropagation();
+            evt.preventDefault();
+        })
+        .find(defaults.scrollable);
 };

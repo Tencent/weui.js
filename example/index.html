@@ -35,6 +35,13 @@
 
         /*fix fastclick很难点中的bug*/
         label > * { pointer-events: none; }
+
+        /* weui需要fix的 */
+        .weui-picker__item{
+            padding: 0;
+            height: 34px;
+            line-height: 34px;
+        }
     </style>
 </head>
 <body ontouchstart>

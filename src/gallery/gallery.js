@@ -31,7 +31,9 @@ function gallery(url, options = {}) {
         url: url
     }, options)));
 
-    function hide(){
+    function _hide(){
+        _hide = $.noop; // 防止二次调用导致报错
+
         $gallery
             .addClass('weui-animate-fade-out')
             .on('animationend webkitAnimationEnd', function () {
@@ -39,9 +41,10 @@ function gallery(url, options = {}) {
                 _sington = false;
             });
     }
+    function hide(){ _hide(); }
 
     $('body').append($gallery);
-    $gallery.find('.weui-gallery__img').on('click', hide);
+    $gallery.find('.weui-gallery__img').on('click', function(){ hide(); });
     $gallery.find('.weui-gallery__del').on('click', function () {
         options.onDelete.call(this, url);
     });

@@ -16,13 +16,7 @@ Result.prototype.valueOf = function () {
     return this.value
 };
 
-const destroy = ($picker) => {
-    if ($picker) {
-        $picker.remove();
-        _sington = false;
-    }
-};
-const show = ($picker) => {
+function show($picker){
     $('body').append($picker);
 
     // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
@@ -30,15 +24,20 @@ const show = ($picker) => {
 
     $picker.find('.weui-mask').addClass('weui-animate-fade-in');
     $picker.find('.weui-picker').addClass('weui-animate-slide-up');
-};
-const hide = ($picker) => {
+}
+function _hide($picker){
+    _hide = $.noop; // 防止二次调用导致报错
+
     $picker.find('.weui-mask').addClass('weui-animate-fade-out');
     $picker.find('.weui-picker')
         .addClass('weui-animate-slide-down')
         .on('animationend webkitAnimationEnd', function () {
-            destroy($picker);
+            $picker.remove();
+            _sington = false;
         });
-};
+}
+function hide($picker){ _hide($picker); }
+
 let _sington;
 let temp = {}; // temp 存在上一次滑动的位置
 

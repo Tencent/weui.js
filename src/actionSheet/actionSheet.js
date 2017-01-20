@@ -59,7 +59,9 @@ function actionSheet(menus = [], actions = [], options = {}) {
     const $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
     const $actionSheetMask = $actionSheetWrap.find('.weui-mask');
 
-    function hide(){
+    function _hide(){
+        _hide = $.noop; // 防止二次调用导致报错
+
         $actionSheet.addClass(isAndroid ? 'weui-animate-fade-out' : 'weui-animate-slide-down');
         $actionSheetMask
             .addClass('weui-animate-fade-out')
@@ -68,6 +70,8 @@ function actionSheet(menus = [], actions = [], options = {}) {
                 _sington = false;
             });
     }
+    function hide(){ _hide(); }
+
     $('body').append($actionSheetWrap);
 
     // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题

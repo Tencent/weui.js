@@ -29,7 +29,9 @@ function loading(content = '', options = {}) {
     const $loading = $loadingWrap.find('.weui-toast');
     const $mask = $loadingWrap.find('.weui-mask');
 
-    function hide() {
+    function _hide() {
+        _hide = $.noop; // 防止二次调用导致报错
+
         $mask.addClass('weui-animate-fade-out');
         $loading
             .addClass('weui-animate-fade-out')
@@ -38,6 +40,7 @@ function loading(content = '', options = {}) {
                 _sington = false;
             });
     }
+    function hide(){ _hide(); }
 
     $('body').append($loadingWrap);
     $loading.addClass('weui-animate-fade-in');

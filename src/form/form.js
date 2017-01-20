@@ -10,7 +10,7 @@ function _validate($input, $form, regexp){
     const input = $input[0], val = $input.val();
 
     if(input.tagName == 'INPUT' || input.tagName == 'TEXTAREA'){
-        let reg = input.getAttribute('required') || input.getAttribute('pattern') || '';
+        let reg = input.getAttribute('pattern') || '';
 
         if(input.type == 'radio') {
             const radioInputs = $form.find('input[type="radio"][name="' + input.name + '"]');

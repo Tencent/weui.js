@@ -431,7 +431,7 @@ document.querySelector('#uploaderFiles').addEventListener('click', function(e){
 
     var url = target.getAttribute('style') || '';
     if(url){
-        url = url.match(/url\((.*?)\)/)[1];
+        url = url.match(/url\((.*?)\)/)[1].replace(/"/g, '');
     }
     var gallery = weui.gallery(url, {
         className: 'custom-name',

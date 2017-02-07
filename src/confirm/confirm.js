@@ -15,6 +15,9 @@ import dialog from '../dialog/dialog';
  * weui.confirm('普通的confirm');
  * weui.confirm('自定义标题的confirm', { title: '自定义标题' });
  * weui.confirm('带回调的confirm', function(){ console.log('yes') }, function(){ console.log('no') });
+ * var confirmDom = weui.confirm('手动关闭的confirm', function(){
+ *     return false; // 不关闭弹窗，可用confirmDom.hide()来手动关闭
+ * });
  * weui.confirm('带回调的自定义标题的confirm', function(){ console.log('yes') }, function(){ console.log('no') }, {
  *     title: '自定义标题'
  * });
@@ -31,10 +34,13 @@ import dialog from '../dialog/dialog';
  *     }]
  * });
  */
-function confirm(content = '', yes, no, options) {
-    const type = typeof yes === 'object';
-    if (type) {
+function confirm(content = '', yes = $.noop, no = $.noop, options) {
+    if(typeof yes === 'object'){
         options = yes;
+        yes = $.noop;
+    }else if(typeof no === 'object'){
+        options = no;
+        no = $.noop;
     }
 
     options = $.extend({
@@ -42,11 +48,11 @@ function confirm(content = '', yes, no, options) {
         buttons: [{
             label: '取消',
             type: 'default',
-            onClick: type ? $.noop : no
+            onClick: no
         }, {
             label: '确定',
             type: 'primary',
-            onClick: type ? $.noop : yes
+            onClick: yes
         }]
     }, options);
 

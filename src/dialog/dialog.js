@@ -72,7 +72,11 @@ function dialog(options = {}) {
 
     $dialogWrap.on('click', '.weui-dialog__btn', function (evt) {
         const index = $(this).index();
-        if(options.buttons[index].onClick && options.buttons[index].onClick.call(this, evt) !== false) hide();
+        if (options.buttons[index].onClick) {
+            if (options.buttons[index].onClick.call(this, evt) !== false) hide();
+        } else {
+            hide();
+        }
     });
 
     _sington = $dialogWrap[0];

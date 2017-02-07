@@ -13,6 +13,9 @@ import dialog from '../dialog/dialog';
  * @example
  * weui.alert('普通的alert');
  * weui.alert('带回调的alert', function(){ console.log('ok') });
+ * var alertDom = weui.alert('手动关闭的alert', function(){
+ *     return false; // 不关闭弹窗，可用alertDom.hide()来手动关闭
+ * });
  * weui.alert('自定义标题的alert', { title: '自定义标题' });
  * weui.alert('带回调的自定义标题的alert', function(){
  *    console.log('ok')
@@ -28,10 +31,10 @@ import dialog from '../dialog/dialog';
  *     }]
  * });
  */
-function alert(content = '', yes, options) {
-    const type = typeof yes === 'object';
-    if (type) {
+function alert(content = '', yes = $.noop, options) {
+    if (typeof yes === 'object') {
         options = yes;
+        yes = $.noop;
     }
 
     options = $.extend({
@@ -39,7 +42,7 @@ function alert(content = '', yes, options) {
         buttons: [{
             label: '确定',
             type: 'primary',
-            onClick: type ? $.noop : yes
+            onClick: yes
         }]
     }, options);
 

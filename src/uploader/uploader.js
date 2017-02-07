@@ -121,6 +121,9 @@ function uploader(selector, options) {
                 file: file
             }, options));
         };
+        file.stop = function(){
+            this.xhr.abort();
+        };
 
         options.onQueued(file);
         if(options.auto) file.upload();

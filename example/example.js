@@ -366,7 +366,7 @@ document.querySelector('#formSubmitBtn').addEventListener('click', function () {
 
 
 /* 图片自动上传 */
-var uploadCount = 0;
+var uploadCount = 0, uploadList = [];
 var uploadCountDom = document.getElementById("uploadCount");
 weui.uploader('#uploader', {
     url: 'http://localhost:8002/upload',
@@ -400,6 +400,7 @@ weui.uploader('#uploader', {
         uploadCountDom.innerHTML = uploadCount;
     },
     onQueued: function(){
+        uploadList.push(this);
         console.log(this);
     },
     onBeforeSend: function(data, headers){
@@ -430,6 +431,8 @@ document.querySelector('#uploaderFiles').addEventListener('click', function(e){
     if(!target) return;
 
     var url = target.getAttribute('style') || '';
+    var id = target.getAttribute('data-id');
+
     if(url){
         url = url.match(/url\((.*?)\)/)[1].replace(/"/g, '');
     }
@@ -439,6 +442,15 @@ document.querySelector('#uploaderFiles').addEventListener('click', function(e){
             weui.confirm('确定删除该图片？', function(){
                 --uploadCount;
                 uploadCountDom.innerHTML = uploadCount;
+
+
+                for (var i = 0, len = uploadList.length; i < len; ++i) {
+                    var file = uploadList[i];
+                    if(file.id == id){
+                        file.stop();
+                        break;
+                    }
+                }
                 target.remove();
                 gallery.hide();
             });

@@ -1,6 +1,9 @@
 function close(done){
     $('.weui-dialog__btn')[0].click();
-    setTimeout(done, closeDur);
+    setTimeout(() => {
+        assert($('.weui-dialog').length === 0);
+        done();
+    }, closeDur);
 }
 
 describe('confirm', function(){
@@ -49,18 +52,15 @@ describe('confirm', function(){
     });
 
     it('test YES btn click', (done) => {
-        let calledYES = false, calledNO = false;
+        let calledYES = false;
         weui.confirm('test YES btn click', () => {
             calledYES = true;
-        }, () => {
-            calledNO = true;
         });
 
         $('.weui-dialog__btn_primary').click();
         setTimeout(() => {
             assert($('.weui-dialog').length === 0);
             assert(calledYES);
-            assert(!calledNO);
             done();
         }, closeDur);
     });
@@ -78,6 +78,25 @@ describe('confirm', function(){
             assert($('.weui-dialog').length === 0);
             assert(!calledYES);
             assert(calledNO);
+            done();
+        }, closeDur);
+    });
+
+    it('test YES btn & custom title', (done) => {
+        const title = 'custom title';
+        let calledYES = false;
+        weui.confirm('test YES btn & custom title', () => {
+            calledYES = true;
+        }, {
+            title: title
+        });
+
+        assert($('.weui-dialog__title').html() === title);
+
+        $('.weui-dialog__btn_primary').click();
+        setTimeout(() => {
+            assert($('.weui-dialog').length === 0);
+            assert(calledYES);
             done();
         }, closeDur);
     });

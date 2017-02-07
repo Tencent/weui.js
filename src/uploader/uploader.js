@@ -11,7 +11,7 @@ let _id = 0;
  * @param {object} options 配置项
  * @param {string} [options.url] 上传的url，返回值需要使用json格式
  * @param {boolean} [options.auto=true] 设置为`true`后，不需要手动调用上传，有文件选择即开始上传。用this.upload()来上传，详情请看example
- * @param {string} [options.type='file'] 上传类型, `file`为文件上传; `base64`为以base64上传
+ * @param {string} [options.type=file] 上传类型, `file`为文件上传; `base64`为以base64上传
  * @param {string=} [options.fileVal=file] 文件上传域的name
  * @param {object=} [options.compress] 压缩配置, `false`则不压缩
  * @param {number=} [options.compress.width=1600] 图片的最大宽度

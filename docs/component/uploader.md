@@ -63,9 +63,12 @@ weui.uploader('#uploader', {
    },
    onQueued: function(){
        console.log(this);
+
+       // console.log(this.status); // 文件的状态：'ready', 'progress', 'success', 'fail'
        // console.log(this.base64); // 如果是base64上传，file.base64可以获得文件的base64
 
-       // this.upload(); // 如果是手动上传，这里可以通过调用upload来实现
+       // this.upload(); // 如果是手动上传，这里可以通过调用upload来实现；也可以用它来实现重传。
+       // this.stop(); // 中断上传
 
        // return true; // 阻止默认行为，不显示预览图的图像
    },

@@ -151,6 +151,8 @@ $.fn.scroll = function (options) {
         }
     }
     function _end(pageY){
+        if(!start) return;
+
         /**
          * 思路:
          * 0. touchstart 记录按下的点和时间
@@ -226,7 +228,7 @@ $.fn.scroll = function (options) {
             evt.stopPropagation();
             evt.preventDefault();
         })
-        .on('mouseup', function(evt){
+        .on('mouseup mouseleave', function(evt){
             _end(evt.pageY);
             evt.stopPropagation();
             evt.preventDefault();

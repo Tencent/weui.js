@@ -16,28 +16,6 @@ Result.prototype.valueOf = function () {
     return this.value
 };
 
-function show($picker){
-    $('body').append($picker);
-
-    // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
-    $.getStyle($picker[0], 'transform');
-
-    $picker.find('.weui-mask').addClass('weui-animate-fade-in');
-    $picker.find('.weui-picker').addClass('weui-animate-slide-up');
-}
-function _hide($picker){
-    _hide = $.noop; // 防止二次调用导致报错
-
-    $picker.find('.weui-mask').addClass('weui-animate-fade-out');
-    $picker.find('.weui-picker')
-        .addClass('weui-animate-slide-down')
-        .on('animationend webkitAnimationEnd', function () {
-            $picker.remove();
-            _sington = false;
-        });
-}
-function hide($picker){ _hide($picker); }
-
 let _sington;
 let temp = {}; // temp 存在上一次滑动的位置
 
@@ -184,10 +162,18 @@ let temp = {}; // temp 存在上一次滑动的位置
 function picker() {
     if (_sington) return _sington;
 
-    let isMulti = false; // 是否多列的类型
+    // 配置项
+    const options = arguments[arguments.length - 1];
+    const defaults = $.extend({
+        id: 'default',
+        className: '',
+        onChange: $.noop,
+        onConfirm: $.noop
+    }, options);
 
-    // 数据
+    // 数据处理
     let items;
+    let isMulti = false; // 是否多列的类型
     if (arguments.length > 2) {
         let i = 0;
         items = [];
@@ -199,16 +185,6 @@ function picker() {
         items = arguments[0];
     }
 
-
-    // 配置项
-    const options = arguments[arguments.length - 1];
-    const defaults = $.extend({
-        id: 'default',
-        className: '',
-        onChange: $.noop,
-        onConfirm: $.noop
-    }, options);
-
     // 获取缓存
     temp[defaults.id] = temp[defaults.id] || [];
     const result = [];
@@ -216,14 +192,30 @@ function picker() {
     const $picker = $($.render(pickerTpl, defaults));
     let depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])), groups = '';
 
-    while (depth--) {
-        groups += groupTpl;
+    // 显示与隐藏的方法
+    function show(){
+        $('body').append($picker);
+
+        // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
+        $.getStyle($picker[0], 'transform');
+
+        $picker.find('.weui-mask').addClass('weui-animate-fade-in');
+        $picker.find('.weui-picker').addClass('weui-animate-slide-up');
     }
+    function _hide(){
+        _hide = $.noop; // 防止二次调用导致报错
 
-    $picker.find('.weui-picker__bd').html(groups);
-    show($picker);
+        $picker.find('.weui-mask').addClass('weui-animate-fade-out');
+        $picker.find('.weui-picker')
+            .addClass('weui-animate-slide-down')
+            .on('animationend webkitAnimationEnd', function () {
+                $picker.remove();
+                _sington = false;
+            });
+    }
+    function hide(){ _hide(); }
 
-    // 初始化滚动
+    // 初始化滚动的方法
     function scroll(items, level) {
         if (lineTemp[level] === undefined && defaults.defaultValue && defaults.defaultValue[level] !== undefined) {
             // 没有缓存选项，而且存在defaultValue
@@ -285,6 +277,14 @@ function picker() {
         });
     }
 
+
+    while (depth--) {
+        groups += groupTpl;
+    }
+
+    $picker.find('.weui-picker__bd').html(groups);
+    show();
+
     if (isMulti) {
         items.forEach((item, index) => {
             scroll(item, index);
@@ -293,18 +293,15 @@ function picker() {
         scroll(items, 0);
     }
 
-    $picker.on('click', '.weui-mask', function () {
-        hide($picker);
-    }).on('click', '.weui-picker__action', function () {
-        hide($picker);
-    }).on('click', '#weui-picker-confirm', function () {
-        defaults.onConfirm(result);
-    });
+    $picker
+        .on('click', '.weui-mask', hide)
+        .on('click', '.weui-picker__action', hide)
+        .on('click', '#weui-picker-confirm', function () {
+            defaults.onConfirm(result);
+        });
 
     _sington = $picker[0];
-    _sington.hide = () => {
-        hide($picker);
-    };
+    _sington.hide = hide;
     return _sington;
 }
 

@@ -388,7 +388,8 @@
 	});
 
 	/* 图片自动上传 */
-	var uploadCount = 0;
+	var uploadCount = 0,
+	    uploadList = [];
 	var uploadCountDom = document.getElementById("uploadCount");
 	_weui2.default.uploader('#uploader', {
 	    url: 'http://localhost:8002/upload',
@@ -423,6 +424,7 @@
 	        uploadCountDom.innerHTML = uploadCount;
 	    },
 	    onQueued: function onQueued() {
+	        uploadList.push(this);
 	        console.log(this);
 	    },
 	    onBeforeSend: function onBeforeSend(data, headers) {
@@ -453,8 +455,10 @@
 	    if (!target) return;
 
 	    var url = target.getAttribute('style') || '';
+	    var id = target.getAttribute('data-id');
+
 	    if (url) {
-	        url = url.match(/url\((.*?)\)/)[1];
+	        url = url.match(/url\((.*?)\)/)[1].replace(/"/g, '');
 	    }
 	    var gallery = _weui2.default.gallery(url, {
 	        className: 'custom-name',
@@ -462,6 +466,14 @@
 	            _weui2.default.confirm('确定删除该图片？', function () {
 	                --uploadCount;
 	                uploadCountDom.innerHTML = uploadCount;
+
+	                for (var i = 0, len = uploadList.length; i < len; ++i) {
+	                    var file = uploadList[i];
+	                    if (file.id == id) {
+	                        file.stop();
+	                        break;
+	                    }
+	                }
 	                target.remove();
 	                gallery.hide();
 	            });
@@ -1528,15 +1540,17 @@
 	    var $dialog = $dialogWrap.find('.weui-dialog');
 	    var $mask = $dialogWrap.find('.weui-mask');
 
-	    function hide() {
-	        var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _util2.default.noop;
+	    function _hide() {
+	        _hide = _util2.default.noop; // 防止二次调用导致报错
 
 	        $mask.addClass('weui-animate-fade-out');
 	        $dialog.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $dialogWrap.remove();
 	            _sington = false;
-	            callback();
 	        });
+	    }
+	    function hide() {
+	        _hide();
 	    }
 
 	    (0, _util2.default)('body').append($dialogWrap);
@@ -1545,12 +1559,12 @@
 	    $dialog.addClass('weui-animate-fade-in');
 
 	    $dialogWrap.on('click', '.weui-dialog__btn', function (evt) {
-	        var _this = this;
-
 	        var index = (0, _util2.default)(this).index();
-	        hide(function () {
-	            options.buttons[index].onClick && options.buttons[index].onClick.call(_this, evt);
-	        });
+	        if (options.buttons[index].onClick) {
+	            if (options.buttons[index].onClick.call(this, evt) !== false) hide();
+	        } else {
+	            hide();
+	        }
 	    });
 
 	    _sington = $dialogWrap[0];
@@ -1868,7 +1882,7 @@
 	     * @returns {String}
 	     */
 	    render: function render(tpl, data) {
-	        var code = 'var p=[],print=function(){p.push.apply(p,arguments);};with(this){p.push(\'' + tpl.replace(/[\r\t\n]/g, ' ').split('<%').join('\t').replace(/((^|%>)[^\t]*)'/g, '$1\r').replace(/\t=(.*?)%>/g, '\',$1,\'').split('\t').join('\');').split('%>').join('p.push(\'').split('\r').join('\\\'') + '\');}return p.join(\'\');';
+	        var code = 'var p=[];with(this){p.push(\'' + tpl.replace(/[\r\t\n]/g, ' ').split('<%').join('\t').replace(/((^|%>)[^\t]*)'/g, '$1\r').replace(/\t=(.*?)%>/g, '\',$1,\'').split('\t').join('\');').split('%>').join('p.push(\'').split('\r').join('\\\'') + '\');}return p.join(\'\');';
 	        return new Function(code).apply(data);
 	    },
 	    /**
@@ -2135,6 +2149,9 @@
 	 * @example
 	 * weui.alert('普通的alert');
 	 * weui.alert('带回调的alert', function(){ console.log('ok') });
+	 * var alertDom = weui.alert('手动关闭的alert', function(){
+	 *     return false; // 不关闭弹窗，可用alertDom.hide()来手动关闭
+	 * });
 	 * weui.alert('自定义标题的alert', { title: '自定义标题' });
 	 * weui.alert('带回调的自定义标题的alert', function(){
 	 *    console.log('ok')
@@ -2152,12 +2169,12 @@
 	 */
 	function alert() {
 	    var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-	    var yes = arguments[1];
+	    var yes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _util2.default.noop;
 	    var options = arguments[2];
 
-	    var type = (typeof yes === 'undefined' ? 'undefined' : _typeof(yes)) === 'object';
-	    if (type) {
+	    if ((typeof yes === 'undefined' ? 'undefined' : _typeof(yes)) === 'object') {
 	        options = yes;
+	        yes = _util2.default.noop;
 	    }
 
 	    options = _util2.default.extend({
@@ -2165,7 +2182,7 @@
 	        buttons: [{
 	            label: '确定',
 	            type: 'primary',
-	            onClick: type ? _util2.default.noop : yes
+	            onClick: yes
 	        }]
 	    }, options);
 
@@ -2210,6 +2227,9 @@
 	 * weui.confirm('普通的confirm');
 	 * weui.confirm('自定义标题的confirm', { title: '自定义标题' });
 	 * weui.confirm('带回调的confirm', function(){ console.log('yes') }, function(){ console.log('no') });
+	 * var confirmDom = weui.confirm('手动关闭的confirm', function(){
+	 *     return false; // 不关闭弹窗，可用confirmDom.hide()来手动关闭
+	 * });
 	 * weui.confirm('带回调的自定义标题的confirm', function(){ console.log('yes') }, function(){ console.log('no') }, {
 	 *     title: '自定义标题'
 	 * });
@@ -2228,13 +2248,16 @@
 	 */
 	function confirm() {
 	    var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-	    var yes = arguments[1];
-	    var no = arguments[2];
+	    var yes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _util2.default.noop;
+	    var no = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _util2.default.noop;
 	    var options = arguments[3];
 
-	    var type = (typeof yes === 'undefined' ? 'undefined' : _typeof(yes)) === 'object';
-	    if (type) {
+	    if ((typeof yes === 'undefined' ? 'undefined' : _typeof(yes)) === 'object') {
 	        options = yes;
+	        yes = _util2.default.noop;
+	    } else if ((typeof no === 'undefined' ? 'undefined' : _typeof(no)) === 'object') {
+	        options = no;
+	        no = _util2.default.noop;
 	    }
 
 	    options = _util2.default.extend({
@@ -2242,11 +2265,11 @@
 	        buttons: [{
 	            label: '取消',
 	            type: 'default',
-	            onClick: type ? _util2.default.noop : no
+	            onClick: no
 	        }, {
 	            label: '确定',
 	            type: 'primary',
-	            onClick: type ? _util2.default.noop : yes
+	            onClick: yes
 	        }]
 	    }, options);
 
@@ -2397,12 +2420,17 @@
 	    var $loading = $loadingWrap.find('.weui-toast');
 	    var $mask = $loadingWrap.find('.weui-mask');
 
-	    function hide() {
+	    function _hide() {
+	        _hide = _util2.default.noop; // 防止二次调用导致报错
+
 	        $mask.addClass('weui-animate-fade-out');
 	        $loading.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $loadingWrap.remove();
 	            _sington = false;
 	        });
+	    }
+	    function hide() {
+	        _hide();
 	    }
 
 	    (0, _util2.default)('body').append($loadingWrap);
@@ -2504,13 +2532,19 @@
 	    var $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
 	    var $actionSheetMask = $actionSheetWrap.find('.weui-mask');
 
-	    function hide() {
+	    function _hide() {
+	        _hide = _util2.default.noop; // 防止二次调用导致报错
+
 	        $actionSheet.addClass(isAndroid ? 'weui-animate-fade-out' : 'weui-animate-slide-down');
 	        $actionSheetMask.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $actionSheetWrap.remove();
 	            _sington = false;
 	        });
 	    }
+	    function hide() {
+	        _hide();
+	    }
+
 	    (0, _util2.default)('body').append($actionSheetWrap);
 
 	    // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
@@ -2604,10 +2638,15 @@
 	    }, options);
 
 	    var $topTips = (0, _util2.default)(_util2.default.render(_topTips2.default, options));
-	    function hide() {
+	    function _hide() {
+	        _hide = _util2.default.noop; // 防止二次调用导致报错
+
 	        $topTips.remove();
 	        options.callback();
 	        _toptips = null;
+	    }
+	    function hide() {
+	        _hide();
 	    }
 
 	    (0, _util2.default)('body').append($topTips);
@@ -2792,7 +2831,7 @@
 	        val = $input.val();
 
 	    if (input.tagName == 'INPUT' || input.tagName == 'TEXTAREA') {
-	        var reg = input.getAttribute('required') || input.getAttribute('pattern') || '';
+	        var reg = input.getAttribute('pattern') || '';
 
 	        if (input.type == 'radio') {
 	            var radioInputs = $form.find('input[type="radio"][name="' + input.name + '"]');
@@ -3053,7 +3092,7 @@
 	 * @param {object} options 配置项
 	 * @param {string} [options.url] 上传的url，返回值需要使用json格式
 	 * @param {boolean} [options.auto=true] 设置为`true`后，不需要手动调用上传，有文件选择即开始上传。用this.upload()来上传，详情请看example
-	 * @param {string} [options.type='file'] 上传类型, `file`为文件上传; `base64`为以base64上传
+	 * @param {string} [options.type=file] 上传类型, `file`为文件上传; `base64`为以base64上传
 	 * @param {string=} [options.fileVal=file] 文件上传域的name
 	 * @param {object=} [options.compress] 压缩配置, `false`则不压缩
 	 * @param {number=} [options.compress.width=1600] 图片的最大宽度
@@ -3104,9 +3143,12 @@
 	 *    },
 	 *    onQueued: function(){
 	 *        console.log(this);
+	 *
+	 *        // console.log(this.status); // 文件的状态：'ready', 'progress', 'success', 'fail'
 	 *        // console.log(this.base64); // 如果是base64上传，file.base64可以获得文件的base64
 	 *
-	 *        // this.upload(); // 如果是手动上传，这里可以通过调用upload来实现
+	 *        // this.upload(); // 如果是手动上传，这里可以通过调用upload来实现；也可以用它来实现重传。
+	 *        // this.stop(); // 中断上传
 	 *
 	 *        // return true; // 阻止默认行为，不显示预览图的图像
 	 *    },
@@ -3157,11 +3199,15 @@
 	    // 设置上传
 	    function setUploadFile(file) {
 	        file.url = URL.createObjectURL(file);
+	        file.status = 'ready';
 	        file.upload = function () {
 	            (0, _upload2.default)(_util2.default.extend({
 	                $uploader: $uploader,
 	                file: file
 	            }, options));
+	        };
+	        file.stop = function () {
+	            this.xhr.abort();
 	        };
 
 	        options.onQueued(file);
@@ -3239,6 +3285,7 @@
 	        (function () {
 	            var onSuccess = options.onSuccess;
 	            options.onSuccess = function (file, ret) {
+	                file.status = 'success';
 	                if (!onSuccess.call(file, ret)) {
 	                    clearFileStatus($uploader, file.id);
 	                }
@@ -3259,6 +3306,7 @@
 	        (function () {
 	            var onError = options.onError;
 	            options.onError = function (file, err) {
+	                file.status = 'fail';
 	                if (!onError.call(file, err)) {
 	                    findFileCtn($uploader, file.id).html('<i class="weui-icon-warn"></i>');
 	                }
@@ -3474,6 +3522,8 @@
 
 	    if (onBeforeSend(file, data, headers) === false) return;
 
+	    file.status = 'progress';
+
 	    onProgress(file, 0);
 
 	    var formData = new FormData();
@@ -3572,27 +3622,6 @@
 	    return this.value;
 	};
 
-	var destroy = function destroy($picker) {
-	    if ($picker) {
-	        $picker.remove();
-	        _sington = false;
-	    }
-	};
-	var show = function show($picker) {
-	    (0, _util2.default)('body').append($picker);
-
-	    // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
-	    _util2.default.getStyle($picker[0], 'transform');
-
-	    $picker.find('.weui-mask').addClass('weui-animate-fade-in');
-	    $picker.find('.weui-picker').addClass('weui-animate-slide-up');
-	};
-	var hide = function hide($picker) {
-	    $picker.find('.weui-mask').addClass('weui-animate-fade-out');
-	    $picker.find('.weui-picker').addClass('weui-animate-slide-down').on('animationend webkitAnimationEnd', function () {
-	        destroy($picker);
-	    });
-	};
 	var _sington = void 0;
 	var temp = {}; // temp 存在上一次滑动的位置
 
@@ -3739,10 +3768,18 @@
 	function picker() {
 	    if (_sington) return _sington;
 
-	    var isMulti = false; // 是否多列的类型
+	    // 配置项
+	    var options = arguments[arguments.length - 1];
+	    var defaults = _util2.default.extend({
+	        id: 'default',
+	        className: '',
+	        onChange: _util2.default.noop,
+	        onConfirm: _util2.default.noop
+	    }, options);
 
-	    // 数据
+	    // 数据处理
 	    var items = void 0;
+	    var isMulti = false; // 是否多列的类型
 	    if (arguments.length > 2) {
 	        var i = 0;
 	        items = [];
@@ -3754,15 +3791,6 @@
 	        items = arguments[0];
 	    }
 
-	    // 配置项
-	    var options = arguments[arguments.length - 1];
-	    var defaults = _util2.default.extend({
-	        id: 'default',
-	        className: '',
-	        onChange: _util2.default.noop,
-	        onConfirm: _util2.default.noop
-	    }, options);
-
 	    // 获取缓存
 	    temp[defaults.id] = temp[defaults.id] || [];
 	    var result = [];
@@ -3771,14 +3799,30 @@
 	    var depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])),
 	        groups = '';
 
-	    while (depth--) {
-	        groups += _group2.default;
+	    // 显示与隐藏的方法
+	    function show() {
+	        (0, _util2.default)('body').append($picker);
+
+	        // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
+	        _util2.default.getStyle($picker[0], 'transform');
+
+	        $picker.find('.weui-mask').addClass('weui-animate-fade-in');
+	        $picker.find('.weui-picker').addClass('weui-animate-slide-up');
+	    }
+	    function _hide() {
+	        _hide = _util2.default.noop; // 防止二次调用导致报错
+
+	        $picker.find('.weui-mask').addClass('weui-animate-fade-out');
+	        $picker.find('.weui-picker').addClass('weui-animate-slide-down').on('animationend webkitAnimationEnd', function () {
+	            $picker.remove();
+	            _sington = false;
+	        });
+	    }
+	    function hide() {
+	        _hide();
 	    }
 
-	    $picker.find('.weui-picker__bd').html(groups);
-	    show($picker);
-
-	    // 初始化滚动
+	    // 初始化滚动的方法
 	    function scroll(items, level) {
 	        if (lineTemp[level] === undefined && defaults.defaultValue && defaults.defaultValue[level] !== undefined) {
 	            // 没有缓存选项，而且存在defaultValue
@@ -3841,6 +3885,13 @@
 	        });
 	    }
 
+	    while (depth--) {
+	        groups += _group2.default;
+	    }
+
+	    $picker.find('.weui-picker__bd').html(groups);
+	    show();
+
 	    if (isMulti) {
 	        items.forEach(function (item, index) {
 	            scroll(item, index);
@@ -3849,18 +3900,12 @@
 	        scroll(items, 0);
 	    }
 
-	    $picker.on('click', '.weui-mask', function () {
-	        hide($picker);
-	    }).on('click', '.weui-picker__action', function () {
-	        hide($picker);
-	    }).on('click', '#weui-picker-confirm', function () {
+	    $picker.on('click', '.weui-mask', hide).on('click', '.weui-picker__action', hide).on('click', '#weui-picker-confirm', function () {
 	        defaults.onConfirm(result);
 	    });
 
 	    _sington = $picker[0];
-	    _sington.hide = function () {
-	        hide($picker);
-	    };
+	    _sington.hide = hide;
 	    return _sington;
 	}
 
@@ -4364,6 +4409,8 @@
 	        }
 	    }
 	    function _end(pageY) {
+	        if (!start) return;
+
 	        /**
 	         * 思路:
 	         * 0. touchstart 记录按下的点和时间
@@ -4431,7 +4478,7 @@
 	        _move(evt.pageY);
 	        evt.stopPropagation();
 	        evt.preventDefault();
-	    }).on('mouseup', function (evt) {
+	    }).on('mouseup mouseleave', function (evt) {
 	        _end(evt.pageY);
 	        evt.stopPropagation();
 	        evt.preventDefault();
@@ -4519,15 +4566,22 @@
 	        url: url
 	    }, options)));
 
-	    function hide() {
+	    function _hide() {
+	        _hide = _util2.default.noop; // 防止二次调用导致报错
+
 	        $gallery.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $gallery.remove();
 	            _sington = false;
 	        });
 	    }
+	    function hide() {
+	        _hide();
+	    }
 
 	    (0, _util2.default)('body').append($gallery);
-	    $gallery.find('.weui-gallery__img').on('click', hide);
+	    $gallery.find('.weui-gallery__img').on('click', function () {
+	        hide();
+	    });
 	    $gallery.find('.weui-gallery__del').on('click', function () {
 	        options.onDelete.call(this, url);
 	    });

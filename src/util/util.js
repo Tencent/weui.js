@@ -274,7 +274,7 @@ objectAssign($, {
      * @returns {String}
      */
     render: function (tpl, data) {
-        const code = 'var p=[],print=function(){p.push.apply(p,arguments);};with(this){p.push(\'' +
+        const code = 'var p=[];with(this){p.push(\'' +
             tpl
                 .replace(/[\r\t\n]/g, ' ')
                 .split('<%').join('\t')

@@ -115,6 +115,7 @@ function uploader(selector, options) {
     // 设置上传
     function setUploadFile(file) {
         file.url = URL.createObjectURL(file);
+        file.status = 'ready';
         file.upload = function () {
             upload($.extend({
                 $uploader: $uploader,
@@ -193,6 +194,7 @@ function uploader(selector, options) {
     if(options.onSuccess){
         const onSuccess = options.onSuccess;
         options.onSuccess = function(file, ret){
+            file.status = 'success';
             if(!onSuccess.call(file, ret)){
                 clearFileStatus($uploader, file.id);
             }
@@ -209,6 +211,7 @@ function uploader(selector, options) {
     if(options.onError){
         const onError = options.onError;
         options.onError = function(file, err){
+            file.status = 'fail';
             if(!onError.call(file, err)){
                 findFileCtn($uploader, file.id).html('<i class="weui-icon-warn"></i>');
             }

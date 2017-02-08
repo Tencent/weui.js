@@ -11,6 +11,8 @@ export default function upload(options) {
 
     if(onBeforeSend(file, data, headers) === false) return;
 
+    file.status = 'progress';
+
     onProgress(file, 0);
 
     const formData = new FormData();

@@ -5,7 +5,7 @@
   "main": "./dist/weui.min.js",
   "scripts": {
     "start": "webpack-dev-server --config ./build/webpack.example.config.js --content-base dist/example --progress --colors --host 0.0.0.0 --port 8001",
-    "build": "npm run clean && webpack --config ./build/webpack.example.config.js && node build/build.js",
+    "build": "npm run clean && npm run lint && webpack --config ./build/webpack.example.config.js && node build/build.js",
     "docs": "node ./build/docs.js",
     "deploy": "npm run docs && gh-pages -d docs/_book",
     "lint": "eslint ./src/**/*.js",

@@ -1,7 +1,8 @@
 /**
  * 检查图片是否有被压扁，如果有，返回比率
+ * ref to http://stackoverflow.com/questions/11929099/html5-canvas-drawimage-ratio-bug-ios
  */
-export function detectVerticalSquash(img) {
+function detectVerticalSquash(img) {
     // 拍照在IOS7或以下的机型会出现照片被压扁的bug
     var data;
     var ih = img.naturalHeight;
@@ -36,25 +37,99 @@ export function detectVerticalSquash(img) {
  * dataURI to blob, ref to https://gist.github.com/fupslot/5015897
  * @param dataURI
  */
-export function dataURItoBlob(dataURI) {
+function dataURItoBuffer(dataURI){
     var byteString = atob(dataURI.split(',')[1]);
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
+    var buffer = new ArrayBuffer(byteString.length);
+    var view = new Uint8Array(buffer);
     for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
+        view[i] = byteString.charCodeAt(i);
     }
-    return new Blob([ab], {type: mimeString});
+    return buffer;
+}
+function dataURItoBlob(dataURI) {
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    var buffer = dataURItoBuffer(dataURI);
+    return new Blob([buffer], {type: mimeString});
+}
+
+/**
+ * 获取图片的orientation
+ * ref to http://stackoverflow.com/questions/7584794/accessing-jpeg-exif-rotation-data-in-javascript-on-the-client-side
+ */
+function getOrientation(buffer){
+    var view = new DataView(buffer);
+    if (view.getUint16(0, false) != 0xFFD8) return -2;
+    var length = view.byteLength, offset = 2;
+    while (offset < length) {
+        var marker = view.getUint16(offset, false);
+        offset += 2;
+        if (marker == 0xFFE1) {
+            if (view.getUint32(offset += 2, false) != 0x45786966) return -1;
+            var little = view.getUint16(offset += 6, false) == 0x4949;
+            offset += view.getUint32(offset + 4, little);
+            var tags = view.getUint16(offset, little);
+            offset += 2;
+            for (var i = 0; i < tags; i++)
+                if (view.getUint16(offset + (i * 12), little) == 0x0112)
+                    return view.getUint16(offset + (i * 12) + 8, little);
+        }
+        else if ((marker & 0xFF00) != 0xFF00) break;
+        else offset += view.getUint16(offset, false);
+    }
+    return -1;
+}
+
+/**
+ * 修正拍照时图片的方向
+ * ref to http://stackoverflow.com/questions/19463126/how-to-draw-photo-with-correct-orientation-in-canvas-after-capture-photo-by-usin
+ */
+function orientationHelper(canvas, ctx, orientation) {
+    const w = canvas.width, h = canvas.height;
+    if(orientation > 4){
+        canvas.width = h;
+        canvas.height = w;
+    }
+    switch (orientation) {
+        case 2:
+            ctx.translate(w, 0);
+            ctx.scale(-1, 1);
+            break;
+        case 3:
+            ctx.translate(w, h);
+            ctx.rotate(Math.PI);
+            break;
+        case 4:
+            ctx.translate(0, h);
+            ctx.scale(1, -1);
+            break;
+        case 5:
+            ctx.rotate(0.5 * Math.PI);
+            ctx.scale(1, -1);
+            break;
+        case 6:
+            ctx.rotate(0.5 * Math.PI);
+            ctx.translate(0, -h);
+            break;
+        case 7:
+            ctx.rotate(0.5 * Math.PI);
+            ctx.translate(w, -h);
+            ctx.scale(-1, 1);
+            break;
+        case 8:
+            ctx.rotate(-0.5 * Math.PI);
+            ctx.translate(-w, 0);
+            break;
+    }
 }
 
 /**
  * 压缩图片
  */
-export function compress(file, options, callback) {
+function compress(file, options, callback) {
     const reader = new FileReader();
     reader.onload = function (evt) {
         if(options.compress === false){
-            // 不启用压缩 & base64上传 的分支
+            // 不启用压缩 & base64上传 的分支，不做任何处理，直接返回文件的base64编码
             file.base64 = evt.target.result;
             callback(file);
             return;
@@ -64,6 +139,7 @@ export function compress(file, options, callback) {
         const img = new Image();
         img.onload = function () {
             const ratio = detectVerticalSquash(img);
+            const orientation = getOrientation(dataURItoBuffer(img.src));
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
 
@@ -84,6 +160,9 @@ export function compress(file, options, callback) {
             canvas.width = w;
             canvas.height = h;
 
+            if(orientation > 0){
+                orientationHelper(canvas, ctx, orientation);
+            }
             ctx.drawImage(img, 0, 0, w, h / ratio);
 
             if(/image\/jpeg/.test(file.type) || /image\/jpg/.test(file.type)){
@@ -119,4 +198,8 @@ export function compress(file, options, callback) {
         img.src = evt.target.result;
     };
     reader.readAsDataURL(file);
+}
+
+export default {
+    compress
 }

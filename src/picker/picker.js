@@ -10,10 +10,10 @@ function Result(item) {
     this.value = item.value;
 }
 Result.prototype.toString = function () {
-    return this.value
+    return this.value;
 };
 Result.prototype.valueOf = function () {
-    return this.value
+    return this.value;
 };
 
 let _sington;

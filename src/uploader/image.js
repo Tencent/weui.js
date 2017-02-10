@@ -202,4 +202,4 @@ function compress(file, options, callback) {
 
 export default {
     compress
-}
+};

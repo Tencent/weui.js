@@ -15,7 +15,10 @@
     "rules": {
         "indent": [
             "error",
-            4
+            4,
+            {
+                "SwitchCase": 1
+            }
         ],
         "quotes": [
             "error",
@@ -33,6 +36,12 @@
                     "warn"
                 ]
             }
+        ],
+        "no-func-assign": [
+            "off"
+        ],
+        "no-constant-condition": [
+            "off"
         ]
     }
 }

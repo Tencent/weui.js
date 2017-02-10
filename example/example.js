@@ -369,7 +369,7 @@ document.querySelector('#formSubmitBtn').addEventListener('click', function () {
 var uploadCount = 0;
 var uploadCountDom = document.getElementById("uploadCount");
 weui.uploader('#uploader', {
-    url: 'http://localhost:8002/upload',
+    url: 'http://' + location.hostname + ':8002/upload',
     auto: true,
     type: 'file',
     fileVal: 'fileVal',

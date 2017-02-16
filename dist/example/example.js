@@ -4422,9 +4422,11 @@
 	    var items = defaults.items.map(function (item) {
 	        return '<div class="weui-picker__item' + (item.disabled ? ' weui-picker__item_disabled' : '') + '">' + item.label + '</div>';
 	    }).join('');
-	    (0, _util2.default)(this).find('.weui-picker__content').html(items);
+	    var $this = (0, _util2.default)(this);
 
-	    var $scrollable = (0, _util2.default)(this).find(defaults.scrollable); // 可滚动的元素
+	    $this.find('.weui-picker__content').html(items);
+
+	    var $scrollable = $this.find(defaults.scrollable); // 可滚动的元素
 	    var start = void 0; // 保存开始按下的位置
 	    var end = void 0; // 保存结束时的位置
 	    var startTime = void 0; // 开始触摸的时间
@@ -4542,28 +4544,34 @@
 	    /**
 	     * 因为现在没有移除匿名函数的方法，所以先暴力移除（offAll），并且改变$scrollable。
 	     */
-	    $scrollable = (0, _util2.default)(this).offAll().on('touchstart', function (evt) {
+	    $scrollable = $this.offAll().on('touchstart', function (evt) {
 	        _start(evt.changedTouches[0].pageY);
 	    }).on('touchmove', function (evt) {
 	        _move(evt.changedTouches[0].pageY);
 	        evt.preventDefault();
 	    }).on('touchend', function (evt) {
 	        _end(evt.changedTouches[0].pageY);
-	    }).on('mousedown', function (evt) {
-	        _start(evt.pageY);
-	        evt.stopPropagation();
-	        evt.preventDefault();
-	    }).on('mousemove', function (evt) {
-	        if (!start) return;
-
-	        _move(evt.pageY);
-	        evt.stopPropagation();
-	        evt.preventDefault();
-	    }).on('mouseup mouseleave', function (evt) {
-	        _end(evt.pageY);
-	        evt.stopPropagation();
-	        evt.preventDefault();
 	    }).find(defaults.scrollable);
+
+	    // 判断是否支持touch事件 https://github.com/Modernizr/Modernizr/blob/master/feature-detects/touchevents.js
+	    var isSupportTouch = 'ontouchstart' in window || window.DocumentTouch && document instanceof window.DocumentTouch;
+	    if (!isSupportTouch) {
+	        $this.on('mousedown', function (evt) {
+	            _start(evt.pageY);
+	            evt.stopPropagation();
+	            evt.preventDefault();
+	        }).on('mousemove', function (evt) {
+	            if (!start) return;
+
+	            _move(evt.pageY);
+	            evt.stopPropagation();
+	            evt.preventDefault();
+	        }).on('mouseup mouseleave', function (evt) {
+	            _end(evt.pageY);
+	            evt.stopPropagation();
+	            evt.preventDefault();
+	        });
+	    }
 	};
 
 /***/ },

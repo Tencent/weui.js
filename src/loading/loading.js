@@ -29,7 +29,7 @@ function loading(content = '', options = {}) {
     const $loading = $loadingWrap.find('.weui-toast');
     const $mask = $loadingWrap.find('.weui-mask');
 
-    function _hide() {
+    function _hide(callback) {
         _hide = $.noop; // 防止二次调用导致报错
 
         $mask.addClass('weui-animate-fade-out');
@@ -38,9 +38,10 @@ function loading(content = '', options = {}) {
             .on('animationend webkitAnimationEnd', function () {
                 $loadingWrap.remove();
                 _sington = false;
+                callback && callback();
             });
     }
-    function hide(){ _hide(); }
+    function hide(callback){ _hide(callback); }
 
     $('body').append($loadingWrap);
     $loading.addClass('weui-animate-fade-in');

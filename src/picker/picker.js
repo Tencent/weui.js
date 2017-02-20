@@ -202,7 +202,7 @@ function picker() {
         $picker.find('.weui-mask').addClass('weui-animate-fade-in');
         $picker.find('.weui-picker').addClass('weui-animate-slide-up');
     }
-    function _hide(){
+    function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
 
         $picker.find('.weui-mask').addClass('weui-animate-fade-out');
@@ -211,9 +211,10 @@ function picker() {
             .on('animationend webkitAnimationEnd', function () {
                 $picker.remove();
                 _sington = false;
+                callback && callback();
             });
     }
-    function hide(){ _hide(); }
+    function hide(callback){ _hide(callback); }
 
     // 初始化滚动的方法
     function scroll(items, level) {

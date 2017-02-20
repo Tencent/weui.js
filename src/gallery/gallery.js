@@ -31,7 +31,7 @@ function gallery(url, options = {}) {
         url: url
     }, options)));
 
-    function _hide(){
+    function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
 
         $gallery
@@ -39,9 +39,10 @@ function gallery(url, options = {}) {
             .on('animationend webkitAnimationEnd', function () {
                 $gallery.remove();
                 _sington = false;
+                callback && callback();
             });
     }
-    function hide(){ _hide(); }
+    function hide(callback){ _hide(callback); }
 
     $('body').append($gallery);
     $gallery.find('.weui-gallery__img').on('click', function(){ hide(); });

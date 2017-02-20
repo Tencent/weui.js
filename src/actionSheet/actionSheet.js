@@ -59,7 +59,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
     const $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
     const $actionSheetMask = $actionSheetWrap.find('.weui-mask');
 
-    function _hide(){
+    function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
 
         $actionSheet.addClass(isAndroid ? 'weui-animate-fade-out' : 'weui-animate-slide-down');
@@ -68,9 +68,10 @@ function actionSheet(menus = [], actions = [], options = {}) {
             .on('animationend webkitAnimationEnd', function () {
                 $actionSheetWrap.remove();
                 _sington = false;
+                callback && callback();
             });
     }
-    function hide(){ _hide(); }
+    function hide(callback){ _hide(callback); }
 
     $('body').append($actionSheetWrap);
 

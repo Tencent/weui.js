@@ -41,14 +41,15 @@ function topTips(content, options = {}) {
     }, options);
 
     const $topTips = $($.render(tpl, options));
-    function _hide(){
+    function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
 
         $topTips.remove();
+        callback && callback();
         options.callback();
         _toptips = null;
     }
-    function hide(){ _hide(); }
+    function hide(callback){ _hide(callback); }
 
     $('body').append($topTips);
     if(_toptips){

@@ -8,6 +8,7 @@ let _toptips = null;
  * @param {string} content 报错的文字
  * @param {number|function|object=} options 多少毫秒后消失|消失后的回调|配置项
  * @param {number=} [options.duration=3000] 多少毫秒后消失
+ * @param {string=} options.className 自定义类名
  * @param {function=} options.callback 消失后的回调
  *
  * @example

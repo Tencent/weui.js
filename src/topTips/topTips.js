@@ -8,6 +8,7 @@ let _toptips = null;
  * @param {string} content 报错的文字
  * @param {number|function|object=} options 多少毫秒后消失|消失后的回调|配置项
  * @param {number=} [options.duration=3000] 多少毫秒后消失
+ * @param {string=} options.className 自定义类名
  * @param {function=} options.callback 消失后的回调
  *
  * @example
@@ -41,14 +42,15 @@ function topTips(content, options = {}) {
     }, options);
 
     const $topTips = $($.render(tpl, options));
-    function _hide(){
+    function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
 
         $topTips.remove();
+        callback && callback();
         options.callback();
         _toptips = null;
     }
-    function hide(){ _hide(); }
+    function hide(callback){ _hide(callback); }
 
     $('body').append($topTips);
     if(_toptips){

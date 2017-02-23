@@ -83,9 +83,11 @@ $.fn.scroll = function (options) {
     const items = defaults.items.map((item) => {
         return `<div class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${item.label}</div>`;
     }).join('');
-    $(this).find('.weui-picker__content').html(items);
+    const $this = $(this);
 
-    let $scrollable = $(this).find(defaults.scrollable);        // 可滚动的元素
+    $this.find('.weui-picker__content').html(items);
+
+    let $scrollable = $this.find(defaults.scrollable);        // 可滚动的元素
     let start;                                                  // 保存开始按下的位置
     let end;                                                    // 保存结束时的位置
     let startTime;                                              // 开始触摸的时间
@@ -204,7 +206,7 @@ $.fn.scroll = function (options) {
     /**
      * 因为现在没有移除匿名函数的方法，所以先暴力移除（offAll），并且改变$scrollable。
      */
-    $scrollable = $(this)
+    $scrollable = $this
         .offAll()
         .on('touchstart', function (evt) {
             _start(evt.changedTouches[0].pageY);
@@ -216,22 +218,29 @@ $.fn.scroll = function (options) {
         .on('touchend', function (evt) {
             _end(evt.changedTouches[0].pageY);
         })
-        .on('mousedown', function(evt){
-            _start(evt.pageY);
-            evt.stopPropagation();
-            evt.preventDefault();
-        })
-        .on('mousemove', function(evt){
-            if(!start) return;
-
-            _move(evt.pageY);
-            evt.stopPropagation();
-            evt.preventDefault();
-        })
-        .on('mouseup mouseleave', function(evt){
-            _end(evt.pageY);
-            evt.stopPropagation();
-            evt.preventDefault();
-        })
         .find(defaults.scrollable);
+
+    // 判断是否支持touch事件 https://github.com/Modernizr/Modernizr/blob/master/feature-detects/touchevents.js
+    const isSupportTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch;
+    if(!isSupportTouch){
+        $this
+            .on('mousedown', function(evt){
+                _start(evt.pageY);
+                evt.stopPropagation();
+                evt.preventDefault();
+            })
+            .on('mousemove', function(evt){
+                if(!start) return;
+
+                _move(evt.pageY);
+                evt.stopPropagation();
+                evt.preventDefault();
+            })
+            .on('mouseup mouseleave', function(evt){
+                _end(evt.pageY);
+                evt.stopPropagation();
+                evt.preventDefault();
+            });
+
+    }
 };

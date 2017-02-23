@@ -52,7 +52,7 @@ function dialog(options = {}) {
     const $dialog = $dialogWrap.find('.weui-dialog');
     const $mask = $dialogWrap.find('.weui-mask');
 
-    function _hide(){
+    function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
 
         $mask.addClass('weui-animate-fade-out');
@@ -61,9 +61,10 @@ function dialog(options = {}) {
             .on('animationend webkitAnimationEnd', function () {
                 $dialogWrap.remove();
                 _sington = false;
+                callback && callback();
             });
     }
-    function hide(){ _hide(); }
+    function hide(callback){ _hide(callback); }
 
     $('body').append($dialogWrap);
     // 不能直接把.weui-animate-fade-in加到$dialog，会导致mask的z-index有问题

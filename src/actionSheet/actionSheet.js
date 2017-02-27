@@ -81,7 +81,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
     $actionSheet.addClass(isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
     $actionSheetMask
         .addClass('weui-animate-fade-in')
-        .on('click', hide);
+        .on('click', function () { hide(); });
     $actionSheetWrap.find('.weui-actionsheet__menu').on('click', '.weui-actionsheet__cell', function (evt) {
         const index = $(this).index();
         menus[index].onClick.call(this, evt);

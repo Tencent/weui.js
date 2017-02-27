@@ -295,8 +295,8 @@ function picker() {
     }
 
     $picker
-        .on('click', '.weui-mask', hide)
-        .on('click', '.weui-picker__action', hide)
+        .on('click', '.weui-mask', function () { hide(); })
+        .on('click', '.weui-picker__action', function () { hide(); })
         .on('click', '#weui-picker-confirm', function () {
             defaults.onConfirm(result);
         });

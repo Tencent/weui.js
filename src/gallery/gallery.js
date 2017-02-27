@@ -45,7 +45,7 @@ function gallery(url, options = {}) {
     function hide(callback){ _hide(callback); }
 
     $('body').append($gallery);
-    $gallery.find('.weui-gallery__img').on('click', function(){ hide(); });
+    $gallery.find('.weui-gallery__img').on('click', function () { hide(); });
     $gallery.find('.weui-gallery__del').on('click', function () {
         options.onDelete.call(this, url);
     });

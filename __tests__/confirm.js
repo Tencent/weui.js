@@ -156,4 +156,20 @@ describe('confirm', function(){
             done();
         }, closeDur);
     });
+
+    it('test hide && callback', (done) => {
+        let called = false;
+        const confirm = weui.confirm("test");
+
+        confirm.hide(function(){
+            called = true;
+        });
+
+        setTimeout(() => {
+            assert($('.weui-dialog').length === 0);
+            assert(called);
+
+            done();
+        }, closeDur);
+    });
 });

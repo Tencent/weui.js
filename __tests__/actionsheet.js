@@ -88,4 +88,20 @@ describe('actionsheet', function(){
             done();
         }, closeDur);
     });
+
+    it('test hide && callback', (done) => {
+        let called = false;
+        const actionSheet = weui.actionSheet([]);
+
+        actionSheet.hide(function(){
+            called = true;
+        });
+
+        setTimeout(() => {
+            assert($('.weui-actionsheet').length === 0);
+            assert(called);
+
+            done();
+        }, closeDur);
+    });
 });

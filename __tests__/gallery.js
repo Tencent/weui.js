@@ -38,7 +38,21 @@ describe('gallery', function(){
         $('.weui-gallery__del').click();
 
         setTimeout(() => {
-            gallery.hide();
+            gallery.hide(done);
+            assert(called);
+        }, closeDur);
+    });
+
+    it('test hide && callback', (done) => {
+        let called = false;
+        const gallery = weui.gallery(url);
+
+        gallery.hide(function(){
+            called = true;
+        });
+
+        setTimeout(() => {
+            assert($('.weui-gallery').length === 0);
             assert(called);
 
             done();

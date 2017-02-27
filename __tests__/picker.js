@@ -210,4 +210,23 @@ describe('picker', function () {
             done();
         }, closeDur);
     });
+
+    it('test hide && callback', (done) => {
+        let called = false;
+        const picker = weui.datePicker({
+            start: 1990,
+            end: 2000
+        });
+
+        picker.hide(function(){
+            called = true;
+        });
+
+        setTimeout(() => {
+            assert($('.weui-picker').length === 0);
+            assert(called);
+
+            done();
+        }, closeDur);
+    });
 });

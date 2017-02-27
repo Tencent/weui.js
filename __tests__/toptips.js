@@ -45,4 +45,20 @@ describe('toptips', function(){
             done();
         }, dur + 10);
     });
+
+    it('test hide && callback', (done) => {
+        let called = false;
+        const topTips = weui.topTips("test");
+
+        topTips.hide(function(){
+            called = true;
+        });
+
+        setTimeout(() => {
+            assert($('.weui-toptips').length === 0);
+            assert(called);
+
+            done();
+        }, closeDur);
+    });
 });

@@ -79,4 +79,20 @@ describe('alert', function(){
             done();
         }, closeDur);
     });
+
+    it('test hide && callback', (done) => {
+        let called = false;
+        const alert = weui.alert("test");
+
+        alert.hide(function(){
+            called = true;
+        });
+
+        setTimeout(() => {
+            assert($('.weui-dialog').length === 0);
+            assert(called);
+
+            done();
+        }, closeDur);
+    });
 });

@@ -1975,15 +1975,8 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	/*
-	object-assign
-	(c) Sindre Sorhus
-	@license MIT
-	*/
-
 	'use strict';
 	/* eslint-disable no-unused-vars */
-	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -2004,7 +1997,7 @@
 			// Detect buggy property enumeration order in older V8 versions.
 
 			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+			var test1 = new String('abc');  // eslint-disable-line
 			test1[5] = 'de';
 			if (Object.getOwnPropertyNames(test1)[0] === '5') {
 				return false;
@@ -2033,7 +2026,7 @@
 			}
 
 			return true;
-		} catch (err) {
+		} catch (e) {
 			// We don't expect any of the above to throw, but better to be safe.
 			return false;
 		}
@@ -2053,8 +2046,8 @@
 				}
 			}
 
-			if (getOwnPropertySymbols) {
-				symbols = getOwnPropertySymbols(from);
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
 				for (var i = 0; i < symbols.length; i++) {
 					if (propIsEnumerable.call(from, symbols[i])) {
 						to[symbols[i]] = from[symbols[i]];
@@ -2569,7 +2562,9 @@
 	    _util2.default.getStyle($actionSheet[0], 'transform');
 
 	    $actionSheet.addClass(isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
-	    $actionSheetMask.addClass('weui-animate-fade-in').on('click', hide);
+	    $actionSheetMask.addClass('weui-animate-fade-in').on('click', function () {
+	        hide();
+	    });
 	    $actionSheetWrap.find('.weui-actionsheet__menu').on('click', '.weui-actionsheet__cell', function (evt) {
 	        var index = (0, _util2.default)(this).index();
 	        menus[index].onClick.call(this, evt);
@@ -4008,7 +4003,11 @@
 	        scroll(items, 0);
 	    }
 
-	    $picker.on('click', '.weui-mask', hide).on('click', '.weui-picker__action', hide).on('click', '#weui-picker-confirm', function () {
+	    $picker.on('click', '.weui-mask', function () {
+	        hide();
+	    }).on('click', '.weui-picker__action', function () {
+	        hide();
+	    }).on('click', '#weui-picker-confirm', function () {
 	        defaults.onConfirm(result);
 	    });
 

@@ -14,7 +14,9 @@ let _sington;
  *     className: 'custom-classname'
  * });
  * setTimeout(function () {
- *     loading.hide();
+ *     loading.hide(function() {
+ *          console.log('`loading` has been hidden');
+ *      });
  * }, 3000);
  */
 function loading(content = '', options = {}) {

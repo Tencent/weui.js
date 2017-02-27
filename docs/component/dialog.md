@@ -18,5 +18,24 @@ dialog，弹窗，alert和confirm的父类
 
 **Example**  
 ```js
-weui.dialog({    title: 'dialog标题',    content: 'dialog内容',    className: 'custom-classname',    buttons: [{        label: '取消',        type: 'default',        onClick: function () { alert('取消') }    }, {        label: '确定',        type: 'primary',        onClick: function () { alert('确定') }    }]});
+weui.dialog({
+    title: 'dialog标题',
+    content: 'dialog内容',
+    className: 'custom-classname',
+    buttons: [{
+        label: '取消',
+        type: 'default',
+        onClick: function () { alert('取消') }
+    }, {
+        label: '确定',
+        type: 'primary',
+        onClick: function () { alert('确定') }
+    }]
+});
+
+// 主动关闭
+var $dialog = weui.dialog({...});
+$dialog.hide(function(){
+     console.log('`dialog` has been hidden');
+});
 ```

@@ -190,6 +190,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *         onClick: function () { alert('确定') }
 	 *     }]
 	 * });
+	 * 
+	 * // 主动关闭
+	 * var $dialog = weui.dialog({...});
+	 * $dialog.hide(function(){
+	 *      console.log('`dialog` has been hidden');
+	 * });
 	 */
 	function dialog() {
 	    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -213,17 +219,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var $dialog = $dialogWrap.find('.weui-dialog');
 	    var $mask = $dialogWrap.find('.weui-mask');
 
-	    function _hide() {
+	    function _hide(callback) {
 	        _hide = _util2.default.noop; // 防止二次调用导致报错
 
 	        $mask.addClass('weui-animate-fade-out');
 	        $dialog.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $dialogWrap.remove();
 	            _sington = false;
+	            callback && callback();
 	        });
 	    }
-	    function hide() {
-	        _hide();
+	    function hide(callback) {
+	        _hide(callback);
 	    }
 
 	    (0, _util2.default)('body').append($dialogWrap);
@@ -641,8 +648,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports) {
 
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+
 	'use strict';
 	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -663,7 +677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			// Detect buggy property enumeration order in older V8 versions.
 
 			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
 			test1[5] = 'de';
 			if (Object.getOwnPropertyNames(test1)[0] === '5') {
 				return false;
@@ -692,7 +706,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 
 			return true;
-		} catch (e) {
+		} catch (err) {
 			// We don't expect any of the above to throw, but better to be safe.
 			return false;
 		}
@@ -712,8 +726,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 			}
 
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
 				for (var i = 0; i < symbols.length; i++) {
 					if (propIsEnumerable.call(from, symbols[i])) {
 						to[symbols[i]] = from[symbols[i]];
@@ -1075,7 +1089,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *     className: 'custom-classname'
 	 * });
 	 * setTimeout(function () {
-	 *     loading.hide();
+	 *     loading.hide(function() {
+	 *          console.log('`loading` has been hidden');
+	 *      });
 	 * }, 3000);
 	 */
 	function loading() {
@@ -1093,17 +1109,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var $loading = $loadingWrap.find('.weui-toast');
 	    var $mask = $loadingWrap.find('.weui-mask');
 
-	    function _hide() {
+	    function _hide(callback) {
 	        _hide = _util2.default.noop; // 防止二次调用导致报错
 
 	        $mask.addClass('weui-animate-fade-out');
 	        $loading.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $loadingWrap.remove();
 	            _sington = false;
+	            callback && callback();
 	        });
 	    }
-	    function hide() {
-	        _hide();
+	    function hide(callback) {
+	        _hide(callback);
 	    }
 
 	    (0, _util2.default)('body').append($loadingWrap);
@@ -1186,6 +1203,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * ], {
 	 *     className: 'custom-classname'
 	 * });
+	 * 
+	 * // 主动关闭
+	 * var $actionSheet = weui.actionSheet({...});
+	 * $actionSheet.hide(function() {
+	 *      console.log('`actionSheet` has been hidden');
+	 * });
 	 */
 	function actionSheet() {
 	    var menus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -1205,17 +1228,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
 	    var $actionSheetMask = $actionSheetWrap.find('.weui-mask');
 
-	    function _hide() {
+	    function _hide(callback) {
 	        _hide = _util2.default.noop; // 防止二次调用导致报错
 
 	        $actionSheet.addClass(isAndroid ? 'weui-animate-fade-out' : 'weui-animate-slide-down');
 	        $actionSheetMask.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $actionSheetWrap.remove();
 	            _sington = false;
+	            callback && callback();
 	        });
 	    }
-	    function hide() {
-	        _hide();
+	    function hide(callback) {
+	        _hide(callback);
 	    }
 
 	    (0, _util2.default)('body').append($actionSheetWrap);
@@ -1276,6 +1300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {string} content 报错的文字
 	 * @param {number|function|object=} options 多少毫秒后消失|消失后的回调|配置项
 	 * @param {number=} [options.duration=3000] 多少毫秒后消失
+	 * @param {string=} options.className 自定义类名
 	 * @param {function=} options.callback 消失后的回调
 	 *
 	 * @example
@@ -1286,6 +1311,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *     duration: 3000,
 	 *     className: 'custom-classname',
 	 *     callback: function(){ console.log('close') }
+	 * });
+	 * 
+	 * // 主动关闭
+	 * var $topTips = weui.topTips('请填写正确的字段');
+	 * $topTips.hide(function() {
+	 *      console.log('`topTips` has been hidden');
 	 * });
 	 */
 	function topTips(content) {
@@ -1311,15 +1342,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, options);
 
 	    var $topTips = (0, _util2.default)(_util2.default.render(_topTips2.default, options));
-	    function _hide() {
+	    function _hide(callback) {
 	        _hide = _util2.default.noop; // 防止二次调用导致报错
 
 	        $topTips.remove();
+	        callback && callback();
 	        options.callback();
 	        _toptips = null;
 	    }
-	    function hide() {
-	        _hide();
+	    function hide(callback) {
+	        _hide(callback);
 	    }
 
 	    (0, _util2.default)('body').append($topTips);
@@ -2384,7 +2416,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {array} items picker的数据，即用于生成picker的数据，picker的层级可以自己定义，但建议最多三层。数据格式参考example。
 	 * @param {Object} options 配置项
 	 * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
-	 * @param {string=} [options.id=default] 作为picker的唯一标识
+	 * @param {string=} [options.id=default] 作为picker的唯一标识，作用是以id缓存当时的选择。（当你想每次传入的defaultValue都是不一样时，可以使用不同的id区分）
 	 * @param {string=} [options.className] 自定义类名
 	 * @param {array=} [options.defaultValue] 默认选项的value数组
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
@@ -2563,17 +2595,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $picker.find('.weui-mask').addClass('weui-animate-fade-in');
 	        $picker.find('.weui-picker').addClass('weui-animate-slide-up');
 	    }
-	    function _hide() {
+	    function _hide(callback) {
 	        _hide = _util2.default.noop; // 防止二次调用导致报错
 
 	        $picker.find('.weui-mask').addClass('weui-animate-fade-out');
 	        $picker.find('.weui-picker').addClass('weui-animate-slide-down').on('animationend webkitAnimationEnd', function () {
 	            $picker.remove();
 	            _sington = false;
+	            callback && callback();
 	        });
 	    }
-	    function hide() {
-	        _hide();
+	    function hide(callback) {
+	        _hide(callback);
 	    }
 
 	    // 初始化滚动的方法
@@ -3310,7 +3343,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *     className: 'custom-classname',
 	 *     onDelete: function(){
 	 *         if(confirm('确定删除该图片？')){ console.log('删除'); }
-	 *         gallery.hide();
+	 *         gallery.hide(function() {
+	 *              console.log('`gallery` has been hidden');
+	 *          });
 	 *     }
 	 * });
 	 */
@@ -3328,16 +3363,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        url: url
 	    }, options)));
 
-	    function _hide() {
+	    function _hide(callback) {
 	        _hide = _util2.default.noop; // 防止二次调用导致报错
 
 	        $gallery.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $gallery.remove();
 	            _sington = false;
+	            callback && callback();
 	        });
 	    }
-	    function hide() {
-	        _hide();
+	    function hide(callback) {
+	        _hide(callback);
 	    }
 
 	    (0, _util2.default)('body').append($gallery);

@@ -15,5 +15,10 @@ toast 一般用于操作成功时的提示场景
 
 **Example**  
 ```js
-weui.toast('操作成功', 3000);weui.toast('操作成功', {    duration: 3000,    className: 'custom-classname',    callback: function(){ console.log('close') }});
+weui.toast('操作成功', 3000);
+weui.toast('操作成功', {
+    duration: 3000,
+    className: 'custom-classname',
+    callback: function(){ console.log('close') }
+});
 ```

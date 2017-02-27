@@ -15,7 +15,9 @@ let _sington;
  *     className: 'custom-classname',
  *     onDelete: function(){
  *         if(confirm('确定删除该图片？')){ console.log('删除'); }
- *         gallery.hide();
+ *         gallery.hide(function() {
+ *              console.log('`gallery` has been hidden');
+ *          });
  *     }
  * });
  */

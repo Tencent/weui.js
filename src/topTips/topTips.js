@@ -20,6 +20,12 @@ let _toptips = null;
  *     className: 'custom-classname',
  *     callback: function(){ console.log('close') }
  * });
+ * 
+ * // 主动关闭
+ * var $topTips = weui.topTips('请填写正确的字段');
+ * $topTips.hide(function() {
+ *      console.log('`topTips` has been hidden');
+ * });
  */
 function topTips(content, options = {}) {
     if (typeof options === 'number') {

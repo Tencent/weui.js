@@ -1517,6 +1517,12 @@
 	 *         onClick: function () { alert('确定') }
 	 *     }]
 	 * });
+	 * 
+	 * // 主动关闭
+	 * var $dialog = weui.dialog({...});
+	 * $dialog.hide(function(){
+	 *      console.log('`dialog` has been hidden');
+	 * });
 	 */
 	function dialog() {
 	    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -1969,8 +1975,15 @@
 /* 6 */
 /***/ function(module, exports) {
 
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
+
 	'use strict';
 	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -1991,7 +2004,7 @@
 			// Detect buggy property enumeration order in older V8 versions.
 
 			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
 			test1[5] = 'de';
 			if (Object.getOwnPropertyNames(test1)[0] === '5') {
 				return false;
@@ -2020,7 +2033,7 @@
 			}
 
 			return true;
-		} catch (e) {
+		} catch (err) {
 			// We don't expect any of the above to throw, but better to be safe.
 			return false;
 		}
@@ -2040,8 +2053,8 @@
 				}
 			}
 
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
 				for (var i = 0; i < symbols.length; i++) {
 					if (propIsEnumerable.call(from, symbols[i])) {
 						to[symbols[i]] = from[symbols[i]];
@@ -2403,7 +2416,9 @@
 	 *     className: 'custom-classname'
 	 * });
 	 * setTimeout(function () {
-	 *     loading.hide();
+	 *     loading.hide(function() {
+	 *          console.log('`loading` has been hidden');
+	 *      });
 	 * }, 3000);
 	 */
 	function loading() {
@@ -2617,6 +2632,12 @@
 	 *     duration: 3000,
 	 *     className: 'custom-classname',
 	 *     callback: function(){ console.log('close') }
+	 * });
+	 * 
+	 * // 主动关闭
+	 * var $topTips = weui.topTips('请填写正确的字段');
+	 * $topTips.hide(function() {
+	 *      console.log('`topTips` has been hidden');
 	 * });
 	 */
 	function topTips(content) {
@@ -4643,7 +4664,9 @@
 	 *     className: 'custom-classname',
 	 *     onDelete: function(){
 	 *         if(confirm('确定删除该图片？')){ console.log('删除'); }
-	 *         gallery.hide();
+	 *         gallery.hide(function() {
+	 *              console.log('`gallery` has been hidden');
+	 *          });
 	 *     }
 	 * });
 	 */

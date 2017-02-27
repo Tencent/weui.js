@@ -18,5 +18,31 @@ actionsheet 弹出式菜单
 
 **Example**  
 ```js
-weui.actionSheet([    {        label: '拍照',        onClick: function () {            console.log('拍照');        }    }, {        label: '从相册选择',        onClick: function () {            console.log('从相册选择');        }    }, {        label: '其他',        onClick: function () {            console.log('其他');        }    }], [    {        label: '取消',        onClick: function () {            console.log('取消');        }    }], {    className: 'custom-classname'});
+weui.actionSheet([
+    {
+        label: '拍照',
+        onClick: function () {
+            console.log('拍照');
+        }
+    }, {
+        label: '从相册选择',
+        onClick: function () {
+            console.log('从相册选择');
+        }
+    }, {
+        label: '其他',
+        onClick: function () {
+            console.log('其他');
+        }
+    }
+], [
+    {
+        label: '取消',
+        onClick: function () {
+            console.log('取消');
+        }
+    }
+], {
+    className: 'custom-classname'
+});
 ```

@@ -23,4 +23,10 @@ weui.topTips('请填写正确的字段', {
     className: 'custom-classname',
     callback: function(){ console.log('close') }
 });
+
+// 主动关闭
+var $topTips = weui.topTips('请填写正确的字段');
+$topTips.hide(function() {
+     console.log('`topTips` has been hidden');
+});
 ```

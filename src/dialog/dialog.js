@@ -31,6 +31,12 @@ let _sington;
  *         onClick: function () { alert('确定') }
  *     }]
  * });
+ * 
+ * // 主动关闭
+ * var $dialog = weui.dialog({...});
+ * $dialog.hide(function(){
+ *      console.log('`dialog` has been hidden');
+ * });
  */
 function dialog(options = {}) {
     if(_sington) return _sington;

@@ -14,5 +14,13 @@ gallery 带删除按钮的图片预览，主要是配合图片上传使用
 
 **Example**  
 ```js
-var gallery = weui.gallery(url, {    className: 'custom-classname',    onDelete: function(){        if(confirm('确定删除该图片？')){ console.log('删除'); }        gallery.hide();    }});
+var gallery = weui.gallery(url, {
+    className: 'custom-classname',
+    onDelete: function(){
+        if(confirm('确定删除该图片？')){ console.log('删除'); }
+        gallery.hide(function() {
+             console.log('`gallery` has been hidden');
+         });
+    }
+});
 ```

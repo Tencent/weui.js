@@ -1,3 +1,11 @@
+#### v1.1.1 (2017-02-27)
+
+- 【优化】 `actionSheet`/`alert`/`confirm`/`dialog`/`gallery`/`loading`/`picker`/`topTips`的`hide`增加回调入参
+- 【修复】 `preview`展示图片时url会出现的问题
+- 【修复】 `uploader`在拍照时图片方向错误的问题
+- 【修复】 `picker`点击时偶尔会移动2倍距离的问题
+
+
 #### v1.1.0 (2017-02-09)
 
 - 【增强】 日期选择器`datePicker`增加`corn`的用法，详情请看[文档](https://github.com/weui/weui.js/blob/master/docs/component/picker.md#datepickeroptions)

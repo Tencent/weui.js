@@ -1203,12 +1203,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * ], {
 	 *     className: 'custom-classname'
 	 * });
-	 * 
-	 * // 主动关闭
-	 * var $actionSheet = weui.actionSheet({...});
-	 * $actionSheet.hide(function() {
-	 *      console.log('`actionSheet` has been hidden');
-	 * });
 	 */
 	function actionSheet() {
 	    var menus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];

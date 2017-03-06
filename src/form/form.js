@@ -50,8 +50,6 @@ function _validate($input, $form, regexp){
             }else{
                 return input.checked ? null : 'empty';
             }
-        }else if(!$input.val().length){
-            return 'empty';
         }else if(reg){
             if(/^REG_/.test(reg)){
                 if(!regexp) throw 'RegExp ' + reg + ' is empty.';
@@ -62,6 +60,8 @@ function _validate($input, $form, regexp){
                 reg = regexp[reg];
             }
             return new RegExp(reg).test(val) ? null : 'notMatch';
+        }else if(!$input.val().length){
+            return 'empty';
         }else{
             return null;
         }

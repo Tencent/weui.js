@@ -1,5 +1,5 @@
 export default function upload(options) {
-    const {url, file, fileVal, onBeforeSend, onProgress, onError, onSuccess} = options;
+    const {url, file, fileVal, onBeforeSend, onProgress, onError, onSuccess, xhrFields} = options;
     const {name, type, lastModifiedDate} = file;
     const data = {
         name: name,
@@ -55,6 +55,9 @@ export default function upload(options) {
 
     xhr.open('POST', url);
 
+    Object.keys(xhrFields).forEach((key) => {
+        xhr[key] = xhrFields[key];
+    });
     // 设置头部信息
     Object.keys(headers).forEach((key) => {
         xhr.setRequestHeader(key, headers[key]);

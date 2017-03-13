@@ -138,6 +138,7 @@ function uploader(selector, options) {
         auto: true,
         type: 'file',
         fileVal: 'file',
+        xhrFields: {},
         onBeforeQueued: $.noop,
         onQueued: $.noop,
         onBeforeSend: $.noop,

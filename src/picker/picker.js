@@ -387,16 +387,16 @@ function datePicker(options) {
 
     // 兼容原来的 start、end 传 Number 的用法
     if (typeof defaults.start === 'number') {
-        defaults.start = new Date(`${defaults.start}-01-01`);
+        defaults.start = new Date(`${defaults.start}/01/01`);
     }
     else if (typeof defaults.start === 'string') {
-        defaults.start = new Date(defaults.start);
+        defaults.start = new Date(defaults.start.replace(/-/g, '/'));
     }
     if (typeof defaults.end === 'number') {
-        defaults.end = new Date(`${defaults.end}-12-31`);
+        defaults.end = new Date(`${defaults.end}/12/31`);
     }
-    else if (typeof defaults.end === 'string') {
-        defaults.end = new Date(defaults.end);
+    else if (typeof defaults.end === 'string') { 
+        defaults.end = new Date(defaults.end.replace(/-/g, '/'));
     }
 
     const findBy = (array, key, value) => {

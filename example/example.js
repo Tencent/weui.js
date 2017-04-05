@@ -504,7 +504,7 @@ document.querySelector('#uploaderCustomFiles').addEventListener('click', functio
                         break;
                     }
                 }
-                if(index) uploadCustomFileList.splice(index, 1);
+                if(index !== undefined) uploadCustomFileList.splice(index, 1);
 
                 target.remove();
                 gallery.hide();

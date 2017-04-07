@@ -1894,6 +1894,7 @@
 	    },
 	    /**
 	     * getStyle 获得元素计算后的样式值
+	     * (from http://stackoverflow.com/questions/2664045/how-to-get-an-html-elements-style-values-in-javascript)
 	     */
 	    getStyle: function getStyle(el, styleProp) {
 	        var value,
@@ -3240,6 +3241,7 @@
 	        auto: true,
 	        type: 'file',
 	        fileVal: 'file',
+	        xhrFields: {},
 	        onBeforeQueued: _util2.default.noop,
 	        onQueued: _util2.default.noop,
 	        onBeforeSend: _util2.default.noop,
@@ -3609,7 +3611,8 @@
 	        onBeforeSend = options.onBeforeSend,
 	        onProgress = options.onProgress,
 	        onError = options.onError,
-	        onSuccess = options.onSuccess;
+	        onSuccess = options.onSuccess,
+	        xhrFields = options.xhrFields;
 	    var name = file.name,
 	        type = file.type,
 	        lastModifiedDate = file.lastModifiedDate;
@@ -3668,6 +3671,9 @@
 
 	    xhr.open('POST', url);
 
+	    Object.keys(xhrFields).forEach(function (key) {
+	        xhr[key] = xhrFields[key];
+	    });
 	    // 设置头部信息
 	    Object.keys(headers).forEach(function (key) {
 	        xhr.setRequestHeader(key, headers[key]);

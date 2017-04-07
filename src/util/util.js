@@ -288,6 +288,7 @@ objectAssign($, {
     },
     /**
      * getStyle 获得元素计算后的样式值
+     * (from http://stackoverflow.com/questions/2664045/how-to-get-an-html-elements-style-values-in-javascript)
      */
     getStyle: function (el, styleProp) {
         var value, defaultView = (el.ownerDocument || document).defaultView;

@@ -25,6 +25,30 @@ let _id = 0;
  * @param {function=} [options.onError] 上传失败的回调
  *
  * @example
+ * #### html
+ * ```html
+ <div class="weui-cells weui-cells_form" id="uploader">
+     <div class="weui-cell">
+         <div class="weui-cell__bd">
+             <div class="weui-uploader">
+                 <div class="weui-uploader__hd">
+                     <p class="weui-uploader__title">图片上传</p>
+                     <div class="weui-uploader__info"><span id="uploadCount">0</span>/5</div>
+                 </div>
+                 <div class="weui-uploader__bd">
+                     <ul class="weui-uploader__files" id="uploaderFiles"></ul>
+                     <div class="weui-uploader__input-box">
+                         <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" capture="camera" multiple="" />
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+ * ```
+ *
+ * #### js
+ * ```javascript
  * var uploadCount = 0;
  * weui.uploader('#uploader', {
  *    url: 'http://localhost:8081',
@@ -91,6 +115,7 @@ let _id = 0;
  *        // return true; // 阻止默认行为，不使用默认的失败态
  *    }
  * });
+ * ```
  */
 function uploader(selector, options) {
     const $uploader = $(selector);

@@ -8,12 +8,33 @@ import $ from '../util/util';
  * @param {function=} options.onChange 点击tab时，返回对应的index
  *
  * @example
+ * #### html
+ * ```html
+ * <div class="weui-tab" id="tab">
+ *     <div class="weui-navbar">
+ *         <div class="weui-navbar__item">反馈</div>
+ *         <div class="weui-navbar__item">表单</div>
+ *         <div class="weui-navbar__item">上传</div>
+ *         <div class="weui-navbar__item">其它</div>
+ *     </div>
+ *     <div class="weui-tab__panel">
+ *         <div class="weui-tab__content">反馈页</div>
+ *         <div class="weui-tab__content">表单页</div>
+ *         <div class="weui-tab__content">上传页</div>
+ *         <div class="weui-tab__content">其它页</div>
+ *     </div>
+ * </div>
+ * ```
+ *
+ * #### js
+ * ```javascript
  * weui.tab('#tab',{
  *     defaultIndex: 0,
  *     onChange: function(index){
  *         console.log(index);
  *     }
  * });
+ * ```
  */
 function tab(selector, options = {}) {
     const $eles = $(selector);

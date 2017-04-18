@@ -245,7 +245,9 @@ function picker() {
                 lineTemp[level] = index;
 
                 if (isMulti) {
-                    defaults.onChange(result);
+                    if(result.length == depth){
+                        defaults.onChange(result);
+                    }
                 } else {
                     /**
                      * @子列表处理
@@ -279,7 +281,8 @@ function picker() {
     }
 
 
-    while (depth--) {
+    let _depth = depth;
+    while (_depth--) {
         groups += groupTpl;
     }
 
@@ -395,7 +398,7 @@ function datePicker(options) {
     if (typeof defaults.end === 'number') {
         defaults.end = new Date(`${defaults.end}/12/31`);
     }
-    else if (typeof defaults.end === 'string') { 
+    else if (typeof defaults.end === 'string') {
         defaults.end = new Date(defaults.end.replace(/-/g, '/'));
     }
 

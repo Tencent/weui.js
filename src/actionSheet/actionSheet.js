@@ -62,7 +62,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
     function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
 
-        $actionSheet.addClass(isAndroid ? 'weui-animate-fade-out' : 'weui-animate-slide-down');
+        $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-out' : 'weui-animate-slide-down');
         $actionSheetMask
             .addClass('weui-animate-fade-out')
             .on('animationend webkitAnimationEnd', function () {
@@ -78,7 +78,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
     // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
     $.getStyle($actionSheet[0], 'transform');
 
-    $actionSheet.addClass(isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
+    $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
     $actionSheetMask
         .addClass('weui-animate-fade-in')
         .on('click', function () { hide(); });

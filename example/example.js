@@ -491,7 +491,7 @@ document.querySelector('#uploaderCustomFiles').addEventListener('click', functio
     var id = target.getAttribute('data-id');
 
     if(url){
-        url = url.match(/url\((.*?)\)/)[1];
+        url = url.match(/url\((.*?)\)/)[1].replace(/"/g, '');
     }
     var gallery = weui.gallery(url, {
         onDelete: function(){

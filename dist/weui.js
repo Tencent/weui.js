@@ -567,6 +567,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    /**
 	     * getStyle 获得元素计算后的样式值
+	     * (from http://stackoverflow.com/questions/2664045/how-to-get-an-html-elements-style-values-in-javascript)
 	     */
 	    getStyle: function getStyle(el, styleProp) {
 	        var value,
@@ -1913,6 +1914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        auto: true,
 	        type: 'file',
 	        fileVal: 'file',
+	        xhrFields: {},
 	        onBeforeQueued: _util2.default.noop,
 	        onQueued: _util2.default.noop,
 	        onBeforeSend: _util2.default.noop,
@@ -2282,7 +2284,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        onBeforeSend = options.onBeforeSend,
 	        onProgress = options.onProgress,
 	        onError = options.onError,
-	        onSuccess = options.onSuccess;
+	        onSuccess = options.onSuccess,
+	        xhrFields = options.xhrFields;
 	    var name = file.name,
 	        type = file.type,
 	        lastModifiedDate = file.lastModifiedDate;
@@ -2341,6 +2344,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    xhr.open('POST', url);
 
+	    Object.keys(xhrFields).forEach(function (key) {
+	        xhr[key] = xhrFields[key];
+	    });
 	    // 设置头部信息
 	    Object.keys(headers).forEach(function (key) {
 	        xhr.setRequestHeader(key, headers[key]);

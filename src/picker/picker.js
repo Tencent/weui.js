@@ -314,7 +314,7 @@ function picker() {
 }
 
 /**
- * dataPicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
+ * datePicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
  * @param options 配置项
  * @param {string=} [options.id=datePicker] 作为picker的唯一标识
  * @param {number=|string|Date} [options.start=2000] 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date

@@ -30,6 +30,12 @@ import dialog from '../dialog/dialog';
  *         onClick: function(){ console.log('ok') }
  *     }]
  * });
+ *
+ * // 多次使用
+ * var alert = weui.alert('hello');
+ * alert.hide(function(){
+ *     weui.alert('world');
+ * });
  */
 function alert(content = '', yes = $.noop, options) {
     if (typeof yes === 'object') {

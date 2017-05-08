@@ -42,7 +42,7 @@ npm run build
 
 ```html
 <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.0/weui.min.css">
-<script type="text/javascript" src="dist/weui.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js"></script>
 <script type="text/javascript">
     weui.alert('alert');
 </script>

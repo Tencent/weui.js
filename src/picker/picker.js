@@ -26,6 +26,7 @@ let temp = {}; // temp 存在上一次滑动的位置
  * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
  * @param {string=} [options.id=default] 作为picker的唯一标识，作用是以id缓存当时的选择。（当你想每次传入的defaultValue都是不一样时，可以使用不同的id区分）
  * @param {string=} [options.className] 自定义类名
+ * @param {string=} [options.container] 指定容器
  * @param {array=} [options.defaultValue] 默认选项的value数组
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
  * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
@@ -52,6 +53,7 @@ let temp = {}; // temp 存在上一次滑动的位置
  * }
  * ], {
  *    className: 'custom-classname',
+ *    container: 'body',
  *    defaultValue: [3],
  *    onChange: function (result) {
  *        console.log(result)
@@ -149,6 +151,7 @@ let temp = {}; // temp 存在上一次滑动的位置
  * }
  * ], {
  *    className: 'custom-classname',
+ *    container: 'body',
  *    defaultValue: [1, 3],
  *    onChange: function (result) {
  *        console.log(result)
@@ -167,6 +170,7 @@ function picker() {
     const defaults = $.extend({
         id: 'default',
         className: '',
+        container: 'body',
         onChange: $.noop,
         onConfirm: $.noop
     }, options);
@@ -194,7 +198,7 @@ function picker() {
 
     // 显示与隐藏的方法
     function show(){
-        $('body').append($picker);
+        $(defaults.container).append($picker);
 
         // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
         $.getStyle($picker[0], 'transform');

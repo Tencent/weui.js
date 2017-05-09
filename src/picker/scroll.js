@@ -81,7 +81,7 @@ $.fn.scroll = function (options) {
         bodyHeight: 7 * 34                          // picker的高度，用于辅助点击滚动的计算
     }, options);
     const items = defaults.items.map((item) => {
-        return `<div class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${item.label}</div>`;
+        return `<div class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${typeof item == 'object' ? item.label : item}</div>`;
     }).join('');
     const $this = $(this);
 

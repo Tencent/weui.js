@@ -6,8 +6,13 @@ import pickerTpl from './picker.html';
 import groupTpl from './group.html';
 
 function Result(item) {
-    this.label = item.label;
-    this.value = item.value;
+    if(typeof item != 'object'){
+        item = {
+            label: item,
+            value: item
+        }
+    }
+    $.extend(this, item);
 }
 Result.prototype.toString = function () {
     return this.value;
@@ -227,8 +232,14 @@ function picker() {
             const defaultVal = defaults.defaultValue[level];
             let index = 0, len = items.length;
 
-            for (; index < len; ++index) {
-                if (defaultVal == items[index].value) break;
+            if(typeof items[index] == 'object'){
+                for (; index < len; ++index) {
+                    if (defaultVal == items[index].value) break;
+                }
+            }else{
+                for (; index < len; ++index) {
+                    if (defaultVal == items[index]) break;
+                }
             }
             if (index < len) {
                 lineTemp[level] = index;

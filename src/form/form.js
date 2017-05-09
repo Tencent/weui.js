@@ -73,18 +73,6 @@ function _validate($input, $form, regexp){
 
     return 'empty';
 }
-function _showErrorMsg(error){
-    if(error){
-        const $ele = $(error.ele), msg = error.msg,
-            tips = $ele.attr(msg + 'Tips') || $ele.attr('tips') || $ele.attr('placeholder');
-        if(tips) topTips(tips);
-
-        if(error.ele.type == 'checkbox' || error.ele.type == 'radio') return;
-
-        const cellParent = _findCellParent(error.ele);
-        if(cellParent) cellParent.classList.add('weui-cell_warn');
-    }
-}
 
 /**
  * 表单校验
@@ -151,12 +139,12 @@ function validate(selector, callback = $.noop, options = {}){
     $eles.forEach((ele) => {
         const $form = $(ele);
         const $requireds = $form.find('[required]');
-        if(typeof callback != 'function') callback = _showErrorMsg;
+        if(typeof callback != 'function') callback = showErrorTips;
 
         for(let i = 0, len = $requireds.length; i < len; ++i){
             const $required = $requireds.eq(i), errorMsg = _validate($required, $form, options.regexp), error = {ele: $required[0], msg: errorMsg};
             if(errorMsg){
-                if(!callback(error)) _showErrorMsg(error);
+                if(!callback(error)) showErrorTips(error);
                 return;
             }
         }
@@ -195,22 +183,60 @@ function checkIfBlur(selector, options = {}){
 
                 let errorMsg = _validate($this, $form, options.regexp);
                 if(errorMsg){
-                    _showErrorMsg({
+                    showErrorTips({
                         ele: $this[0],
                         msg: errorMsg
                     });
                 }
             })
             .on('focus', function () {
-                const cellParent = _findCellParent(this);
-                if(cellParent) cellParent.classList.remove('weui-cell_warn');
+                hideErrorTips(this);
             });
     });
 
     return this;
 }
 
+/**
+ * showErrorTips 显示错误提示
+ * @param {Object} error 错误数据
+ * @param {string} error.ele 出错了的dom元素
+ * @param {string} error.msg 出错了的msg。会根据此`msg`找到对应的`Tips`（比如`msg`是`empty`），那么`ele`上的`emptyTips`就会以`topTips`显示
+ *
+ * @example
+ * weui.form.showErrorTips({
+ *     ele: document.getElementById("xxxInput")
+ *     msg: 'empty'
+ * });
+ */
+function showErrorTips(error){
+    if(error){
+        const $ele = $(error.ele), msg = error.msg,
+            tips = $ele.attr(msg + 'Tips') || $ele.attr('tips') || $ele.attr('placeholder');
+        if(tips) topTips(tips);
+
+        if(error.ele.type == 'checkbox' || error.ele.type == 'radio') return;
+
+        const cellParent = _findCellParent(error.ele);
+        if(cellParent) cellParent.classList.add('weui-cell_warn');
+    }
+}
+
+/**
+ * hideErrorTips 隐藏错误提示
+ * @param {Object} ele dom元素
+ *
+ * @example
+ * weui.form.hideErrorTips(document.getElementById("xxxInput"));
+ */
+function hideErrorTips(ele){
+    const cellParent = _findCellParent(ele);
+    if(cellParent) cellParent.classList.remove('weui-cell_warn');
+}
+
 export default {
+    showErrorTips,
+    hideErrorTips,
     validate,
     checkIfBlur
 };

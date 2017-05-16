@@ -10,7 +10,7 @@ function Result(item) {
         item = {
             label: item,
             value: item
-        }
+        };
     }
     $.extend(this, item);
 }

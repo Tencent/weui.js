@@ -59,7 +59,7 @@ function _validate($input, $form, regexp){
 
                 reg = regexp[reg];
             }
-            return new RegExp(reg).test(val) ? null : 'notMatch';
+            return new RegExp(reg).test(val) ? null : !$input.val().length ? 'empty' : 'notMatch';
         }else if(!$input.val().length){
             return 'empty';
         }else{

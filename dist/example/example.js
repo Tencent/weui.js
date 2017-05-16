@@ -513,7 +513,7 @@
 	    var id = target.getAttribute('data-id');
 
 	    if (url) {
-	        url = url.match(/url\((.*?)\)/)[1];
+	        url = url.match(/url\((.*?)\)/)[1].replace(/"/g, '');
 	    }
 	    var gallery = _weui2.default.gallery(url, {
 	        onDelete: function onDelete() {
@@ -526,7 +526,7 @@
 	                        break;
 	                    }
 	                }
-	                if (index) uploadCustomFileList.splice(index, 1);
+	                if (index !== undefined) uploadCustomFileList.splice(index, 1);
 
 	                target.remove();
 	                gallery.hide();
@@ -2174,6 +2174,12 @@
 	 *         onClick: function(){ console.log('ok') }
 	 *     }]
 	 * });
+	 *
+	 * // 多次使用
+	 * var alert = weui.alert('hello');
+	 * alert.hide(function(){
+	 *     weui.alert('world');
+	 * });
 	 */
 	function alert() {
 	    var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
@@ -2546,7 +2552,7 @@
 	    function _hide(callback) {
 	        _hide = _util2.default.noop; // 防止二次调用导致报错
 
-	        $actionSheet.addClass(isAndroid ? 'weui-animate-fade-out' : 'weui-animate-slide-down');
+	        $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-out' : 'weui-animate-slide-down');
 	        $actionSheetMask.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $actionSheetWrap.remove();
 	            _sington = false;
@@ -2562,7 +2568,7 @@
 	    // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
 	    _util2.default.getStyle($actionSheet[0], 'transform');
 
-	    $actionSheet.addClass(isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
+	    $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
 	    $actionSheetMask.addClass('weui-animate-fade-in').on('click', function () {
 	        hide();
 	    });
@@ -2715,7 +2721,28 @@
 	 * @param {string} selector searchbar的selector
 	 *
 	 * @example
+	 * #### html
+	 * ```html
+	 * <div class="weui-search-bar" id="searchBar">
+	 *     <form class="weui-search-bar__form">
+	 *         <div class="weui-search-bar__box">
+	 *             <i class="weui-icon-search"></i>
+	 *             <input type="search" class="weui-search-bar__input" placeholder="搜索" required="">
+	 *             <a href="javascript:" class="weui-icon-clear"></a>
+	 *         </div>
+	 *         <label class="weui-search-bar__label">
+	 *             <i class="weui-icon-search"></i>
+	 *             <span>搜索</span>
+	 *         </label>
+	 *     </form>
+	 *     <a href="javascript:" class="weui-search-bar__cancel-btn">取消</a>
+	 * </div>
+	 * ```
+	 *
+	 * #### js
+	 * ```javascript
 	 * weui.searchBar('#searchBar');
+	 * ```
 	 */
 	function searchBar(selector) {
 	    var $eles = (0, _util2.default)(selector);
@@ -2778,12 +2805,33 @@
 	 * @param {function=} options.onChange 点击tab时，返回对应的index
 	 *
 	 * @example
+	 * #### html
+	 * ```html
+	 * <div class="weui-tab" id="tab">
+	 *     <div class="weui-navbar">
+	 *         <div class="weui-navbar__item">反馈</div>
+	 *         <div class="weui-navbar__item">表单</div>
+	 *         <div class="weui-navbar__item">上传</div>
+	 *         <div class="weui-navbar__item">其它</div>
+	 *     </div>
+	 *     <div class="weui-tab__panel">
+	 *         <div class="weui-tab__content">反馈页</div>
+	 *         <div class="weui-tab__content">表单页</div>
+	 *         <div class="weui-tab__content">上传页</div>
+	 *         <div class="weui-tab__content">其它页</div>
+	 *     </div>
+	 * </div>
+	 * ```
+	 *
+	 * #### js
+	 * ```javascript
 	 * weui.tab('#tab',{
 	 *     defaultIndex: 0,
 	 *     onChange: function(index){
 	 *         console.log(index);
 	 *     }
 	 * });
+	 * ```
 	 */
 	function tab(selector) {
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -2909,8 +2957,6 @@
 	            } else {
 	                return input.checked ? null : 'empty';
 	            }
-	        } else if (!$input.val().length) {
-	            return 'empty';
 	        } else if (reg) {
 	            if (/^REG_/.test(reg)) {
 	                if (!regexp) throw 'RegExp ' + reg + ' is empty.';
@@ -2920,7 +2966,9 @@
 
 	                reg = regexp[reg];
 	            }
-	            return new RegExp(reg).test(val) ? null : 'notMatch';
+	            return new RegExp(reg).test(val) ? null : !$input.val().length ? 'empty' : 'notMatch';
+	        } else if (!$input.val().length) {
+	            return 'empty';
 	        } else {
 	            return null;
 	        }
@@ -2930,19 +2978,6 @@
 	    }
 
 	    return 'empty';
-	}
-	function _showErrorMsg(error) {
-	    if (error) {
-	        var $ele = (0, _util2.default)(error.ele),
-	            msg = error.msg,
-	            tips = $ele.attr(msg + 'Tips') || $ele.attr('tips') || $ele.attr('placeholder');
-	        if (tips) (0, _topTips2.default)(tips);
-
-	        if (error.ele.type == 'checkbox' || error.ele.type == 'radio') return;
-
-	        var cellParent = _findCellParent(error.ele);
-	        if (cellParent) cellParent.classList.add('weui-cell_warn');
-	    }
 	}
 
 	/**
@@ -3013,14 +3048,14 @@
 	    $eles.forEach(function (ele) {
 	        var $form = (0, _util2.default)(ele);
 	        var $requireds = $form.find('[required]');
-	        if (typeof callback != 'function') callback = _showErrorMsg;
+	        if (typeof callback != 'function') callback = showErrorTips;
 
 	        for (var i = 0, len = $requireds.length; i < len; ++i) {
 	            var $required = $requireds.eq(i),
 	                errorMsg = _validate($required, $form, options.regexp),
 	                error = { ele: $required[0], msg: errorMsg };
 	            if (errorMsg) {
-	                if (!callback(error)) _showErrorMsg(error);
+	                if (!callback(error)) showErrorTips(error);
 	                return;
 	            }
 	        }
@@ -3060,21 +3095,60 @@
 
 	            var errorMsg = _validate($this, $form, options.regexp);
 	            if (errorMsg) {
-	                _showErrorMsg({
+	                showErrorTips({
 	                    ele: $this[0],
 	                    msg: errorMsg
 	                });
 	            }
 	        }).on('focus', function () {
-	            var cellParent = _findCellParent(this);
-	            if (cellParent) cellParent.classList.remove('weui-cell_warn');
+	            hideErrorTips(this);
 	        });
 	    });
 
 	    return this;
 	}
 
+	/**
+	 * showErrorTips 显示错误提示
+	 * @param {Object} error 错误数据
+	 * @param {string} error.ele 出错了的dom元素
+	 * @param {string} error.msg 出错了的msg。会根据此`msg`找到对应的`Tips`（比如`msg`是`empty`），那么`ele`上的`emptyTips`就会以`topTips`显示
+	 *
+	 * @example
+	 * weui.form.showErrorTips({
+	 *     ele: document.getElementById("xxxInput")
+	 *     msg: 'empty'
+	 * });
+	 */
+	function showErrorTips(error) {
+	    if (error) {
+	        var $ele = (0, _util2.default)(error.ele),
+	            msg = error.msg,
+	            tips = $ele.attr(msg + 'Tips') || $ele.attr('tips') || $ele.attr('placeholder');
+	        if (tips) (0, _topTips2.default)(tips);
+
+	        if (error.ele.type == 'checkbox' || error.ele.type == 'radio') return;
+
+	        var cellParent = _findCellParent(error.ele);
+	        if (cellParent) cellParent.classList.add('weui-cell_warn');
+	    }
+	}
+
+	/**
+	 * hideErrorTips 隐藏错误提示
+	 * @param {Object} ele dom元素
+	 *
+	 * @example
+	 * weui.form.hideErrorTips(document.getElementById("xxxInput"));
+	 */
+	function hideErrorTips(ele) {
+	    var cellParent = _findCellParent(ele);
+	    if (cellParent) cellParent.classList.remove('weui-cell_warn');
+	}
+
 	exports.default = {
+	    showErrorTips: showErrorTips,
+	    hideErrorTips: hideErrorTips,
 	    validate: validate,
 	    checkIfBlur: checkIfBlur
 	};
@@ -3128,6 +3202,30 @@
 	 * @param {function=} [options.onError] 上传失败的回调
 	 *
 	 * @example
+	 * #### html
+	 * ```html
+	 <div class="weui-cells weui-cells_form" id="uploader">
+	     <div class="weui-cell">
+	         <div class="weui-cell__bd">
+	             <div class="weui-uploader">
+	                 <div class="weui-uploader__hd">
+	                     <p class="weui-uploader__title">图片上传</p>
+	                     <div class="weui-uploader__info"><span id="uploadCount">0</span>/5</div>
+	                 </div>
+	                 <div class="weui-uploader__bd">
+	                     <ul class="weui-uploader__files" id="uploaderFiles"></ul>
+	                     <div class="weui-uploader__input-box">
+	                         <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" capture="camera" multiple="" />
+	                     </div>
+	                 </div>
+	             </div>
+	         </div>
+	     </div>
+	 </div>
+	 * ```
+	 *
+	 * #### js
+	 * ```javascript
 	 * var uploadCount = 0;
 	 * weui.uploader('#uploader', {
 	 *    url: 'http://localhost:8081',
@@ -3194,6 +3292,7 @@
 	 *        // return true; // 阻止默认行为，不使用默认的失败态
 	 *    }
 	 * });
+	 * ```
 	 */
 	function uploader(selector, options) {
 	    var $uploader = (0, _util2.default)(selector);
@@ -3693,6 +3792,8 @@
 	    value: true
 	});
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _util = __webpack_require__(4);
 
 	var _util2 = _interopRequireDefault(_util);
@@ -3720,8 +3821,13 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function Result(item) {
-	    this.label = item.label;
-	    this.value = item.value;
+	    if ((typeof item === 'undefined' ? 'undefined' : _typeof(item)) != 'object') {
+	        item = {
+	            label: item,
+	            value: item
+	        };
+	    }
+	    _util2.default.extend(this, item);
 	}
 	Result.prototype.toString = function () {
 	    return this.value;
@@ -3740,6 +3846,7 @@
 	 * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
 	 * @param {string=} [options.id=default] 作为picker的唯一标识，作用是以id缓存当时的选择。（当你想每次传入的defaultValue都是不一样时，可以使用不同的id区分）
 	 * @param {string=} [options.className] 自定义类名
+	 * @param {string=} [options.container] 指定容器
 	 * @param {array=} [options.defaultValue] 默认选项的value数组
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
 	 * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
@@ -3766,6 +3873,7 @@
 	 * }
 	 * ], {
 	 *    className: 'custom-classname',
+	 *    container: 'body',
 	 *    defaultValue: [3],
 	 *    onChange: function (result) {
 	 *        console.log(result)
@@ -3863,6 +3971,7 @@
 	 * }
 	 * ], {
 	 *    className: 'custom-classname',
+	 *    container: 'body',
 	 *    defaultValue: [1, 3],
 	 *    onChange: function (result) {
 	 *        console.log(result)
@@ -3881,6 +3990,7 @@
 	    var defaults = _util2.default.extend({
 	        id: 'default',
 	        className: '',
+	        container: 'body',
 	        onChange: _util2.default.noop,
 	        onConfirm: _util2.default.noop
 	    }, options);
@@ -3909,7 +4019,7 @@
 
 	    // 显示与隐藏的方法
 	    function show() {
-	        (0, _util2.default)('body').append($picker);
+	        (0, _util2.default)(defaults.container).append($picker);
 
 	        // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
 	        _util2.default.getStyle($picker[0], 'transform');
@@ -3939,8 +4049,14 @@
 	            var index = 0,
 	                len = items.length;
 
-	            for (; index < len; ++index) {
-	                if (defaultVal == items[index].value) break;
+	            if (_typeof(items[index]) == 'object') {
+	                for (; index < len; ++index) {
+	                    if (defaultVal == items[index].value) break;
+	                }
+	            } else {
+	                for (; index < len; ++index) {
+	                    if (defaultVal == items[index]) break;
+	                }
 	            }
 	            if (index < len) {
 	                lineTemp[level] = index;
@@ -3961,7 +4077,9 @@
 	                lineTemp[level] = index;
 
 	                if (isMulti) {
-	                    defaults.onChange(result);
+	                    if (result.length == depth) {
+	                        defaults.onChange(result);
+	                    }
 	                } else {
 	                    /**
 	                     * @子列表处理
@@ -3994,7 +4112,8 @@
 	        });
 	    }
 
-	    while (depth--) {
+	    var _depth = depth;
+	    while (_depth--) {
 	        groups += _group2.default;
 	    }
 
@@ -4023,7 +4142,7 @@
 	}
 
 	/**
-	 * dataPicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
+	 * datePicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
 	 * @param options 配置项
 	 * @param {string=} [options.id=datePicker] 作为picker的唯一标识
 	 * @param {number=|string|Date} [options.start=2000] 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date
@@ -4103,14 +4222,14 @@
 
 	    // 兼容原来的 start、end 传 Number 的用法
 	    if (typeof defaults.start === 'number') {
-	        defaults.start = new Date(defaults.start + '-01-01');
+	        defaults.start = new Date(defaults.start + '/01/01');
 	    } else if (typeof defaults.start === 'string') {
-	        defaults.start = new Date(defaults.start);
+	        defaults.start = new Date(defaults.start.replace(/-/g, '/'));
 	    }
 	    if (typeof defaults.end === 'number') {
-	        defaults.end = new Date(defaults.end + '-12-31');
+	        defaults.end = new Date(defaults.end + '/12/31');
 	    } else if (typeof defaults.end === 'string') {
-	        defaults.end = new Date(defaults.end);
+	        defaults.end = new Date(defaults.end.replace(/-/g, '/'));
 	    }
 
 	    var findBy = function findBy(array, key, value) {
@@ -4233,7 +4352,7 @@
 	        value: function _findNext() {
 	            var next = void 0;
 	            while (true) {
-	                if (this._end.getTime() - this._pointer.getTime() <= 0) {
+	                if (this._end.getTime() - this._pointer.getTime() < 0) {
 	                    throw new Error('out of range, end is ' + this._end + ', current is ' + this._pointer);
 	                }
 
@@ -4364,6 +4483,8 @@
 
 	'use strict';
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _util = __webpack_require__(4);
 
 	var _util2 = _interopRequireDefault(_util);
@@ -4452,7 +4573,7 @@
 	        bodyHeight: 7 * 34 // picker的高度，用于辅助点击滚动的计算
 	    }, options);
 	    var items = defaults.items.map(function (item) {
-	        return '<div class="weui-picker__item' + (item.disabled ? ' weui-picker__item_disabled' : '') + '">' + item.label + '</div>';
+	        return '<div class="weui-picker__item' + (item.disabled ? ' weui-picker__item_disabled' : '') + '">' + ((typeof item === 'undefined' ? 'undefined' : _typeof(item)) == 'object' ? item.label : item) + '</div>';
 	    }).join('');
 	    var $this = (0, _util2.default)(this);
 
@@ -4750,13 +4871,29 @@
 	 * @param {function=} options.onChange slider发生改变时返回对应的百分比，取值范围 [0-100]
 	 *
 	 * @example
-	 * weui.slider('#sliderStep', {
+	 * #### html
+	 * ```html
+	 * <div class="weui-slider-box">
+	 *     <div id="slider" class="weui-slider">
+	 *         <div class="weui-slider__inner">
+	 *             <div class="weui-slider__track"></div>
+	 *             <div class="weui-slider__handler"></div>
+	 *         </div>
+	 *     </div>
+	 *     <div id="sliderValue" class="weui-slider-box__value"></div>
+	 * </div>
+	 * ```
+	 *
+	 * #### js
+	 * ```javascript
+	 * weui.slider('#slider', {
 	 *     step: 10,
 	 *     defaultValue: 40,
 	 *     onChange: function(percent){
 	 *         console.log(percent);
 	 *     }
 	 * });
+	 * ```
 	 */
 	function slider(selector) {
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};

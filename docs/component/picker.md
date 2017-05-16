@@ -5,7 +5,7 @@
 <dd><p>picker 多列选择器。</p>
 </dd>
 <dt><a href="#datePicker">datePicker(options)</a></dt>
-<dd><p>dataPicker 时间选择器，由picker拓展而来，提供年、月、日的选择。</p>
+<dd><p>datePicker 时间选择器，由picker拓展而来，提供年、月、日的选择。</p>
 </dd>
 </dl>
 
@@ -23,6 +23,7 @@ picker 多列选择器。
 | [options.depth] | <code>number</code> |  | picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。 |
 | [options.id] | <code>string</code> | <code>&quot;default&quot;</code> | 作为picker的唯一标识，作用是以id缓存当时的选择。（当你想每次传入的defaultValue都是不一样时，可以使用不同的id区分） |
 | [options.className] | <code>string</code> |  | 自定义类名 |
+| [options.container] | <code>string</code> |  | 指定容器 |
 | [options.defaultValue] | <code>array</code> |  | 默认选项的value数组 |
 | [options.onChange] | <code>function</code> |  | 在picker选中的值发生变化的时候回调 |
 | [options.onConfirm] | <code>function</code> |  | 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。 |
@@ -50,6 +51,7 @@ weui.picker([
 }
 ], {
    className: 'custom-classname',
+   container: 'body',
    defaultValue: [3],
    onChange: function (result) {
        console.log(result)
@@ -149,6 +151,7 @@ weui.picker([
 }
 ], {
    className: 'custom-classname',
+   container: 'body',
    defaultValue: [1, 3],
    onChange: function (result) {
        console.log(result)
@@ -162,7 +165,7 @@ weui.picker([
 <a name="datePicker"></a>
 
 ## datePicker(options)
-dataPicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
+datePicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
 
 **Kind**: global function  
 

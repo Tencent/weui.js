@@ -197,7 +197,7 @@ function picker() {
     let depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])), groups = '';
 
     // 显示与隐藏的方法
-    function show(){
+    function show() {
         $(defaults.container).append($picker);
 
         // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
@@ -206,7 +206,7 @@ function picker() {
         $picker.find('.weui-mask').addClass('weui-animate-fade-in');
         $picker.find('.weui-picker').addClass('weui-animate-slide-up');
     }
-    function _hide(callback){
+    function _hide(callback) {
         _hide = $.noop; // 防止二次调用导致报错
 
         $picker.find('.weui-mask').addClass('weui-animate-fade-out');
@@ -218,7 +218,7 @@ function picker() {
                 callback && callback();
             });
     }
-    function hide(callback){ _hide(callback); }
+    function hide(callback) { _hide(callback); }
 
     // 初始化滚动的方法
     function scroll(items, level) {
@@ -321,6 +321,7 @@ function picker() {
  * @param {array=} [options.defaultValue] 默认选项的value数组, 如 [1991, 6, 9]
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
  * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+ * @param {string} [options.showTime=min] showTime可传参数分别为 hour min second表示不显示时间、显示到小时、显示到分和显示到秒.默认false
  *
  *@example
  * // 示例1：
@@ -378,6 +379,20 @@ function picker() {
  *      },
  *      id: 'datePicker'
  *  });
+ * // 示例5：
+ * weui.datePicker({
+ *      start: new Date(), // 从今天开始
+ *      end: 2030,
+ *      cron: '1-10 * *',  // 每月1日-10日
+ *      showTime:'hour',//显示到时,
+ *      onChange: function(result){
+ *          console.log(result);
+ *      },
+ *      onConfirm: function(result){
+ *          console.log(result);
+ *      },
+ *      id: 'datePicker'
+ *  });
  */
 function datePicker(options) {
     const defaults = $.extend({
@@ -386,7 +401,8 @@ function datePicker(options) {
         onConfirm: $.noop,
         start: 2000,
         end: 2030,
-        cron: '* * *'
+        cron: '* * *',
+        showTime: false
     }, options);
 
     // 兼容原来的 start、end 传 Number 的用法
@@ -404,13 +420,44 @@ function datePicker(options) {
     }
 
     const findBy = (array, key, value) => {
-        for(let i = 0, len = array.length; i < len; i++){
+        for (let i = 0, len = array.length; i < len; i++) {
             const obj = array[i];
-            if(obj[key] == value){
+            if (obj[key] == value) {
                 return obj;
             }
         }
     };
+
+    const seconds = (function () {
+        var arr = [];
+        for (var i = 0; i <= 59; i++) {
+            arr.push({
+                label: i + '秒',
+                value: i
+            });
+        }
+        return arr;
+    })();
+    const minutes = (function () {
+        var arr = [];
+        for (var i = 0; i <= 59; i++) {
+            arr.push({
+                label: i + '分',
+                value: i
+            });
+        }
+        return arr;
+    })();
+    const hours = (function () {
+        var arr = [];
+        for (var i = 0; i <= 23; i++) {
+            arr.push({
+                label: i + '时',
+                value: i
+            });
+        }
+        return arr;
+    })();
 
     const date = [];
     const interval = cron.parse(defaults.cron, defaults.start, defaults.end);
@@ -440,10 +487,30 @@ function datePicker(options) {
             };
             Y.children.push(M);
         }
-        M.children.push({
+        let D = {
             label: day + '日',
-            value: day
-        });
+            value: day,
+            children: []
+        };
+        M.children.push(D);
+        if (defaults.showTime) {
+            let showHour = (defaults.showTime == 'hour' || defaults.showTime == 'min' || defaults.showTime == 'second');
+            let showMin = (defaults.showTime == 'min' || defaults.showTime == 'second');
+            let showSecond = (defaults.showTime == 'second');
+            if (showHour) {
+                D.children = hours;
+                if (showMin) {
+                    D.children.forEach(function (Hour) {
+                        Hour.children = minutes;
+                        if (showSecond) {
+                            Hour.children.forEach(function (Min) {
+                                Min.children = seconds;
+                            });
+                        }
+                    });
+                }
+            }
+        }
     }
     while (!obj.done);
 

@@ -42,7 +42,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -211,7 +211,36 @@
 	        id: 'datePicker'
 	    });
 	});
-
+	// 时间-time选择器
+	document.querySelector('#datePicker2Btn').addEventListener('click', function () {
+	    _weui2.default.datePicker({
+	        start: '2016-12-29',
+	        end: '2030-12-29',
+	        /**
+	         * https://zh.wikipedia.org/wiki/Cron
+	         * cron 表达式后三位
+	         * 示例：
+	         *  * * *                每天
+	         *  5 * *                每个月的5日
+	         *  1-10 * *             每个月的前10日
+	         *  1,5,10 * *           每个月的1号、5号、10号
+	         *  *\/2 * *             每个月的 1、3、5、7...日，注意写的时候斜杠“/”前面没有反斜杠“\”，这是因为是注释所以需要转义
+	         *  * 2 0                2月的每个周日
+	         *  * * 0,6              每个周末
+	         *  * * 3                每周三
+	         */
+	        cron: '* */2 0',
+	        defaultValue: [2017, 7, 9],
+	        showTime: 'second',
+	        onChange: function onChange(result) {
+	            console.log(result);
+	        },
+	        onConfirm: function onConfirm(result) {
+	            console.log(result);
+	        },
+	        id: 'datePicker2'
+	    });
+	});
 	// 多列选择器
 	document.querySelector('#multiPickerBtn').addEventListener('click', function () {
 	    _weui2.default.picker([{
@@ -535,9 +564,9 @@
 	    });
 	});
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {
 		'use strict';
@@ -1382,9 +1411,9 @@
 	}());
 
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1467,9 +1496,9 @@
 	};
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1581,9 +1610,9 @@
 	exports.default = dialog;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -1827,24 +1856,17 @@
 	     * @returns {*}
 	     */
 	    attr: function attr() {
-	        var _arguments2 = arguments,
-	            _this3 = this;
+	        var _arguments2 = arguments;
 
 	        if (_typeof(arguments[0]) == 'object') {
-	            var _ret = function () {
-	                var attrsObj = _arguments2[0];
-	                var that = _this3;
-	                Object.keys(attrsObj).forEach(function (attr) {
-	                    that.forEach(function ($element) {
-	                        $element.setAttribute(attr, attrsObj[attr]);
-	                    });
+	            var attrsObj = arguments[0];
+	            var that = this;
+	            Object.keys(attrsObj).forEach(function (attr) {
+	                that.forEach(function ($element) {
+	                    $element.setAttribute(attr, attrsObj[attr]);
 	                });
-	                return {
-	                    v: _this3
-	                };
-	            }();
-
-	            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	            });
+	            return this;
 	        }
 
 	        if (typeof arguments[0] == 'string' && arguments.length < 2) {
@@ -1933,9 +1955,9 @@
 	exports.default = _balajs2.default;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	// element-closest | CC0-1.0 | github.com/jonathantneal/closest
 
@@ -1972,12 +1994,19 @@
 	})(window.Element.prototype);
 
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
+
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
 
 	'use strict';
 	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -1998,7 +2027,7 @@
 			// Detect buggy property enumeration order in older V8 versions.
 
 			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
 			test1[5] = 'de';
 			if (Object.getOwnPropertyNames(test1)[0] === '5') {
 				return false;
@@ -2027,7 +2056,7 @@
 			}
 
 			return true;
-		} catch (e) {
+		} catch (err) {
 			// We don't expect any of the above to throw, but better to be safe.
 			return false;
 		}
@@ -2047,8 +2076,8 @@
 				}
 			}
 
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
 				for (var i = 0; i < symbols.length; i++) {
 					if (propIsEnumerable.call(from, symbols[i])) {
 						to[symbols[i]] = from[symbols[i]];
@@ -2061,9 +2090,9 @@
 	};
 
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(root, $) {
 		$ = (function(document, s_addEventListener, s_querySelectorAll) {
@@ -2117,15 +2146,15 @@
 	})(this);
 
 
-/***/ },
+/***/ }),
 /* 8 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<div class=\"<%=className%>\"> <div class=weui-mask></div> <div class=\"weui-dialog <% if(isAndroid){ %> weui-skin_android <% } %>\"> <% if(title){ %> <div class=weui-dialog__hd><strong class=weui-dialog__title><%=title%></strong></div> <% } %> <div class=weui-dialog__bd><%=content%></div> <div class=weui-dialog__ft> <% for(var i = 0; i < buttons.length; i++){ %> <a href=javascript:; class=\"weui-dialog__btn weui-dialog__btn_<%=buttons[i]['type']%>\"><%=buttons[i]['label']%></a> <% } %> </div> </div> </div> ";
 
-/***/ },
+/***/ }),
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2199,9 +2228,9 @@
 	exports.default = alert;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 10 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2286,9 +2315,9 @@
 	exports.default = confirm;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 11 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2371,15 +2400,15 @@
 	exports.default = toast;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 12 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-icon_toast weui-icon-success-no-circle\"></i> <p class=weui-toast__content><%=content%></p> </div> </div> ";
 
-/***/ },
+/***/ }),
 /* 13 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2455,15 +2484,15 @@
 	exports.default = loading;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 14 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<div class=\"weui-loading_toast <%= className %>\"> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-loading weui-icon_toast\"></i> <p class=weui-toast__content><%=content%></p> </div> </div> ";
 
-/***/ },
+/***/ }),
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2584,15 +2613,15 @@
 	exports.default = actionSheet;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 16 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<div class=\"<% if(isAndroid){ %>weui-skin_android <% } %><%= className %>\"> <div class=weui-mask></div> <div class=weui-actionsheet> <div class=weui-actionsheet__menu> <% for(var i = 0; i < menus.length; i++){ %> <div class=weui-actionsheet__cell><%= menus[i].label %></div> <% } %> </div> <div class=weui-actionsheet__action> <% for(var j = 0; j < actions.length; j++){ %> <div class=weui-actionsheet__cell><%= actions[j].label %></div> <% } %> </div> </div> </div> ";
 
-/***/ },
+/***/ }),
 /* 17 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2688,15 +2717,15 @@
 	exports.default = topTips;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 18 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<div class=\"weui-toptips weui-toptips_warn <%= className %>\" style=display:block><%= content %></div> ";
 
-/***/ },
+/***/ }),
 /* 19 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2754,9 +2783,9 @@
 	exports.default = searchBar;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 20 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2821,17 +2850,15 @@
 	exports.default = tab;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 21 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var _util = __webpack_require__(4);
 
@@ -2863,49 +2890,35 @@
 	            return 'empty';
 	        } else if (input.type == 'checkbox') {
 	            if (reg) {
-	                var _ret = function () {
-	                    var checkboxInputs = $form.find('input[type="checkbox"][name="' + input.name + '"]');
-	                    var regs = reg.replace(/[{\s}]/g, '').split(',');
-	                    var count = 0;
+	                var checkboxInputs = $form.find('input[type="checkbox"][name="' + input.name + '"]');
+	                var regs = reg.replace(/[{\s}]/g, '').split(',');
+	                var count = 0;
 
-	                    if (regs.length != 2) {
-	                        throw input.outerHTML + ' regexp is wrong.';
-	                    }
+	                if (regs.length != 2) {
+	                    throw input.outerHTML + ' regexp is wrong.';
+	                }
 
-	                    checkboxInputs.forEach(function (checkboxInput) {
-	                        if (checkboxInput.checked) ++count;
-	                    });
+	                checkboxInputs.forEach(function (checkboxInput) {
+	                    if (checkboxInput.checked) ++count;
+	                });
 
-	                    if (!count) return {
-	                            v: 'empty'
-	                        };
+	                if (!count) return 'empty';
 
-	                    if (regs[1] === '') {
-	                        // {0,}
-	                        if (count >= parseInt(regs[0])) {
-	                            return {
-	                                v: null
-	                            };
-	                        } else {
-	                            return {
-	                                v: 'notMatch'
-	                            };
-	                        }
+	                if (regs[1] === '') {
+	                    // {0,}
+	                    if (count >= parseInt(regs[0])) {
+	                        return null;
 	                    } else {
-	                        // {0,2}
-	                        if (parseInt(regs[0]) <= count && count <= parseInt(regs[1])) {
-	                            return {
-	                                v: null
-	                            };
-	                        } else {
-	                            return {
-	                                v: 'notMatch'
-	                            };
-	                        }
+	                        return 'notMatch';
 	                    }
-	                }();
-
-	                if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	                } else {
+	                    // {0,2}
+	                    if (parseInt(regs[0]) <= count && count <= parseInt(regs[1])) {
+	                        return null;
+	                    } else {
+	                        return 'notMatch';
+	                    }
+	                }
 	            } else {
 	                return input.checked ? null : 'empty';
 	            }
@@ -3080,9 +3093,9 @@
 	};
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 22 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -3259,82 +3272,70 @@
 	    }
 
 	    if (options.onBeforeQueued) {
-	        (function () {
-	            var onBeforeQueued = options.onBeforeQueued;
-	            options.onBeforeQueued = function (file, files) {
-	                var ret = onBeforeQueued.call(file, files);
-	                if (ret === false) {
-	                    return false;
-	                }
-	                if (ret === true) {
-	                    return;
-	                }
+	        var onBeforeQueued = options.onBeforeQueued;
+	        options.onBeforeQueued = function (file, files) {
+	            var ret = onBeforeQueued.call(file, files);
+	            if (ret === false) {
+	                return false;
+	            }
+	            if (ret === true) {
+	                return;
+	            }
 
-	                var $item = (0, _util2.default)(_util2.default.render(_item2.default, {
-	                    id: file.id
-	                }));
-	                $uploader.find('.weui-uploader__files').append($item);
-	            };
-	        })();
+	            var $item = (0, _util2.default)(_util2.default.render(_item2.default, {
+	                id: file.id
+	            }));
+	            $uploader.find('.weui-uploader__files').append($item);
+	        };
 	    }
 	    if (options.onQueued) {
-	        (function () {
-	            var onQueued = options.onQueued;
-	            options.onQueued = function (file) {
-	                if (!onQueued.call(file)) {
-	                    var $file = $uploader.find('[data-id="' + file.id + '"]');
-	                    $file.css({
-	                        backgroundImage: 'url("' + (file.base64 || file.url) + '")'
-	                    });
-	                    if (!options.auto) {
-	                        clearFileStatus($uploader, file.id);
-	                    }
-	                }
-	            };
-	        })();
-	    }
-	    if (options.onBeforeSend) {
-	        (function () {
-	            var onBeforeSend = options.onBeforeSend;
-	            options.onBeforeSend = function (file, data, headers) {
-	                var ret = onBeforeSend.call(file, data, headers);
-	                if (ret === false) {
-	                    return false;
-	                }
-	            };
-	        })();
-	    }
-	    if (options.onSuccess) {
-	        (function () {
-	            var onSuccess = options.onSuccess;
-	            options.onSuccess = function (file, ret) {
-	                file.status = 'success';
-	                if (!onSuccess.call(file, ret)) {
+	        var onQueued = options.onQueued;
+	        options.onQueued = function (file) {
+	            if (!onQueued.call(file)) {
+	                var $file = $uploader.find('[data-id="' + file.id + '"]');
+	                $file.css({
+	                    backgroundImage: 'url("' + (file.base64 || file.url) + '")'
+	                });
+	                if (!options.auto) {
 	                    clearFileStatus($uploader, file.id);
 	                }
-	            };
-	        })();
+	            }
+	        };
+	    }
+	    if (options.onBeforeSend) {
+	        var onBeforeSend = options.onBeforeSend;
+	        options.onBeforeSend = function (file, data, headers) {
+	            var ret = onBeforeSend.call(file, data, headers);
+	            if (ret === false) {
+	                return false;
+	            }
+	        };
+	    }
+	    if (options.onSuccess) {
+	        var onSuccess = options.onSuccess;
+	        options.onSuccess = function (file, ret) {
+	            file.status = 'success';
+	            if (!onSuccess.call(file, ret)) {
+	                clearFileStatus($uploader, file.id);
+	            }
+	        };
 	    }
 	    if (options.onProgress) {
-	        (function () {
-	            var onProgress = options.onProgress;
-	            options.onProgress = function (file, percent) {
-	                if (!onProgress.call(file, percent)) {
-	                    findFileCtn($uploader, file.id).html(percent + '%');
-	                }
-	            };
-	        })();
+	        var onProgress = options.onProgress;
+	        options.onProgress = function (file, percent) {
+	            if (!onProgress.call(file, percent)) {
+	                findFileCtn($uploader, file.id).html(percent + '%');
+	            }
+	        };
 	    }
 	    if (options.onError) {
-	        (function () {
-	            var onError = options.onError;
-	            options.onError = function (file, err) {
-	                file.status = 'fail';
-	                if (!onError.call(file, err)) {
-	                    findFileCtn($uploader, file.id).html('<i class="weui-icon-warn"></i>');
-	                }
-	            };
-	        })();
+	        var onError = options.onError;
+	        options.onError = function (file, err) {
+	            file.status = 'fail';
+	            if (!onError.call(file, err)) {
+	                findFileCtn($uploader, file.id).html('<i class="weui-icon-warn"></i>');
+	            }
+	        };
 	    }
 
 	    $uploader.find('input[type="file"]').on('change', function (evt) {
@@ -3372,15 +3373,15 @@
 	exports.default = uploader;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 23 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<li class=\"weui-uploader__file weui-uploader__file_status\" data-id=\"<%= id %>\"> <div class=weui-uploader__file-content> <i class=weui-loading style=width:30px;height:30px></i> </div> </li> ";
 
-/***/ },
+/***/ }),
 /* 24 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 
@@ -3594,9 +3595,9 @@
 	};
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 25 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 
@@ -3683,9 +3684,9 @@
 	}
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 26 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -3740,6 +3741,7 @@
 	 * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
 	 * @param {string=} [options.id=default] 作为picker的唯一标识，作用是以id缓存当时的选择。（当你想每次传入的defaultValue都是不一样时，可以使用不同的id区分）
 	 * @param {string=} [options.className] 自定义类名
+	 * @param {string=} [options.container] 指定容器
 	 * @param {array=} [options.defaultValue] 默认选项的value数组
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
 	 * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
@@ -3766,6 +3768,7 @@
 	 * }
 	 * ], {
 	 *    className: 'custom-classname',
+	 *    container: 'body',
 	 *    defaultValue: [3],
 	 *    onChange: function (result) {
 	 *        console.log(result)
@@ -3863,6 +3866,7 @@
 	 * }
 	 * ], {
 	 *    className: 'custom-classname',
+	 *    container: 'body',
 	 *    defaultValue: [1, 3],
 	 *    onChange: function (result) {
 	 *        console.log(result)
@@ -3881,6 +3885,7 @@
 	    var defaults = _util2.default.extend({
 	        id: 'default',
 	        className: '',
+	        container: 'body',
 	        onChange: _util2.default.noop,
 	        onConfirm: _util2.default.noop
 	    }, options);
@@ -3909,7 +3914,7 @@
 
 	    // 显示与隐藏的方法
 	    function show() {
-	        (0, _util2.default)('body').append($picker);
+	        (0, _util2.default)(defaults.container).append($picker);
 
 	        // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
 	        _util2.default.getStyle($picker[0], 'transform');
@@ -4033,6 +4038,7 @@
 	 * @param {array=} [options.defaultValue] 默认选项的value数组, 如 [1991, 6, 9]
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
 	 * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+	 * @param {string} [options.showTime=min] showTime可传参数分别为 hour min second表示不显示时间、显示到小时、显示到分和显示到秒.默认false
 	 *
 	 *@example
 	 * // 示例1：
@@ -4090,6 +4096,20 @@
 	 *      },
 	 *      id: 'datePicker'
 	 *  });
+	 * // 示例5：
+	 * weui.datePicker({
+	 *      start: new Date(), // 从今天开始
+	 *      end: 2030,
+	 *      cron: '1-10 * *',  // 每月1日-10日
+	 *      showTime:'hour',//显示到时,
+	 *      onChange: function(result){
+	 *          console.log(result);
+	 *      },
+	 *      onConfirm: function(result){
+	 *          console.log(result);
+	 *      },
+	 *      id: 'datePicker'
+	 *  });
 	 */
 	function datePicker(options) {
 	    var defaults = _util2.default.extend({
@@ -4098,7 +4118,8 @@
 	        onConfirm: _util2.default.noop,
 	        start: 2000,
 	        end: 2030,
-	        cron: '* * *'
+	        cron: '* * *',
+	        showTime: false
 	    }, options);
 
 	    // 兼容原来的 start、end 传 Number 的用法
@@ -4121,6 +4142,37 @@
 	            }
 	        }
 	    };
+
+	    var seconds = function () {
+	        var arr = [];
+	        for (var i = 0; i <= 59; i++) {
+	            arr.push({
+	                label: i + '秒',
+	                value: i
+	            });
+	        }
+	        return arr;
+	    }();
+	    var minutes = function () {
+	        var arr = [];
+	        for (var i = 0; i <= 59; i++) {
+	            arr.push({
+	                label: i + '分',
+	                value: i
+	            });
+	        }
+	        return arr;
+	    }();
+	    var hours = function () {
+	        var arr = [];
+	        for (var i = 0; i <= 23; i++) {
+	            arr.push({
+	                label: i + '时',
+	                value: i
+	            });
+	        }
+	        return arr;
+	    }();
 
 	    var date = [];
 	    var interval = _cron2.default.parse(defaults.cron, defaults.start, defaults.end);
@@ -4150,10 +4202,32 @@
 	            };
 	            Y.children.push(M);
 	        }
-	        M.children.push({
+	        var D = {
 	            label: day + '日',
-	            value: day
-	        });
+	            value: day,
+	            children: []
+	        };
+	        M.children.push(D);
+	        if (defaults.showTime) {
+	            (function () {
+	                var showHour = defaults.showTime == 'hour' || defaults.showTime == 'min' || defaults.showTime == 'second';
+	                var showMin = defaults.showTime == 'min' || defaults.showTime == 'second';
+	                var showSecond = defaults.showTime == 'second';
+	                if (showHour) {
+	                    D.children = hours;
+	                    if (showMin) {
+	                        D.children.forEach(function (Hour) {
+	                            Hour.children = minutes;
+	                            if (showSecond) {
+	                                Hour.children.forEach(function (Min) {
+	                                    Min.children = seconds;
+	                                });
+	                            }
+	                        });
+	                    }
+	                }
+	            })();
+	        }
 	    } while (!obj.done);
 
 	    return picker(date, defaults);
@@ -4165,9 +4239,9 @@
 	};
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 27 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 
@@ -4358,9 +4432,9 @@
 	};
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 28 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -4606,9 +4680,9 @@
 	    }
 	};
 
-/***/ },
+/***/ }),
 /* 29 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	"use strict";
 
@@ -4623,21 +4697,21 @@
 	    return depth;
 	};
 
-/***/ },
+/***/ }),
 /* 30 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=weui-picker> <div class=weui-picker__hd> <a href=javascript:; data-action=cancel class=weui-picker__action>取消</a> <a href=javascript:; data-action=select class=weui-picker__action id=weui-picker-confirm>确定</a> </div> <div class=weui-picker__bd></div> </div> </div> ";
 
-/***/ },
+/***/ }),
 /* 31 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<div class=weui-picker__group> <div class=weui-picker__mask></div> <div class=weui-picker__indicator></div> <div class=weui-picker__content></div> </div>";
 
-/***/ },
+/***/ }),
 /* 32 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -4719,15 +4793,15 @@
 	exports.default = gallery;
 	module.exports = exports['default'];
 
-/***/ },
+/***/ }),
 /* 33 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = "<div class=\"weui-gallery <%= className %>\"> <span class=weui-gallery__img style=\"background-image:url(<%= url %>)\"></span> <div class=weui-gallery__opr> <a href=javascript: class=weui-gallery__del> <i class=\"weui-icon-delete weui-icon_gallery-delete\"></i> </a> </div> </div> ";
 
-/***/ },
+/***/ }),
 /* 34 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -4847,5 +4921,5 @@
 	exports.default = slider;
 	module.exports = exports['default'];
 
-/***/ }
+/***/ })
 /******/ ]);

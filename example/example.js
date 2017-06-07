@@ -166,7 +166,36 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
         id: 'datePicker'
     });
 });
-
+// 时间-time选择器
+document.querySelector('#datePicker2Btn').addEventListener('click', function () {
+    weui.datePicker({
+        start: '2016-12-29',
+        end: '2030-12-29',
+        /**
+         * https://zh.wikipedia.org/wiki/Cron
+         * cron 表达式后三位
+         * 示例：
+         *  * * *                每天
+         *  5 * *                每个月的5日
+         *  1-10 * *             每个月的前10日
+         *  1,5,10 * *           每个月的1号、5号、10号
+         *  *\/2 * *             每个月的 1、3、5、7...日，注意写的时候斜杠“/”前面没有反斜杠“\”，这是因为是注释所以需要转义
+         *  * 2 0                2月的每个周日
+         *  * * 0,6              每个周末
+         *  * * 3                每周三
+         */
+        cron: '* */2 0',
+        defaultValue: [2017, 7, 9],
+        showTime:'second',
+        onChange: function (result) {
+            console.log(result);
+        },
+        onConfirm: function (result) {
+            console.log(result);
+        },
+        id: 'datePicker2'
+    });
+});
 // 多列选择器
 document.querySelector('#multiPickerBtn').addEventListener('click', function () {
     weui.picker([

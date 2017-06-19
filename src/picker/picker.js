@@ -30,6 +30,7 @@ let temp = {}; // temp 存在上一次滑动的位置
  * @param {array=} [options.defaultValue] 默认选项的value数组
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
  * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+ * @param {function=} [options.onReset] 在点击"重置"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
  *
  * @example
  * // 单列picker
@@ -171,8 +172,10 @@ function picker() {
         id: 'default',
         className: '',
         container: 'body',
+        showReset: false,
         onChange: $.noop,
-        onConfirm: $.noop
+        onConfirm: $.noop,
+        onReset: $.noop
     }, options);
 
     // 数据处理
@@ -205,6 +208,9 @@ function picker() {
 
         $picker.find('.weui-mask').addClass('weui-animate-fade-in');
         $picker.find('.weui-picker').addClass('weui-animate-slide-up');
+        if (!defaults.showReset) {
+            $picker.find('#weui-picker-reset').addClass('weui-display_none');
+        }
     }
     function _hide(callback) {
         _hide = $.noop; // 防止二次调用导致报错
@@ -301,6 +307,9 @@ function picker() {
     $picker
         .on('click', '.weui-mask', function () { hide(); })
         .on('click', '.weui-picker__action', function () { hide(); })
+        .on('click', '#weui-picker-reset', function () {
+            defaults.onReset(result);
+        })
         .on('click', '#weui-picker-confirm', function () {
             defaults.onConfirm(result);
         });
@@ -407,16 +416,16 @@ function datePicker(options) {
 
     // 兼容原来的 start、end 传 Number 的用法
     if (typeof defaults.start === 'number') {
-        defaults.start = new Date(`${defaults.start}-01-01`);
+        defaults.start = new Date(`${defaults.start}/01/01`);
     }
     else if (typeof defaults.start === 'string') {
-        defaults.start = new Date(defaults.start);
+        defaults.start = new Date(defaults.start.replace(/-/g, '/'));
     }
     if (typeof defaults.end === 'number') {
-        defaults.end = new Date(`${defaults.end}-12-31`);
+        defaults.end = new Date(`${defaults.end}/12/31`);
     }
     else if (typeof defaults.end === 'string') {
-        defaults.end = new Date(defaults.end);
+        defaults.end = new Date(defaults.end).replace(/-/g, '/');
     }
 
     const findBy = (array, key, value) => {

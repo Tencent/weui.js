@@ -215,7 +215,7 @@
 	document.querySelector('#datePicker2Btn').addEventListener('click', function () {
 	    _weui2.default.datePicker({
 	        start: '2016-12-29',
-	        end: '2030-12-29',
+	        end: '2116-12-29',
 	        /**
 	         * https://zh.wikipedia.org/wiki/Cron
 	         * cron 表达式后三位
@@ -229,7 +229,7 @@
 	         *  * * 0,6              每个周末
 	         *  * * 3                每周三
 	         */
-	        cron: '* */2 0',
+	        cron: '* * *',
 	        defaultValue: [2017, 7, 9],
 	        showTime: 'second',
 	        onChange: function onChange(result) {
@@ -4139,7 +4139,7 @@
 	    if (typeof defaults.end === 'number') {
 	        defaults.end = new Date(defaults.end + '/12/31');
 	    } else if (typeof defaults.end === 'string') {
-	        defaults.end = new Date(defaults.end).replace(/-/g, '/');
+	        defaults.end = new Date(defaults.end.replace(/-/g, '/'));
 	    }
 
 	    var findBy = function findBy(array, key, value) {

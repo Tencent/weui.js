@@ -425,7 +425,7 @@ function datePicker(options) {
         defaults.end = new Date(`${defaults.end}/12/31`);
     }
     else if (typeof defaults.end === 'string') {
-        defaults.end = new Date(defaults.end).replace(/-/g, '/');
+        defaults.end = new Date(defaults.end.replace(/-/g, '/'));
     }
 
     const findBy = (array, key, value) => {

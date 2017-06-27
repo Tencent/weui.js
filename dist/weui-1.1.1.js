@@ -2783,7 +2783,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof defaults.end === 'number') {
 	        defaults.end = new Date(defaults.end + '/12/31');
 	    } else if (typeof defaults.end === 'string') {
-	        defaults.end = new Date(defaults.end).replace(/-/g, '/');
+	        defaults.end = new Date(defaults.end.replace(/-/g, '/'));
 	    }
 
 	    var findBy = function findBy(array, key, value) {

@@ -170,7 +170,7 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
 document.querySelector('#datePicker2Btn').addEventListener('click', function () {
     weui.datePicker({
         start: '2016-12-29',
-        end: '2030-12-29',
+        end: '2116-12-29',
         /**
          * https://zh.wikipedia.org/wiki/Cron
          * cron 表达式后三位
@@ -184,7 +184,7 @@ document.querySelector('#datePicker2Btn').addEventListener('click', function () 
          *  * * 0,6              每个周末
          *  * * 3                每周三
          */
-        cron: '* */2 0',
+        cron: '* * *',
         defaultValue: [2017, 7, 9],
         showTime:'second',
         onChange: function (result) {

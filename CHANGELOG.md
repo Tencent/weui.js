@@ -1,3 +1,20 @@
+#### v1.1.2 (2017-06-28)
+
+- 【修复】 hide的回调在事件响应中报错的问题
+- 【修复】 修复结束日期为个位数时不能到选择结束日期当天的bug。#73
+- 【修复】 example.js index为0的时候，浏览图片不能删除的问题
+- 【修复】 多列时多次触发onChange的bug #104
+- 【修复】 example手动上传图片不显示的问题 #116
+- 【修复】 参数`isAndroid`不生效的问题 #111
+- 【优化】 文档不完善，没有列出html #70
+- 【优化】 `picker` 增加参数，指定容器
+- 【优化】 `uploader` 增加 xhrFields 参数，设置 withCredentials:true 支持 cookies
+- 【优化】 表单验证逻辑，如果有表达式，先进行表达式校验，再进行为空校验。目的是符合input选填，但要是填了的话一定要符合正则的需求。#66 #102
+- 【优化】 `picker` 允许传入基本类型，那么label和value都是它
+- 【优化】 `form` 增加API `showErrorTips`和`hideErrorTips`
+
+
+
 #### v1.1.1 (2017-02-27)
 
 - 【优化】 `actionSheet`/`alert`/`confirm`/`dialog`/`gallery`/`loading`/`picker`/`topTips`的`hide`增加回调入参

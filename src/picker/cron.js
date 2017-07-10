@@ -63,7 +63,7 @@ class Schedule {
     _findNext() {
         let next;
         while (true) {
-            if (this._end.getTime() - this._pointer.getTime() <= 0) {
+            if (this._end.getTime() - this._pointer.getTime() < 0) {
                 throw new Error(`out of range, end is ${this._end}, current is ${this._pointer}`);
             }
 

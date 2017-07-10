@@ -14,8 +14,22 @@ slider slider滑块，单位是百分比。注意，因为需要获取slider的�
 | [options.onChange] | <code>function</code> |  | slider发生改变时返回对应的百分比，取值范围 [0-100] |
 
 **Example**  
-```js
-weui.slider('#sliderStep', {
+#### html
+```html
+<div class="weui-slider-box">
+    <div id="slider" class="weui-slider">
+        <div class="weui-slider__inner">
+            <div class="weui-slider__track"></div>
+            <div class="weui-slider__handler"></div>
+        </div>
+    </div>
+    <div id="sliderValue" class="weui-slider-box__value"></div>
+</div>
+```
+
+#### js
+```javascript
+weui.slider('#slider', {
     step: 10,
     defaultValue: 40,
     onChange: function(percent){

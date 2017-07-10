@@ -25,13 +25,29 @@ import $ from '../util/util';
  * @param {function=} options.onChange slider发生改变时返回对应的百分比，取值范围 [0-100]
  *
  * @example
- * weui.slider('#sliderStep', {
+ * #### html
+ * ```html
+ * <div class="weui-slider-box">
+ *     <div id="slider" class="weui-slider">
+ *         <div class="weui-slider__inner">
+ *             <div class="weui-slider__track"></div>
+ *             <div class="weui-slider__handler"></div>
+ *         </div>
+ *     </div>
+ *     <div id="sliderValue" class="weui-slider-box__value"></div>
+ * </div>
+ * ```
+ *
+ * #### js
+ * ```javascript
+ * weui.slider('#slider', {
  *     step: 10,
  *     defaultValue: 40,
  *     onChange: function(percent){
  *         console.log(percent);
  *     }
  * });
+ * ```
  */
 function slider(selector, options = {}) {
     const $eles = $(selector);

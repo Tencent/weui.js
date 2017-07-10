@@ -22,8 +22,13 @@ import pickerTpl from './picker.html';
 import groupTpl from './group.html';
 
 function Result(item) {
-    this.label = item.label;
-    this.value = item.value;
+    if(typeof item != 'object'){
+        item = {
+            label: item,
+            value: item
+        };
+    }
+    $.extend(this, item);
 }
 Result.prototype.toString = function () {
     return this.value;
@@ -243,8 +248,14 @@ function picker() {
             const defaultVal = defaults.defaultValue[level];
             let index = 0, len = items.length;
 
-            for (; index < len; ++index) {
-                if (defaultVal == items[index].value) break;
+            if(typeof items[index] == 'object'){
+                for (; index < len; ++index) {
+                    if (defaultVal == items[index].value) break;
+                }
+            }else{
+                for (; index < len; ++index) {
+                    if (defaultVal == items[index]) break;
+                }
             }
             if (index < len) {
                 lineTemp[level] = index;
@@ -265,7 +276,9 @@ function picker() {
                 lineTemp[level] = index;
 
                 if (isMulti) {
-                    defaults.onChange(result);
+                    if(result.length == depth){
+                        defaults.onChange(result);
+                    }
                 } else {
                     /**
                      * @子列表处理
@@ -299,7 +312,8 @@ function picker() {
     }
 
 
-    while (depth--) {
+    let _depth = depth;
+    while (_depth--) {
         groups += groupTpl;
     }
 
@@ -327,7 +341,7 @@ function picker() {
 }
 
 /**
- * dataPicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
+ * datePicker 时间选择器，由picker拓展而来，提供年、月、日的选择。
  * @param options 配置项
  * @param {string=} [options.id=datePicker] 作为picker的唯一标识
  * @param {number=|string|Date} [options.start=2000] 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date
@@ -407,16 +421,16 @@ function datePicker(options) {
 
     // 兼容原来的 start、end 传 Number 的用法
     if (typeof defaults.start === 'number') {
-        defaults.start = new Date(`${defaults.start}-01-01`);
+        defaults.start = new Date(`${defaults.start}/01/01`);
     }
     else if (typeof defaults.start === 'string') {
-        defaults.start = new Date(defaults.start);
+        defaults.start = new Date(defaults.start.replace(/-/g, '/'));
     }
     if (typeof defaults.end === 'number') {
-        defaults.end = new Date(`${defaults.end}-12-31`);
+        defaults.end = new Date(`${defaults.end}/12/31`);
     }
     else if (typeof defaults.end === 'string') {
-        defaults.end = new Date(defaults.end);
+        defaults.end = new Date(defaults.end.replace(/-/g, '/'));
     }
 
     const findBy = (array, key, value) => {

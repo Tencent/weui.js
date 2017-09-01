@@ -42,12 +42,18 @@ function gallery(url, options = {}) {
 
     options = $.extend({
         className: '',
-        onDelete: $.noop
+        onDelete: $.noop,
+        withDeleteButton: true
     }, options);
 
     const $gallery = $($.render(tpl, $.extend({
         url: url
     }, options)));
+
+    function popStateCallback() {
+        if(_sington)
+            hide();
+    }
 
     function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
@@ -56,7 +62,10 @@ function gallery(url, options = {}) {
             .addClass('weui-animate-fade-out')
             .on('animationend webkitAnimationEnd', function () {
                 $gallery.remove();
+                $(window).off('popstate',popStateCallback);
                 _sington = false;
+                if (window.location.hash == '#gallery')
+                    history.back();
                 callback && callback();
             });
     }
@@ -68,7 +77,16 @@ function gallery(url, options = {}) {
         options.onDelete.call(this, url);
     });
 
+    if(!options.withDeleteButton) {
+        $gallery.find('.weui-gallery__del').hide();
+        $gallery.find('.weui-gallery__img')[0].style.bottom=0;
+    }
+
     $gallery.show().addClass('weui-animate-fade-in');
+
+    history.pushState({}, null, '#gallery');
+
+    $(window).on('popstate',popStateCallback);
 
     _sington = $gallery[0];
     _sington.hide = hide;

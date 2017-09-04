@@ -47,6 +47,7 @@ let temp = {}; // temp 存在上一次滑动的位置
  * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
  * @param {string=} [options.id=default] 作为picker的唯一标识，作用是以id缓存当时的选择。（当你想每次传入的defaultValue都是不一样时，可以使用不同的id区分）
  * @param {string=} [options.className] 自定义类名
+ * @param {string=} [options.title]  picker的标题
  * @param {string=} [options.container] 指定容器
  * @param {array=} [options.defaultValue] 默认选项的value数组
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调

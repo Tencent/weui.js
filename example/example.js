@@ -125,6 +125,7 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
         value: 9
     }], {
         defaultValue: [8],
+        title: '标题',
         className: 'custom-classname',
         onChange: function (result) {
             //console.log(item, index);
@@ -140,6 +141,7 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
 // 时间选择器
 document.querySelector('#datePickerBtn').addEventListener('click', function () {
     weui.datePicker({
+        title: '日期',
         start: '2016-12-29',
         end: '2030-12-29',
         /**
@@ -192,6 +194,7 @@ document.querySelector('#multiPickerBtn').addEventListener('click', function () 
             value: 'C'
         }
     ], {
+        title: '多列选择器标题',
         defaultValue: ['3', 'A'],
         onChange: function (result) {
             console.log(result);
@@ -268,6 +271,7 @@ document.querySelector('#cascadePickerBtn').addEventListener('click', function (
             ]
         }
     ], {
+        title: '级联选择器标题',
         depth: 3,
         defaultValue: [0, 1, 1],
         onChange: function (result) {

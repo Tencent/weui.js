@@ -185,7 +185,7 @@ $.fn.scroll = function (options) {
 
         // 如果上次时间距离松开手的时间超过 100ms, 则停止了, 没有惯性滑动
         if (endTime - startTime > 100) {
-            //如果end和start相差小于10，则视为手指是 tap 操作，而不是 swipe 操作，需要将被 tap 的条目滚动的 highlight 区域
+            //如果end和start相差小于10，则视为手指是 tap 操作，而不是 swipe 操作，需要将被 tap 的条目滚动到 highlight 区域
             if (Math.abs(end - start) > 10) {
                 stop(end - start);
             } else {

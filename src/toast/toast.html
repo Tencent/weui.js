@@ -1,7 +1,15 @@
 <div class="<%= className %>">
     <div class="weui-mask_transparent"></div>
     <div class="weui-toast">
-        <i class="weui-icon_toast weui-icon-success-no-circle"></i>
+        <% if(type === 'success'){ %>
+            <i class="weui-icon_toast weui-icon-success-no-circle"></i>
+        <% } %>
+        <% if(type === 'warning'){ %>
+            <i class="weui-icon_toast weui-icon-success-no-circle weui-icon-warn"></i>
+        <% } %>
+        <% if(type === 'error'){ %>
+            <i class="weui-icon_toast weui-icon-success-no-circle weui-icon-cancel"></i>
+        <% } %>
         <p class="weui-toast__content"><%=content%></p>
     </div>
 </div>

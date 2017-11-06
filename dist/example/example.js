@@ -2471,7 +2471,7 @@
 	    var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	    return toast(content = '', Object.assign({}, options, { type: 'success' }));
+	    return toast(content, Object.assign({}, options, { type: 'success' }));
 	};
 
 	// warning 状态，weui-icon-warn 样式
@@ -2479,7 +2479,7 @@
 	    var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	    return toast(content = '', Object.assign({}, options, { type: 'warning' }));
+	    return toast(content, Object.assign({}, options, { type: 'warning' }));
 	};
 
 	// error 状态，weui-icon-cancel 样式
@@ -2487,7 +2487,7 @@
 	    var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	    return toast(content = '', Object.assign({}, options, { type: 'error' }));
+	    return toast(content, Object.assign({}, options, { type: 'error' }));
 	};
 
 	exports.default = toast;

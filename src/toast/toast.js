@@ -82,17 +82,17 @@ function toast(content = '', options = {}) {
 
 // success 状态，默认状态
 toast.success = (content = '', options = {}) => {
-    return toast(content = '', Object.assign({}, options, { type: 'success' }));
+    return toast(content, Object.assign({}, options, { type: 'success' }));
 };
 
 // warning 状态，weui-icon-warn 样式
 toast.warning = (content = '', options = {}) => {
-    return toast(content = '', Object.assign({}, options, { type: 'warning' }));
+    return toast(content, Object.assign({}, options, { type: 'warning' }));
 };
 
 // error 状态，weui-icon-cancel 样式
 toast.error = (content = '', options = {}) => {
-    return toast(content = '', Object.assign({}, options, { type: 'error' }));
+    return toast(content, Object.assign({}, options, { type: 'error' }));
 };
 
 export default toast;

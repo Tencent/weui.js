@@ -36,7 +36,7 @@ let _sington;
  * });
  */
 function toast(content = '', options = {}) {
-    if(_sington) return _sington;
+    if (_sington) return _sington;
 
     if (typeof options === 'number') {
         options = {
@@ -53,7 +53,8 @@ function toast(content = '', options = {}) {
         content: content,
         duration: 3000,
         callback: $.noop,
-        className: ''
+        className: '',
+        type: 'success'
     }, options);
 
     const $toastWrap = $($.render(tpl, options));
@@ -78,4 +79,20 @@ function toast(content = '', options = {}) {
     _sington = $toastWrap[0];
     return $toastWrap[0];
 }
+
+// success 状态，默认状态
+toast.success = (content = '', options = {}) => {
+    return toast(content = '', Object.assign({}, options, { type: 'success' }));
+};
+
+// warning 状态，weui-icon-warn 样式
+toast.warning = (content = '', options = {}) => {
+    return toast(content = '', Object.assign({}, options, { type: 'warning' }));
+};
+
+// error 状态，weui-icon-cancel 样式
+toast.error = (content = '', options = {}) => {
+    return toast(content = '', Object.assign({}, options, { type: 'error' }));
+};
+
 export default toast;

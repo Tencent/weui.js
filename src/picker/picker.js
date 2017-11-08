@@ -193,7 +193,8 @@ function picker() {
         className: '',
         container: 'body',
         onChange: $.noop,
-        onConfirm: $.noop
+        onConfirm: $.noop,
+        onClose: $.noop
     }, options);
 
     // 数据处理
@@ -236,6 +237,7 @@ function picker() {
             .on('animationend webkitAnimationEnd', function () {
                 $picker.remove();
                 _sington = false;
+                options.onClose && options.onClose();
                 callback && callback();
             });
     }

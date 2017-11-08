@@ -31,6 +31,7 @@ let _sington;
  *
  * @param {object=} options 配置项
  * @param {string=} options.className 自定义类名
+ * @param {function=} [options.onClose] actionSheet关闭后的回调
  *
  * @example
  * weui.actionSheet([

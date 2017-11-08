@@ -1296,6 +1296,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @param {object=} options 配置项
 	 * @param {string=} options.className 自定义类名
+	 * @param {function=} [options.onClose] actionSheet关闭后的回调
 	 *
 	 * @example
 	 * weui.actionSheet([
@@ -1323,7 +1324,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *         }
 	 *     }
 	 * ], {
-	 *     className: 'custom-classname'
+	 *     className: 'custom-classname',
+	 *     onClose: function(){
+	 *         console.log('关闭');
+	 *     }
 	 * });
 	 */
 	function actionSheet() {
@@ -1338,7 +1342,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        menus: menus,
 	        actions: actions,
 	        className: '',
-	        isAndroid: isAndroid
+	        isAndroid: isAndroid,
+	        onClose: _util2.default.noop
 	    }, options);
 	    var $actionSheetWrap = (0, _util2.default)(_util2.default.render(_actionSheet2.default, options));
 	    var $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
@@ -1351,6 +1356,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $actionSheetMask.addClass('weui-animate-fade-out').on('animationend webkitAnimationEnd', function () {
 	            $actionSheetWrap.remove();
 	            _sington = false;
+	            options.onClose();
 	            callback && callback();
 	        });
 	    }
@@ -2763,6 +2769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {array=} [options.defaultValue] 默认选项的value数组
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
 	 * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+	 * @param {function=} [options.onClose] picker关闭后的回调
 	 *
 	 * @example
 	 * // 单列picker
@@ -2905,7 +2912,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        className: '',
 	        container: 'body',
 	        onChange: _util2.default.noop,
-	        onConfirm: _util2.default.noop
+	        onConfirm: _util2.default.noop,
+	        onClose: _util2.default.noop
 	    }, options);
 
 	    // 数据处理
@@ -2947,6 +2955,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $picker.find('.weui-picker').addClass('weui-animate-slide-down').on('animationend webkitAnimationEnd', function () {
 	            $picker.remove();
 	            _sington = false;
+	            defaults.onClose();
 	            callback && callback();
 	        });
 	    }

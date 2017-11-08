@@ -51,7 +51,8 @@ let temp = {}; // temp 存在上一次滑动的位置
  * @param {array=} [options.defaultValue] 默认选项的value数组
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
  * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
- *
+ * @param {function=} [options.onCancel] 在点击"取消"或者"遮罩部分"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+ * 
  * @example
  * // 单列picker
  * weui.picker([
@@ -80,6 +81,9 @@ let temp = {}; // temp 存在上一次滑动的位置
  *        console.log(result)
  *    },
  *    onConfirm: function (result) {
+ *        console.log(result)
+ *    },
+ *    onCancel: function(result){
  *        console.log(result)
  *    },
  *    id: 'singleLinePicker'
@@ -115,6 +119,9 @@ let temp = {}; // temp 存在上一次滑动的位置
  *         console.log(result);
  *     },
  *     onConfirm: function (result) {
+ *         console.log(result);
+ *     },
+ *     onCancel: function(result){
  *         console.log(result);
  *     },
  *     id: 'multiPickerBtn'
@@ -180,6 +187,9 @@ let temp = {}; // temp 存在上一次滑动的位置
  *    onConfirm: function (result) {
  *        console.log(result)
  *    },
+ *    onCancel: function(result){
+ *        console.log(result)
+ *    },
  *    id: 'doubleLinePicker'
  * });
  */
@@ -193,7 +203,8 @@ function picker() {
         className: '',
         container: 'body',
         onChange: $.noop,
-        onConfirm: $.noop
+        onConfirm: $.noop,
+        onCancel: $.noop
     }, options);
 
     // 数据处理
@@ -307,7 +318,8 @@ function picker() {
                     }
                 }
             },
-            onConfirm: defaults.onConfirm
+            onConfirm: defaults.onConfirm,
+            onCancel: defaults.onCancel
         });
     }
 
@@ -329,10 +341,16 @@ function picker() {
     }
 
     $picker
-        .on('click', '.weui-mask', function () { hide(); })
+        .on('click', '.weui-mask', function () { 
+            hide();
+            defaults.onCancel(result); 
+        })
         .on('click', '.weui-picker__action', function () { hide(); })
         .on('click', '#weui-picker-confirm', function () {
             defaults.onConfirm(result);
+        })
+        .on('click', '#weui-picker-cancel', function(){
+            defaults.onCancel(result);
         });
 
     _sington = $picker[0];

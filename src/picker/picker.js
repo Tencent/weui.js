@@ -237,7 +237,7 @@ function picker() {
             .on('animationend webkitAnimationEnd', function () {
                 $picker.remove();
                 _sington = false;
-                options.onClose && options.onClose();
+                defaults.onClose();
                 callback && callback();
             });
     }

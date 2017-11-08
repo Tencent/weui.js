@@ -88,7 +88,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
             .on('animationend webkitAnimationEnd', function () {
                 $actionSheetWrap.remove();
                 _sington = false;
-                options.onClose && options.onClose();
+                options.onClose();
                 callback && callback();
             });
     }

@@ -58,7 +58,10 @@ let _sington;
  *         }
  *     }
  * ], {
- *     className: 'custom-classname'
+ *     className: 'custom-classname',
+ *     onClose: function(){
+ *         console.log('关闭');
+ *     }
  * });
  */
 function actionSheet(menus = [], actions = [], options = {}) {
@@ -69,7 +72,8 @@ function actionSheet(menus = [], actions = [], options = {}) {
         menus: menus,
         actions: actions,
         className: '',
-        isAndroid: isAndroid
+        isAndroid: isAndroid,
+        onClose: function(){}
     }, options);
     const $actionSheetWrap = $($.render(tpl, options));
     const $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
@@ -84,6 +88,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
             .on('animationend webkitAnimationEnd', function () {
                 $actionSheetWrap.remove();
                 _sington = false;
+                options.onClose && options.onClose();
                 callback && callback();
             });
     }

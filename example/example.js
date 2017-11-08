@@ -71,7 +71,10 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
             }
         }
     ], {
-        className: "custom-classname"
+        className: "custom-classname",
+        onClose: function(){
+            console.log('关闭');
+        }
     });
 });
 

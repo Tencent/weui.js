@@ -73,7 +73,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
         actions: actions,
         className: '',
         isAndroid: isAndroid,
-        onClose: function(){}
+        onClose: $.noop
     }, options);
     const $actionSheetWrap = $($.render(tpl, options));
     const $actionSheet = $actionSheetWrap.find('.weui-actionsheet');

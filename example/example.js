@@ -71,7 +71,10 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
             }
         }
     ], {
-        className: "custom-classname"
+        className: "custom-classname",
+        onClose: function(){
+            console.log('关闭');
+        }
     });
 });
 
@@ -199,7 +202,10 @@ document.querySelector('#multiPickerBtn').addEventListener('click', function () 
         onConfirm: function (result) {
             console.log(result);
         },
-        id: 'multiPickerBtn'
+        id: 'multiPickerBtn',
+        onClose: function(){
+            console.log('onClose');
+        }
     });
 });
 

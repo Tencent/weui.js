@@ -31,6 +31,7 @@ let _sington;
  *
  * @param {object=} options 配置项
  * @param {string=} options.className 自定义类名
+ * @param {function=} [options.onClose] actionSheet关闭后的回调
  *
  * @example
  * weui.actionSheet([
@@ -58,7 +59,10 @@ let _sington;
  *         }
  *     }
  * ], {
- *     className: 'custom-classname'
+ *     className: 'custom-classname',
+ *     onClose: function(){
+ *         console.log('关闭');
+ *     }
  * });
  */
 function actionSheet(menus = [], actions = [], options = {}) {
@@ -69,7 +73,8 @@ function actionSheet(menus = [], actions = [], options = {}) {
         menus: menus,
         actions: actions,
         className: '',
-        isAndroid: isAndroid
+        isAndroid: isAndroid,
+        onClose: $.noop
     }, options);
     const $actionSheetWrap = $($.render(tpl, options));
     const $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
@@ -84,6 +89,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
             .on('animationend webkitAnimationEnd', function () {
                 $actionSheetWrap.remove();
                 _sington = false;
+                options.onClose();
                 callback && callback();
             });
     }

@@ -104,4 +104,21 @@ describe('actionsheet', function(){
             done();
         }, closeDur);
     });
+
+    it('test onClose', (done) => {
+        let called = false;
+        const actionSheet = weui.actionSheet([], [], {
+            onClose: function(){
+                called = true;
+            }
+        });
+        $('.weui-mask').click();
+
+        setTimeout(() => {
+            assert($('.weui-actionsheet').length === 0);
+            assert(called);
+
+            done();
+        }, closeDur);
+    });
 });

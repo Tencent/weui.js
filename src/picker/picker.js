@@ -51,6 +51,7 @@ let temp = {}; // temp 存在上一次滑动的位置
  * @param {array=} [options.defaultValue] 默认选项的value数组
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
  * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
+ * @param {function=} [options.onClose] picker关闭后的回调
  *
  * @example
  * // 单列picker
@@ -193,7 +194,8 @@ function picker() {
         className: '',
         container: 'body',
         onChange: $.noop,
-        onConfirm: $.noop
+        onConfirm: $.noop,
+        onClose: $.noop
     }, options);
 
     // 数据处理
@@ -236,6 +238,7 @@ function picker() {
             .on('animationend webkitAnimationEnd', function () {
                 $picker.remove();
                 _sington = false;
+                defaults.onClose();
                 callback && callback();
             });
     }

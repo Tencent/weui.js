@@ -1,13 +1,13 @@
 /*
 * Tencent is pleased to support the open source community by making WeUI.js available.
-* 
+*
 * Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-* 
+*
 * Licensed under the MIT License (the "License"); you may not use this file except in compliance
 * with the License. You may obtain a copy of the License at
-* 
+*
 *       http://opensource.org/licenses/MIT
-* 
+*
 * Unless required by applicable law or agreed to in writing, software distributed under the License is
 * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 * either express or implied. See the License for the specific language governing permissions and
@@ -419,7 +419,8 @@ function datePicker(options) {
         onConfirm: $.noop,
         start: 2000,
         end: 2030,
-        cron: '* * *'
+        cron: '* * *',
+        format: 'ymd'
     }, options);
 
     // 兼容原来的 start、end 传 Number 的用法
@@ -464,19 +465,23 @@ function datePicker(options) {
             };
             date.push(Y);
         }
-        let M = findBy(Y.children, 'value', month);
-        if (!M) {
-            M = {
-                label: month + '月',
-                value: month,
-                children: []
-            };
-            Y.children.push(M);
+        if(defaults.format.toLowerCase().indexOf('m')>-1){
+            let M = findBy(Y.children, 'value', month);
+            if (!M) {
+                M = {
+                    label: month + '月',
+                    value: month,
+                    children: []
+                };
+                Y.children.push(M);
+            }
+            if(defaults.format.toLowerCase().indexOf('d')>-1){
+                M.children.push({
+                    label: day + '日',
+                    value: day
+                });
+            }
         }
-        M.children.push({
-            label: day + '日',
-            value: day
-        });
     }
     while (!obj.done);
 

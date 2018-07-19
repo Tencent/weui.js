@@ -93,14 +93,19 @@ function dialog(options = {}) {
     $mask.addClass('weui-animate-fade-in');
     $dialog.addClass('weui-animate-fade-in');
 
-    $dialogWrap.on('click', '.weui-dialog__btn', function (evt) {
-        const index = $(this).index();
-        if (options.buttons[index].onClick) {
-            if (options.buttons[index].onClick.call(this, evt) !== false) hide();
-        } else {
-            hide();
-        }
-    });
+    $dialogWrap
+        .on('click', '.weui-dialog__btn', function(evt){
+            const index = $(this).index();
+            if(options.buttons[index].onClick){
+                if(options.buttons[index].onClick.call(this, evt) !== false) hide();
+            }else{
+                hide();
+            }
+        })
+        .on('touchmove', function(evt){
+            evt.stopPropagation();
+            evt.preventDefault();
+        });
 
     _sington = $dialogWrap[0];
     _sington.hide = hide;

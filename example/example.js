@@ -71,6 +71,7 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
             }
         }
     ], {
+        title: 'actionTitle',
         className: "custom-classname",
         onClose: function(){
             console.log('关闭');

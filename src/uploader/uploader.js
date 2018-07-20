@@ -118,8 +118,8 @@ let _id = 0;
  *
  *        // return false; // 阻止文件上传
  *    },
- *    onProgress: function(procent){
- *        console.log(this, procent);
+ *    onProgress: function(percent){
+ *        console.log(this, percent);
  *        // return true; // 阻止默认行为，不使用默认的进度显示
  *    },
  *    onSuccess: function (ret) {

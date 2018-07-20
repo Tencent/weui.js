@@ -118,6 +118,7 @@
 	            console.log('取消');
 	        }
 	    }], {
+	        title: 'actionTitle',
 	        className: "custom-classname",
 	        onClose: function onClose() {
 	            console.log('关闭');
@@ -1610,6 +1611,9 @@
 	        } else {
 	            hide();
 	        }
+	    }).on('touchmove', function (evt) {
+	        evt.stopPropagation();
+	        evt.preventDefault();
 	    });
 
 	    _sington = $dialogWrap[0];
@@ -2628,6 +2632,7 @@
 	 * @param {function} actions[].onClick 选项点击时的回调
 	 *
 	 * @param {object=} options 配置项
+	 * @param {string=} options.title actionSheet的title，如果isAndroid=true，则不会显示
 	 * @param {string=} options.className 自定义类名
 	 * @param {function=} [options.onClose] actionSheet关闭后的回调
 	 *
@@ -2674,6 +2679,7 @@
 	    options = _util2.default.extend({
 	        menus: menus,
 	        actions: actions,
+	        title: '',
 	        className: '',
 	        isAndroid: isAndroid,
 	        onClose: _util2.default.noop
@@ -2728,7 +2734,7 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"<% if(isAndroid){ %>weui-skin_android <% } %><%= className %>\"> <div class=weui-mask></div> <div class=weui-actionsheet> <div class=weui-actionsheet__menu> <% for(var i = 0; i < menus.length; i++){ %> <div class=weui-actionsheet__cell><%= menus[i].label %></div> <% } %> </div> <div class=weui-actionsheet__action> <% for(var j = 0; j < actions.length; j++){ %> <div class=weui-actionsheet__cell><%= actions[j].label %></div> <% } %> </div> </div> </div> ";
+	module.exports = "<div class=\"<% if(isAndroid){ %>weui-skin_android <% } %><%= className %>\"> <div class=weui-mask></div> <div class=weui-actionsheet> <% if(!isAndroid && title){ %> <div class=weui-actionsheet__title> <p class=weui-actionsheet__title-text><%= title %></p> </div> <% } %> <div class=weui-actionsheet__menu> <% for(var i = 0; i < menus.length; i++){ %> <div class=weui-actionsheet__cell><%= menus[i].label %></div> <% } %> </div> <div class=weui-actionsheet__action> <% for(var j = 0; j < actions.length; j++){ %> <div class=weui-actionsheet__cell><%= actions[j].label %></div> <% } %> </div> </div> </div> ";
 
 /***/ },
 /* 17 */
@@ -3485,8 +3491,8 @@
 	 *
 	 *        // return false; // 阻止文件上传
 	 *    },
-	 *    onProgress: function(procent){
-	 *        console.log(this, procent);
+	 *    onProgress: function(percent){
+	 *        console.log(this, percent);
 	 *        // return true; // 阻止默认行为，不使用默认的进度显示
 	 *    },
 	 *    onSuccess: function (ret) {
@@ -4466,12 +4472,15 @@
 	 *  });
 	 */
 	function datePicker(options) {
+	    var nowDate = new Date();
+
 	    var defaults = _util2.default.extend({
 	        id: 'datePicker',
 	        onChange: _util2.default.noop,
 	        onConfirm: _util2.default.noop,
-	        start: 2000,
-	        end: 2030,
+	        start: nowDate.getFullYear() - 20,
+	        end: nowDate.getFullYear() + 20,
+	        defaultValue: [nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate()],
 	        cron: '* * *'
 	    }, options);
 

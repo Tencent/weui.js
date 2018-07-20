@@ -8,12 +8,14 @@ describe('actionsheet', function(){
             [ {label: '拍照'}, {label: '从相册选择'}],
             [ {label: '确定'}, {label: '取消'}],
             {
+                title: 'title',
                 className: 'test'
             }
         );
         const $actionsheet = $('.weui-actionsheet');
         assert($actionsheet.length === 1);
         assert(actionsheetWrp.classList.contains('test'));
+        assert($('.weui-actionsheet__title-text').text() == 'title');
     });
     it('should render menus', () => {
         const $menu = $('.weui-actionsheet__menu');

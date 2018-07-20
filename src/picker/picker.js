@@ -413,12 +413,15 @@ function picker() {
  *  });
  */
 function datePicker(options) {
+    const nowDate = new Date();
+
     const defaults = $.extend({
         id: 'datePicker',
         onChange: $.noop,
         onConfirm: $.noop,
-        start: 2000,
-        end: 2030,
+        start: nowDate.getFullYear() - 20,
+        end: nowDate.getFullYear() + 20,
+        defaultValue: [nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate()],
         cron: '* * *'
     }, options);
 

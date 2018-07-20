@@ -1,6 +1,11 @@
 <div class="<% if(isAndroid){ %>weui-skin_android <% } %><%= className %>">
     <div class="weui-mask"></div>
     <div class="weui-actionsheet">
+        <% if(!isAndroid && title){ %>
+        <div class="weui-actionsheet__title">
+            <p class="weui-actionsheet__title-text"><%= title %></p>
+        </div>
+        <% } %>
         <div class="weui-actionsheet__menu">
             <% for(var i = 0; i < menus.length; i++){ %>
             <div class="weui-actionsheet__cell"><%= menus[i].label %></div>

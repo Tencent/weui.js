@@ -30,6 +30,7 @@ let _sington;
  * @param {function} actions[].onClick 选项点击时的回调
  *
  * @param {object=} options 配置项
+ * @param {string=} options.title actionSheet的title，如果isAndroid=true，则不会显示
  * @param {string=} options.className 自定义类名
  * @param {function=} [options.onClose] actionSheet关闭后的回调
  *
@@ -72,6 +73,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
     options = $.extend({
         menus: menus,
         actions: actions,
+        title: '',
         className: '',
         isAndroid: isAndroid,
         onClose: $.noop

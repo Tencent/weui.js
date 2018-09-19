@@ -1,13 +1,13 @@
 /*
 * Tencent is pleased to support the open source community by making WeUI.js available.
-* 
+*
 * Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-* 
+*
 * Licensed under the MIT License (the "License"); you may not use this file except in compliance
 * with the License. You may obtain a copy of the License at
-* 
+*
 *       http://opensource.org/licenses/MIT
-* 
+*
 * Unless required by applicable law or agreed to in writing, software distributed under the License is
 * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 * either express or implied. See the License for the specific language governing permissions and
@@ -86,6 +86,8 @@ const getMin = (offset, rowHeight, length) => {
     return -(rowHeight * (length - offset - 1));
 };
 
+let lockScrolling = null;
+
 $.fn.scroll = function (options) {
     const defaults = $.extend({
         items: [],                                  // 数据
@@ -153,70 +155,78 @@ $.fn.scroll = function (options) {
     };
 
     function _start(pageY){
-        start = pageY;
-        startTime = +new Date();
+        if (lockScrolling === null) {
+            lockScrolling = $scrollable;
+            start = pageY;
+            startTime = +new Date();
+        }
     }
     function _move(pageY){
-        end = pageY;
-        const diff = end - start;
+        if (lockScrolling === $scrollable) {
+            end = pageY;
+            const diff = end - start;
 
-        setTransition($scrollable, 0);
-        setTranslate($scrollable, (translate + diff));
-        startTime = +new Date();
-        points.push({time: startTime, y: end});
-        if (points.length > 40) {
-            points.shift();
+            setTransition($scrollable, 0);
+            setTranslate($scrollable, (translate + diff));
+            startTime = +new Date();
+            points.push({time: startTime, y: end});
+            if (points.length > 40) {
+                points.shift();
+            }
         }
     }
     function _end(pageY){
-        if(!start) return;
+        if (lockScrolling === $scrollable) {
+            if(!start) return;
 
-        /**
-         * 思路:
-         * 0. touchstart 记录按下的点和时间
-         * 1. touchmove 移动时记录前 40个经过的点和时间
-         * 2. touchend 松开手时, 记录该点和时间. 如果松开手时的时间, 距离上一次 move时的时间超过 100ms, 那么认为停止了, 不执行惯性滑动
-         *    如果间隔时间在 100ms 内, 查找 100ms 内最近的那个点, 和松开手时的那个点, 计算距离和时间差, 算出速度
-         *    速度乘以惯性滑动的时间, 例如 300ms, 计算出应该滑动的距离
-         */
-        const endTime = new Date().getTime();
-        const relativeY = windowHeight - (defaults.bodyHeight / 2);
-        end = pageY;
+            /**
+             * 思路:
+             * 0. touchstart 记录按下的点和时间
+             * 1. touchmove 移动时记录前 40个经过的点和时间
+             * 2. touchend 松开手时, 记录该点和时间. 如果松开手时的时间, 距离上一次 move时的时间超过 100ms, 那么认为停止了, 不执行惯性滑动
+             *    如果间隔时间在 100ms 内, 查找 100ms 内最近的那个点, 和松开手时的那个点, 计算距离和时间差, 算出速度
+             *    速度乘以惯性滑动的时间, 例如 300ms, 计算出应该滑动的距离
+             */
+            const endTime = new Date().getTime();
+            const relativeY = windowHeight - (defaults.bodyHeight / 2);
+            end = pageY;
 
-        // 如果上次时间距离松开手的时间超过 100ms, 则停止了, 没有惯性滑动
-        if (endTime - startTime > 100) {
-            //如果end和start相差小于10，则视为
-            if (Math.abs(end - start) > 10) {
-                stop(end - start);
-            } else {
-                stop(relativeY - end);
-            }
-        } else {
-            if (Math.abs(end - start) > 10) {
-                const endPos = points.length - 1;
-                let startPos = endPos;
-                for (let i = endPos; i > 0 && startTime - points[i].time < 100; i--) {
-                    startPos = i;
-                }
-
-                if (startPos !== endPos) {
-                    const ep = points[endPos];
-                    const sp = points[startPos];
-                    const t = ep.time - sp.time;
-                    const s = ep.y - sp.y;
-                    const v = s / t; // 出手时的速度
-                    const diff = v * 150 + (end - start); // 滑行 150ms,这里直接影响“灵敏度”
-                    stop(diff);
-                }
-                else {
-                    stop(0);
+            // 如果上次时间距离松开手的时间超过 100ms, 则停止了, 没有惯性滑动
+            if (endTime - startTime > 100) {
+                //如果end和start相差小于10，则视为
+                if (Math.abs(end - start) > 10) {
+                    stop(end - start);
+                } else {
+                    stop(relativeY - end);
                 }
             } else {
-                stop(relativeY - end);
+                if (Math.abs(end - start) > 10) {
+                    const endPos = points.length - 1;
+                    let startPos = endPos;
+                    for (let i = endPos; i > 0 && startTime - points[i].time < 100; i--) {
+                        startPos = i;
+                    }
+
+                    if (startPos !== endPos) {
+                        const ep = points[endPos];
+                        const sp = points[startPos];
+                        const t = ep.time - sp.time;
+                        const s = ep.y - sp.y;
+                        const v = s / t; // 出手时的速度
+                        const diff = v * 150 + (end - start); // 滑行 150ms,这里直接影响“灵敏度”
+                        stop(diff);
+                    }
+                    else {
+                        stop(0);
+                    }
+                } else {
+                    stop(relativeY - end);
+                }
             }
+
+            start = null;
+            lockScrolling = null;
         }
-
-        start = null;
     }
 
     /**

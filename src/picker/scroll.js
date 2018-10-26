@@ -87,14 +87,16 @@ const getMin = (offset, rowHeight, length) => {
 };
 
 $.fn.scroll = function (options) {
+    let pickerItem = document.querySelector('.weui-picker__indicator');
+    let rowHeight = document.defaultView.getComputedStyle(pickerItem)['height'].replace(/px/gi, '');
     const defaults = $.extend({
         items: [],                                  // 数据
         scrollable: '.weui-picker__content',        // 滚动的元素
         offset: 3,                                  // 列表初始化时的偏移量（列表初始化时，选项是聚焦在中间的，通过offset强制往上挪3项，以达到初始选项是为顶部的那项）
-        rowHeight: 34,                              // 列表每一行的高度
+        rowHeight: rowHeight,                              // 列表每一行的高度
         onChange: $.noop,                           // onChange回调
         temp: null,                                 // translate的缓存
-        bodyHeight: 7 * 34                          // picker的高度，用于辅助点击滚动的计算
+        bodyHeight: 7 * rowHeight                          // picker的高度，用于辅助点击滚动的计算
     }, options);
     const items = defaults.items.map((item) => {
         return `<div class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${typeof item == 'object' ? item.label : item}</div>`;

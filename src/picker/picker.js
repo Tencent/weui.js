@@ -1,13 +1,13 @@
 /*
 * Tencent is pleased to support the open source community by making WeUI.js available.
-* 
+*
 * Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-* 
+*
 * Licensed under the MIT License (the "License"); you may not use this file except in compliance
 * with the License. You may obtain a copy of the License at
-* 
+*
 *       http://opensource.org/licenses/MIT
-* 
+*
 * Unless required by applicable law or agreed to in writing, software distributed under the License is
 * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 * either express or implied. See the License for the specific language governing permissions and
@@ -449,40 +449,111 @@ function datePicker(options) {
     };
 
     const date = [];
-    const interval = cron.parse(defaults.cron, defaults.start, defaults.end);
-    let obj;
-    do {
-        obj = interval.next();
+    if (typeof defaults.cron === 'string') {
+        const interval = cron.parse(defaults.cron, defaults.start, defaults.end);
+        let obj;
+        do {
+            obj = interval.next();
 
-        const year = obj.value.getFullYear();
-        const month = obj.value.getMonth() + 1;
-        const day = obj.value.getDate();
+            const year = obj.value.getFullYear();
+            const month = obj.value.getMonth() + 1;
+            const day = obj.value.getDate();
 
-        let Y = findBy(date, 'value', year);
-        if (!Y) {
-            Y = {
-                label: year + '年',
-                value: year,
-                children: []
-            };
-            date.push(Y);
+            let Y = findBy(date, 'value', year);
+            if (!Y) {
+                Y = {
+                    label: year + '年',
+                    value: year,
+                    children: []
+                };
+                date.push(Y);
+            }
+            let M = findBy(Y.children, 'value', month);
+            if (!M) {
+                M = {
+                    label: month + '月',
+                    value: month,
+                    children: []
+                };
+                Y.children.push(M);
+            }
+            M.children.push({
+                label: day + '日',
+                value: day
+            });
         }
-        let M = findBy(Y.children, 'value', month);
-        if (!M) {
-            M = {
-                label: month + '月',
-                value: month,
-                children: []
-            };
-            Y.children.push(M);
+        while (!obj.done);
+        return picker(date, defaults);
+    }
+
+    const date2arr = date => [date.getFullYear(), date.getMonth() + 1, date.getDate()];
+    const hasLeapYear = year => year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0);
+    const createDaysArr = (hasLeap, month, startDay, endDay) => {
+        const daysArr = [];
+        let maxDays = hasLeap ? 29 : 28;
+        switch (month) {
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+            case 12:
+                maxDays = 31;
+                break;
+            case 2:
+                maxDays = hasLeap ? 29 : 28;
+                break;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                maxDays = 30;
+                break;
         }
-        M.children.push({
-            label: day + '日',
-            value: day
+        startDay = startDay || 1;
+        endDay = endDay || maxDays;
+        if (startDay > maxDays) {
+            startDay = maxDays;
+        }
+        if (endDay > maxDays) {
+            endDay = maxDays;
+        }
+        for (let i = startDay; i <= endDay; i++) {
+            daysArr.push({ label: i + '日', value: i });
+        }
+        return daysArr;
+    };
+    const createMonthsObj = (year, startMonth, endMonth, startDay, endDay) => {
+        const monthsArr = [];
+        const hasLeap = hasLeapYear(year);
+        for (let i = startMonth; i <= endMonth; i++) {
+            monthsArr.push({
+                label: i + '月',
+                value: i,
+                children: createDaysArr(hasLeap, i, startDay, endDay),
+            });
+        }
+        return monthsArr;
+    };
+    const startArr = date2arr(defaults.start);
+    const endArr = date2arr(defaults.end);
+    for (let year = startArr[0]; year <= endArr[0]; year++) {
+        let startMonth = 1, endMonth = 12, startDay, endDay;
+        if (year === startArr[0]) {
+            startMonth = startArr[1];
+            startDay = startArr[2];
+        }
+        if(year === endArr[0]){
+            endMonth = endArr[1];
+            endDay = endArr[2];
+        }
+        date.push({
+            label: year + '年',
+            value: year,
+            children: createMonthsObj(year, startMonth, endMonth, startDay, endDay),
         });
     }
-    while (!obj.done);
-
     return picker(date, defaults);
 }
 

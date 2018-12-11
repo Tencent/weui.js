@@ -31,15 +31,137 @@ picker 多列选择器。
 
 **Example**  
 ```js
-// 单列pickerweui.picker([{    label: '飞机票',    value: 0,    disabled: true // 不可用},{    label: '火车票',    value: 1},{    label: '汽车票',    value: 3},{    label: '公车票',    value: 4,}], {   className: 'custom-classname',   container: 'body',   defaultValue: [3],   onChange: function (result) {       console.log(result)   },   onConfirm: function (result) {       console.log(result)   },   id: 'singleLinePicker'});
+// 单列picker
+weui.picker([
+{
+    label: '飞机票',
+    value: 0,
+    disabled: true // 不可用
+},
+{
+    label: '火车票',
+    value: 1
+},
+{
+    label: '汽车票',
+    value: 3
+},
+{
+    label: '公车票',
+    value: 4,
+}
+], {
+   className: 'custom-classname',
+   container: 'body',
+   defaultValue: [3],
+   onChange: function (result) {
+       console.log(result)
+   },
+   onConfirm: function (result) {
+       console.log(result)
+   },
+   id: 'singleLinePicker'
+});
 ```
 **Example**  
 ```js
-// 多列pickerweui.picker([    {        label: '1',        value: '1'    }, {        label: '2',        value: '2'    }, {        label: '3',        value: '3'    }], [    {        label: 'A',        value: 'A'    }, {        label: 'B',        value: 'B'    }, {        label: 'C',        value: 'C'    }], {    defaultValue: ['3', 'A'],    onChange: function (result) {        console.log(result);    },    onConfirm: function (result) {        console.log(result);    },    id: 'multiPickerBtn'});
+// 多列picker
+weui.picker([
+    {
+        label: '1',
+        value: '1'
+    }, {
+        label: '2',
+        value: '2'
+    }, {
+        label: '3',
+        value: '3'
+    }
+], [
+    {
+        label: 'A',
+        value: 'A'
+    }, {
+        label: 'B',
+        value: 'B'
+    }, {
+        label: 'C',
+        value: 'C'
+    }
+], {
+    defaultValue: ['3', 'A'],
+    onChange: function (result) {
+        console.log(result);
+    },
+    onConfirm: function (result) {
+        console.log(result);
+    },
+    id: 'multiPickerBtn'
+});
 ```
 **Example**  
 ```js
-// 级联pickerweui.picker([{    label: '飞机票',    value: 0,    children: [        {            label: '经济舱',            value: 1        },        {            label: '商务舱',            value: 2        }    ]},{    label: '火车票',    value: 1,    children: [        {            label: '卧铺',            value: 1,            disabled: true // 不可用        },        {            label: '坐票',            value: 2        },        {            label: '站票',            value: 3        }    ]},{    label: '汽车票',    value: 3,    children: [        {            label: '快班',            value: 1        },        {            label: '普通',            value: 2        }    ]}], {   className: 'custom-classname',   container: 'body',   defaultValue: [1, 3],   onChange: function (result) {       console.log(result)   },   onConfirm: function (result) {       console.log(result)   },   id: 'doubleLinePicker'});
+// 级联picker
+weui.picker([
+{
+    label: '飞机票',
+    value: 0,
+    children: [
+        {
+            label: '经济舱',
+            value: 1
+        },
+        {
+            label: '商务舱',
+            value: 2
+        }
+    ]
+},
+{
+    label: '火车票',
+    value: 1,
+    children: [
+        {
+            label: '卧铺',
+            value: 1,
+            disabled: true // 不可用
+        },
+        {
+            label: '坐票',
+            value: 2
+        },
+        {
+            label: '站票',
+            value: 3
+        }
+    ]
+},
+{
+    label: '汽车票',
+    value: 3,
+    children: [
+        {
+            label: '快班',
+            value: 1
+        },
+        {
+            label: '普通',
+            value: 2
+        }
+    ]
+}
+], {
+   className: 'custom-classname',
+   container: 'body',
+   defaultValue: [1, 3],
+   onChange: function (result) {
+       console.log(result)
+   },
+   onConfirm: function (result) {
+       console.log(result)
+   },
+   id: 'doubleLinePicker'
+});
 ```
 <a name="datePicker"></a>
 
@@ -54,7 +176,7 @@ datePicker 时间选择器，由picker拓展而来，提供年、月、日的选
 | [options.id] | <code>string</code> | <code>&quot;datePicker&quot;</code> | 作为picker的唯一标识 |
 | [options.start] | <code>number</code> &#124; <code>string</code> &#124; <code>Date</code> | <code>2000</code> | 起始年份，如果是 `Number` 类型，表示起始年份；如果是 `String` 类型，格式为 'YYYY-MM-DD'；如果是 `Date` 类型，就传一个 Date |
 | [options.end] | <code>number</code> &#124; <code>string</code> &#124; <code>Date</code> | <code>2030</code> | 结束年份，同上 |
-| [options.cron] | <code>string</code> | <code>&quot;* * *&quot;</code> | cron 表达式，三位，分别是 dayOfMonth[1-31]，month[1-12] 和 dayOfWeek[0-6]（周日-周六） |
+| [options.cron] | <code>string</code> | <code>&quot;* * *&quot;</code>  &#124; `false` | cron 表达式，三位，分别是 dayOfMonth[1-31]，month[1-12] 和 dayOfWeek[0-6]（周日-周六）；设置为 `false` 时，忽略之（优化在 Safari 中 时间间隔大于100年时弹出过慢的问题） |
 | [options.className] | <code>string</code> |  | 自定义类名 |
 | [options.defaultValue] | <code>array</code> |  | 默认选项的value数组, 如 [1991, 6, 9] |
 | [options.onChange] | <code>function</code> |  | 在picker选中的值发生变化的时候回调 |
@@ -62,5 +184,59 @@ datePicker 时间选择器，由picker拓展而来，提供年、月、日的选
 
 **Example**  
 ```js
-// 示例1：weui.datePicker({    start: 1990,    end: 2000,    defaultValue: [1991, 6, 9],    onChange: function(result){        console.log(result);    },    onConfirm: function(result){        console.log(result);    },    id: 'datePicker'});// 示例2：weui.datePicker({     start: new Date(), // 从今天开始     end: 2030,     defaultValue: [2020, 6, 9],     onChange: function(result){         console.log(result);     },     onConfirm: function(result){         console.log(result);     },     id: 'datePicker' }); // 示例3：weui.datePicker({     start: new Date(), // 从今天开始     end: 2030,     cron: '* * 0,6',  // 每逢周日、周六     onChange: function(result){         console.log(result);     },     onConfirm: function(result){         console.log(result);     },     id: 'datePicker' }); // 示例4：weui.datePicker({     start: new Date(), // 从今天开始     end: 2030,     cron: '1-10 * *',  // 每月1日-10日     onChange: function(result){         console.log(result);     },     onConfirm: function(result){         console.log(result);     },     id: 'datePicker' });
+// 示例1：
+weui.datePicker({
+    start: 1990,
+    end: 2000,
+    defaultValue: [1991, 6, 9],
+    onChange: function(result){
+        console.log(result);
+    },
+    onConfirm: function(result){
+        console.log(result);
+    },
+    id: 'datePicker'
+});
+
+// 示例2：
+weui.datePicker({
+     start: new Date(), // 从今天开始
+     end: 2030,
+     defaultValue: [2020, 6, 9],
+     onChange: function(result){
+         console.log(result);
+     },
+     onConfirm: function(result){
+         console.log(result);
+     },
+     id: 'datePicker'
+ });
+
+ // 示例3：
+weui.datePicker({
+     start: new Date(), // 从今天开始
+     end: 2030,
+     cron: '* * 0,6',  // 每逢周日、周六
+     onChange: function(result){
+         console.log(result);
+     },
+     onConfirm: function(result){
+         console.log(result);
+     },
+     id: 'datePicker'
+ });
+
+ // 示例4：
+weui.datePicker({
+     start: new Date(), // 从今天开始
+     end: 2030,
+     cron: '1-10 * *',  // 每月1日-10日
+     onChange: function(result){
+         console.log(result);
+     },
+     onConfirm: function(result){
+         console.log(result);
+     },
+     id: 'datePicker'
+ });
 ```

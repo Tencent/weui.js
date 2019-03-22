@@ -3190,7 +3190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var hasLeapYear = function hasLeapYear(year) {
 	        return year % 400 === 0 || year % 4 === 0 && year % 100 !== 0;
 	    };
-	    var createDaysArr = function createDaysArr(hasLeap, month, startDay, endDay) {
+	    var createDaysArr = function createDaysArr(hasLeap, month, startMonth, endMonth, startDay, endDay) {
 	        var daysArr = [];
 	        var maxDays = hasLeap ? 29 : 28;
 	        switch (month) {
@@ -3215,6 +3215,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        startDay = startDay || 1;
 	        endDay = endDay || maxDays;
+	        if (month > startMonth) {
+	            startDay = 1;
+	        }
+	        if (month < endMonth) {
+	            endDay = maxDays;
+	        }
 	        if (startDay > maxDays) {
 	            startDay = maxDays;
 	        }
@@ -3233,7 +3239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            monthsArr.push({
 	                label: i + '月',
 	                value: i,
-	                children: createDaysArr(hasLeap, i, startDay, endDay)
+	                children: createDaysArr(hasLeap, i, startMonth, endMonth, startDay, endDay)
 	            });
 	        }
 	        return monthsArr;

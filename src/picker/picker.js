@@ -488,7 +488,7 @@ function datePicker(options) {
 
     const date2arr = date => [date.getFullYear(), date.getMonth() + 1, date.getDate()];
     const hasLeapYear = year => year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0);
-    const createDaysArr = (hasLeap, month, startDay, endDay) => {
+    const createDaysArr = (hasLeap, month, startMonth, endMonth, startDay, endDay) => {
         const daysArr = [];
         let maxDays = hasLeap ? 29 : 28;
         switch (month) {
@@ -513,6 +513,12 @@ function datePicker(options) {
         }
         startDay = startDay || 1;
         endDay = endDay || maxDays;
+        if (month > startMonth) {
+            startDay = 1;
+        }
+        if (month < endMonth) {
+            endDay = maxDays;
+        }
         if (startDay > maxDays) {
             startDay = maxDays;
         }
@@ -531,7 +537,7 @@ function datePicker(options) {
             monthsArr.push({
                 label: i + '月',
                 value: i,
-                children: createDaysArr(hasLeap, i, startDay, endDay),
+                children: createDaysArr(hasLeap, i, startMonth, endMonth, startDay, endDay),
             });
         }
         return monthsArr;

@@ -219,7 +219,7 @@
 	// 时间选择器
 	document.querySelector('#datePickerBtn100').addEventListener('click', function () {
 	    _weui2.default.datePicker({
-	        start: '1816-12-29',
+	        start: '1816-03-29',
 	        end: '2030-12-29',
 	        /**
 	         * https://zh.wikipedia.org/wiki/Cron
@@ -4555,7 +4555,7 @@
 	    var hasLeapYear = function hasLeapYear(year) {
 	        return year % 400 === 0 || year % 4 === 0 && year % 100 !== 0;
 	    };
-	    var createDaysArr = function createDaysArr(hasLeap, month, startDay, endDay) {
+	    var createDaysArr = function createDaysArr(hasLeap, month, startMonth, endMonth, startDay, endDay) {
 	        var daysArr = [];
 	        var maxDays = hasLeap ? 29 : 28;
 	        switch (month) {
@@ -4580,6 +4580,12 @@
 	        }
 	        startDay = startDay || 1;
 	        endDay = endDay || maxDays;
+	        if (month > startMonth) {
+	            startDay = 1;
+	        }
+	        if (month < endMonth) {
+	            endDay = maxDays;
+	        }
 	        if (startDay > maxDays) {
 	            startDay = maxDays;
 	        }
@@ -4598,7 +4604,7 @@
 	            monthsArr.push({
 	                label: i + '月',
 	                value: i,
-	                children: createDaysArr(hasLeap, i, startDay, endDay)
+	                children: createDaysArr(hasLeap, i, startMonth, endMonth, startDay, endDay)
 	            });
 	        }
 	        return monthsArr;

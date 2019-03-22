@@ -174,7 +174,7 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
 // 时间选择器
 document.querySelector('#datePickerBtn100').addEventListener('click', function () {
     weui.datePicker({
-        start: '1816-12-29',
+        start: '1816-03-29',
         end: '2030-12-29',
         /**
          * https://zh.wikipedia.org/wiki/Cron

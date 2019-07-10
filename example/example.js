@@ -103,15 +103,15 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
         disabled: true,
         value: 1
     }, {
-        label: '的士票(disabled)',
-        disabled: true,
+        label: '的士票',
         value: 2
     }, {
         label: '住宿费',
         value: 3
     }, {
-        label: '礼品费',
-        value: 4
+        label: '礼品费(disabled)',
+        value: 4,
+        disabled: true,
     }, {
         label: '活动费',
         value: 5
@@ -128,16 +128,18 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
         label: '其他',
         value: 9
     }], {
-        defaultValue: [8],
+        defaultValue: [2],
         className: 'custom-classname',
         onChange: function (result) {
             //console.log(item, index);
             console.log(result);
         },
         onConfirm: function (result) {
+            console.log('confirm')
             console.log(result);
         },
-        id: 'picker'
+        id: 'picker',
+        title: '单列选择器'        
     });
 });
 
@@ -167,7 +169,8 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
         onConfirm: function (result) {
             console.log(result);
         },
-        id: 'datePicker'
+        id: 'datePicker',
+        title: '日期选择器'        
     });
 });
 
@@ -206,7 +209,8 @@ document.querySelector('#multiPickerBtn').addEventListener('click', function () 
         id: 'multiPickerBtn',
         onClose: function(){
             console.log('onClose');
-        }
+        },
+        title: '多列选择器'
     });
 });
 
@@ -283,7 +287,8 @@ document.querySelector('#cascadePickerBtn').addEventListener('click', function (
         onConfirm: function (result) {
             console.log(result);
         },
-        id: 'cascadePicker'
+        id: 'cascadePicker',
+        title: '嵌套选择器'
     });
 });
 

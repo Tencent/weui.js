@@ -90,11 +90,11 @@ $.fn.scroll = function (options) {
     const defaults = $.extend({
         items: [],                                  // 数据
         scrollable: '.weui-picker__content',        // 滚动的元素
-        offset: 3,                                  // 列表初始化时的偏移量（列表初始化时，选项是聚焦在中间的，通过offset强制往上挪3项，以达到初始选项是为顶部的那项）
-        rowHeight: 34,                              // 列表每一行的高度
+        offset: 2,                                  // 列表初始化时的偏移量（列表初始化时，选项是聚焦在中间的，通过offset强制往上挪3项，以达到初始选项是为顶部的那项）
+        rowHeight: 48,                              // 列表每一行的高度
         onChange: $.noop,                           // onChange回调
         temp: null,                                 // translate的缓存
-        bodyHeight: 7 * 34                          // picker的高度，用于辅助点击滚动的计算
+        bodyHeight: 5 * 48                          // picker的高度，用于辅助点击滚动的计算
     }, options);
     const items = defaults.items.map((item) => {
         return `<div class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${typeof item == 'object' ? item.label : item}</div>`;
@@ -109,7 +109,6 @@ $.fn.scroll = function (options) {
     let startTime;                                              // 开始触摸的时间
     let translate;                                              // 缓存 translate
     const points = [];                                          // 记录移动点
-    const windowHeight = window.innerHeight;                    // 屏幕的高度
 
     // 首次触发选中事件
     // 如果有缓存的选项，则用缓存的选项，否则使用中间值。
@@ -180,7 +179,7 @@ $.fn.scroll = function (options) {
          *    速度乘以惯性滑动的时间, 例如 300ms, 计算出应该滑动的距离
          */
         const endTime = new Date().getTime();
-        const relativeY = windowHeight - (defaults.bodyHeight / 2);
+        const relativeY = $this[0].getBoundingClientRect().top  + defaults.bodyHeight / 2;
         end = pageY;
 
         // 如果上次时间距离松开手的时间超过 100ms, 则停止了, 没有惯性滑动

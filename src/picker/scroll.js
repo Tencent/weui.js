@@ -1,13 +1,13 @@
 /*
 * Tencent is pleased to support the open source community by making WeUI.js available.
-* 
+*
 * Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-* 
+*
 * Licensed under the MIT License (the "License"); you may not use this file except in compliance
 * with the License. You may obtain a copy of the License at
-* 
+*
 *       http://opensource.org/licenses/MIT
-* 
+*
 * Unless required by applicable law or agreed to in writing, software distributed under the License is
 * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 * either express or implied. See the License for the specific language governing permissions and
@@ -235,27 +235,22 @@ $.fn.scroll = function (options) {
         })
         .find(defaults.scrollable);
 
-    // 判断是否支持touch事件 https://github.com/Modernizr/Modernizr/blob/master/feature-detects/touchevents.js
-    const isSupportTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch;
-    if(!isSupportTouch){
-        $this
-            .on('mousedown', function(evt){
-                _start(evt.pageY);
-                evt.stopPropagation();
-                evt.preventDefault();
-            })
-            .on('mousemove', function(evt){
-                if(!start) return;
+    $this
+        .on('mousedown', function(evt){
+            _start(evt.pageY);
+            evt.stopPropagation();
+            evt.preventDefault();
+        })
+        .on('mousemove', function(evt){
+            if(!start) return;
 
-                _move(evt.pageY);
-                evt.stopPropagation();
-                evt.preventDefault();
-            })
-            .on('mouseup mouseleave', function(evt){
-                _end(evt.pageY);
-                evt.stopPropagation();
-                evt.preventDefault();
-            });
-
-    }
+            _move(evt.pageY);
+            evt.stopPropagation();
+            evt.preventDefault();
+        })
+        .on('mouseup mouseleave', function(evt){
+            _end(evt.pageY);
+            evt.stopPropagation();
+            evt.preventDefault();
+        });
 };

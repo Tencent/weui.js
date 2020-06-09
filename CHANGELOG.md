@@ -1,3 +1,6 @@
+#### v1.2.2 (2020-06-09)
+- 【增强】 `picker`支持`desc`字段
+
 #### v1.2.1 (2019-07-18)
 - 【增强】 更新支持weui2.0版本，注意：v1.2.1的weui.js，需要配合v2.0.1的[weui](https://github.com/Tencent/weui)使用。
 

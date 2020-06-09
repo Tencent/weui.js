@@ -1,16 +1,3 @@
-<!-- <div class="<%= className %>">
-    <div class="weui-mask"></div>
-    <div class="weui-picker">
-
-        <div class="weui-picker__hd">
-            <a href="javascript:;" data-action="cancel" class="weui-picker__action">取消</a>
-            <a href="javascript:;" data-action="select" class="weui-picker__action" id="weui-picker-confirm">确定</a>
-        </div>
-        <div class="weui-picker__bd"></div>
-    </div>
-</div> -->
-
-
 <div class="<%= className %>">
     <div class="weui-mask"></div>
     <div class="weui-half-screen-dialog weui-picker">
@@ -19,7 +6,8 @@
                 <button class="weui-icon-btn weui-icon-btn_close weui-picker__btn">关闭</button>
             </div>
             <div class="weui-half-screen-dialog__hd__main">
-                <strong class="weui-half-screen-dialog__title">标题</strong>
+                <strong class="weui-half-screen-dialog__title"><%= title %></strong>
+                <span class="weui-half-screen-dialog__subtitle"><%= desc %></span>
             </div>
         </div>
 

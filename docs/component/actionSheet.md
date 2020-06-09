@@ -14,10 +14,40 @@ actionsheet 弹出式菜单
 | actions[].label | <code>string</code> | 选项的文字 |
 | actions[].onClick | <code>function</code> | 选项点击时的回调 |
 | [options] | <code>object</code> | 配置项 |
+| [options.title] | <code>string</code> | actionSheet的title，如果isAndroid=true，则不会显示 |
 | [options.className] | <code>string</code> | 自定义类名 |
 | [options.onClose] | <code>function</code> | actionSheet关闭后的回调 |
 
 **Example**  
 ```js
-weui.actionSheet([    {        label: '拍照',        onClick: function () {            console.log('拍照');        }    }, {        label: '从相册选择',        onClick: function () {            console.log('从相册选择');        }    }, {        label: '其他',        onClick: function () {            console.log('其他');        }    }], [    {        label: '取消',        onClick: function () {            console.log('取消');        }    }], {    className: 'custom-classname',    onClose: function(){        console.log('关闭');    }});
+weui.actionSheet([
+    {
+        label: '拍照',
+        onClick: function () {
+            console.log('拍照');
+        }
+    }, {
+        label: '从相册选择',
+        onClick: function () {
+            console.log('从相册选择');
+        }
+    }, {
+        label: '其他',
+        onClick: function () {
+            console.log('其他');
+        }
+    }
+], [
+    {
+        label: '取消',
+        onClick: function () {
+            console.log('取消');
+        }
+    }
+], {
+    className: 'custom-classname',
+    onClose: function(){
+        console.log('关闭');
+    }
+});
 ```

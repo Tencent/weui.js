@@ -1,6 +1,6 @@
 /*!
- * weui.js v1.2.1 (https://weui.io)
- * Copyright 2019, wechat ui team
+ * weui.js v1.2.2 (https://weui.io)
+ * Copyright 2020, wechat ui team
  * MIT license
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -2680,14 +2680,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /*
 	                                                                                                                                                                                                                                                                              * Tencent is pleased to support the open source community by making WeUI.js available.
-	                                                                                                                                                                                                                                                                              * 
+	                                                                                                                                                                                                                                                                              *
 	                                                                                                                                                                                                                                                                              * Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-	                                                                                                                                                                                                                                                                              * 
+	                                                                                                                                                                                                                                                                              *
 	                                                                                                                                                                                                                                                                              * Licensed under the MIT License (the "License"); you may not use this file except in compliance
 	                                                                                                                                                                                                                                                                              * with the License. You may obtain a copy of the License at
-	                                                                                                                                                                                                                                                                              * 
+	                                                                                                                                                                                                                                                                              *
 	                                                                                                                                                                                                                                                                              *       http://opensource.org/licenses/MIT
-	                                                                                                                                                                                                                                                                              * 
+	                                                                                                                                                                                                                                                                              *
 	                                                                                                                                                                                                                                                                              * Unless required by applicable law or agreed to in writing, software distributed under the License is
 	                                                                                                                                                                                                                                                                              * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 	                                                                                                                                                                                                                                                                              * either express or implied. See the License for the specific language governing permissions and
@@ -2746,6 +2746,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
 	 * @param {string=} [options.id=default] 作为picker的唯一标识，作用是以id缓存当时的选择。（当你想每次传入的defaultValue都是不一样时，可以使用不同的id区分）
 	 * @param {string=} [options.className] 自定义类名
+	 * @param {string=} [options.title] 自定义标题
+	 * @param {string=} [options.desc] 自定义描述
 	 * @param {string=} [options.container] 指定容器
 	 * @param {array=} [options.defaultValue] 默认选项的value数组
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
@@ -2893,6 +2895,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        className: '',
 	        container: 'body',
 	        title: '',
+	        desc: '',
 	        onChange: _util2.default.noop,
 	        onConfirm: _util2.default.noop,
 	        onClose: _util2.default.noop
@@ -2928,7 +2931,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _util2.default.getStyle($picker[0], 'transform');
 
 	        //更改标题
-	        $picker.find('.weui-half-screen-dialog__title').html(defaults.title);
 	        $picker.find('.weui-mask').addClass('weui-animate-fade-in');
 	        $picker.find('.weui-picker').addClass('weui-animate-slide-up');
 	    }
@@ -3702,7 +3704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 28 */
 /***/ (function(module, exports) {
 
-	module.exports = " <div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\"> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn\">关闭</button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title>标题</strong> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select>确定</a> </div> </div> </div>";
+	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\"> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn\">关闭</button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title><%= title %></strong> <span class=weui-half-screen-dialog__subtitle><%= desc %></span> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select>确定</a> </div> </div> </div> ";
 
 /***/ }),
 /* 29 */

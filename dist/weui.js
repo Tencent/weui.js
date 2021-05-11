@@ -1,6 +1,6 @@
 /*!
- * weui.js v1.2.2 (https://weui.io)
- * Copyright 2020, wechat ui team
+ * weui.js v1.2.3 (https://weui.io)
+ * Copyright 2021, wechat ui team
  * MIT license
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -1271,14 +1271,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/*
 	* Tencent is pleased to support the open source community by making WeUI.js available.
-	* 
+	*
 	* Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-	* 
+	*
 	* Licensed under the MIT License (the "License"); you may not use this file except in compliance
 	* with the License. You may obtain a copy of the License at
-	* 
+	*
 	*       http://opensource.org/licenses/MIT
-	* 
+	*
 	* Unless required by applicable law or agreed to in writing, software distributed under the License is
 	* distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 	* either express or implied. See the License for the specific language governing permissions and
@@ -1331,6 +1331,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *     className: 'custom-classname',
 	 *     onClose: function(){
 	 *         console.log('关闭');
+	 *     },
+	 *     onClickMask: function() {
+	 *         console.log('点击mask');
 	 *     }
 	 * });
 	 */
@@ -1348,7 +1351,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        title: '',
 	        className: '',
 	        isAndroid: isAndroid,
-	        onClose: _util2.default.noop
+	        onClose: _util2.default.noop,
+	        onClickMask: _util2.default.noop
 	    }, options);
 	    var $actionSheetWrap = (0, _util2.default)(_util2.default.render(_actionSheet2.default, options));
 	    var $actionSheet = $actionSheetWrap.find('.weui-actionsheet');
@@ -1376,6 +1380,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
 	    $actionSheetMask.addClass('weui-animate-fade-in').on('click', function () {
+	        options.onClickMask();
 	        hide();
 	    });
 	    $actionSheetWrap.find('.weui-actionsheet__menu').on('click', '.weui-actionsheet__cell', function (evt) {

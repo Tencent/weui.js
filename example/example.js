@@ -75,7 +75,10 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
         className: "custom-classname",
         onClose: function(){
             console.log('关闭');
-        }
+        },
+        onClickMask: function() {
+            console.log('点击mask');
+        },
     });
 });
 

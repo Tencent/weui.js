@@ -90,7 +90,10 @@ function dialog(options = {}) {
 
     $('body').append($dialogWrap);
     // 不能直接把.weui-animate-fade-in加到$dialog，会导致mask的z-index有问题
-    $mask.addClass('weui-animate-fade-in');
+    $mask.addClass('weui-animate-fade-in').on('touchmove', function(evt){
+	    evt.stopPropagation();
+	    evt.preventDefault();
+    });
     $dialog.addClass('weui-animate-fade-in');
 
     $dialogWrap
@@ -101,11 +104,7 @@ function dialog(options = {}) {
             }else{
                 hide();
             }
-        })
-        .on('touchmove', function(evt){
-            evt.stopPropagation();
-            evt.preventDefault();
-        });
+	});
 
     _sington = $dialogWrap[0];
     _sington.hide = hide;

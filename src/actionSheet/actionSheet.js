@@ -112,6 +112,9 @@ function actionSheet(menus = [], actions = [], options = {}) {
         .on('click', function () {
             options.onClickMask();
             hide();
+        })
+        .on('touchmove', function(event) {
+            event.preventDefault();
         });
     $actionSheetWrap.find('.weui-actionsheet__menu').on('click', '.weui-actionsheet__cell', function (evt) {
         const index = $(this).index();

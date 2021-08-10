@@ -109,6 +109,9 @@ function actionSheet(menus = [], actions = [], options = {}) {
     $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
     $actionSheetMask
         .addClass('weui-animate-fade-in')
+        .on('animationend webkitAnimationEnd', function () {
+            $actionSheet[0].focus();
+        })
         .on('click', function () {
             options.onClickMask();
             hide();
@@ -124,6 +127,10 @@ function actionSheet(menus = [], actions = [], options = {}) {
     $actionSheetWrap.find('.weui-actionsheet__action').on('click', '.weui-actionsheet__cell', function (evt) {
         const index = $(this).index();
         actions[index].onClick.call(this, evt);
+        hide();
+    });
+    $actionSheetWrap.find('.weui-actionsheet__close').on('click', function () {
+        options.onClickMask();
         hide();
     });
 

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh_CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
     <title>weui.js</title>
-    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/2.0.1/weui.min.css">
+    <link rel="stylesheet" href="https://res.wx.qq.com/t/wx_fed/weui-source/res/2.4.5/weui.min.css">
     <style>
         html, body{
             height: 100%;
@@ -35,7 +35,7 @@
 
         /*fix fastclick很难点中的bug*/
         label > * { pointer-events: none; }
-        
+
     </style>
 </head>
 <body ontouchstart>
@@ -176,7 +176,9 @@
                                 <p class="weui-uploader__title">图片上传</p>
                             </div>
                             <div class="weui-uploader__bd">
-                                <ul class="weui-uploader__files" id="uploaderCustomFiles"></ul>
+                                <ul class="weui-uploader__files" id="uploaderCustomFiles">
+                                    <li class="weui-uploader__file" data-id="1" role="img" style="background-image: url('https://team.weui.io/avatar/bear.jpg');"></li>
+                                </ul>
                                 <div class="weui-uploader__input-box">
                                     <input id="uploaderCustomInput" class="weui-uploader__input" type="file" accept="image/*" multiple="">
                                 </div>

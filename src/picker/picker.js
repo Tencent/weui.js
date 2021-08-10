@@ -1,13 +1,13 @@
 /*
 * Tencent is pleased to support the open source community by making WeUI.js available.
-* 
+*
 * Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-* 
+*
 * Licensed under the MIT License (the "License"); you may not use this file except in compliance
 * with the License. You may obtain a copy of the License at
-* 
+*
 *       http://opensource.org/licenses/MIT
-* 
+*
 * Unless required by applicable law or agreed to in writing, software distributed under the License is
 * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 * either express or implied. See the License for the specific language governing permissions and
@@ -47,6 +47,8 @@ let temp = {}; // temp 存在上一次滑动的位置
  * @param {number=} [options.depth] picker深度(也就是picker有多少列) 取值为1-3。如果为空，则取items第一项的深度。
  * @param {string=} [options.id=default] 作为picker的唯一标识，作用是以id缓存当时的选择。（当你想每次传入的defaultValue都是不一样时，可以使用不同的id区分）
  * @param {string=} [options.className] 自定义类名
+ * @param {string=} [options.title] 自定义标题
+ * @param {string=} [options.desc] 自定义描述
  * @param {string=} [options.container] 指定容器
  * @param {array=} [options.defaultValue] 默认选项的value数组
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
@@ -193,7 +195,8 @@ function picker() {
         id: 'default',
         className: '',
         container: 'body',
-        title:'',
+        title: '',
+        desc: '',
         onChange: $.noop,
         onConfirm: $.noop,
         onClose: $.noop
@@ -218,6 +221,7 @@ function picker() {
     const result = [];
     const lineTemp = temp[defaults.id];
     const $picker = $($.render(pickerTpl, defaults));
+    const $confirm = $picker.find('#weui-picker-confirm');
     let depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])), groups = '';
 
     // 显示与隐藏的方法
@@ -228,9 +232,13 @@ function picker() {
         $.getStyle($picker[0], 'transform');
 
         //更改标题
-        $picker.find('.weui-half-screen-dialog__title').html(defaults.title);
         $picker.find('.weui-mask').addClass('weui-animate-fade-in');
-        $picker.find('.weui-picker').addClass('weui-animate-slide-up');
+        $picker
+            .find('.weui-picker')
+            .addClass('weui-animate-slide-up')
+            .on('animationend webkitAnimationEnd', function (evt) {
+                evt.target.focus();
+            });
     }
     function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
@@ -248,6 +256,7 @@ function picker() {
     function hide(callback){ _hide(callback); }
 
     // 初始化滚动的方法
+    let ariaFocusTimeout;
     function scroll(items, level) {
         if (lineTemp[level] === undefined && defaults.defaultValue && defaults.defaultValue[level] !== undefined) {
             // 没有缓存选项，而且存在defaultValue
@@ -284,6 +293,7 @@ function picker() {
                 if (isMulti) {
                     if(result.length == depth){
                         defaults.onChange(result);
+                        $picker.find('#weui-picker-confirm')[0].focus();
                     }
                 } else {
                     /**
@@ -298,6 +308,11 @@ function picker() {
                     if (item.children && item.children.length > 0) {
                         $picker.find('.weui-picker__group').eq(level + 1).show();
                         !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
+
+                        clearTimeout(ariaFocusTimeout);
+                        ariaFocusTimeout = setTimeout(function() {
+                            $picker.find('.weui-picker__group').eq(level + 1)[0].focus();
+                        }, 100);
                     } else {
                         //如果子列表test不通过，子孙列表都隐藏。
                         const $items = $picker.find('.weui-picker__group');
@@ -310,6 +325,8 @@ function picker() {
                         result.splice(level + 1);
 
                         defaults.onChange(result);
+                        $confirm[0].blur();
+                        $confirm[0].focus();
                     }
                 }
             },
@@ -335,11 +352,12 @@ function picker() {
     }
 
     $picker
-        .on('click', '.weui-mask', function () { hide(); })
-        .on('click', '.weui-picker__btn', function () { hide(); })
-        .on('click', '#weui-picker-confirm', function () {
-            defaults.onConfirm(result);
-        });
+        .on('touchend', '.weui-mask', function () { hide(); })
+        .on('click', '.weui-picker__btn', function () { hide(); });
+
+    $confirm.on('click', function () {
+        defaults.onConfirm(result);
+    });
 
     _sington = $picker[0];
     _sington.hide = hide;

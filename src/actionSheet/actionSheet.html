@@ -1,6 +1,7 @@
 <div class="<% if(isAndroid){ %>weui-skin_android <% } %><%= className %>">
     <div class="weui-mask"></div>
-    <div class="weui-actionsheet">
+    <div class="weui-actionsheet" role="dialog" aria-modal="true" tabindex="-1">
+        <button class="weui-hidden_abs weui-actionsheet__close">关闭</button>
         <% if(!isAndroid && title){ %>
         <div class="weui-actionsheet__title">
             <p class="weui-actionsheet__title-text"><%= title %></p>
@@ -8,12 +9,12 @@
         <% } %>
         <div class="weui-actionsheet__menu">
             <% for(var i = 0; i < menus.length; i++){ %>
-            <div class="weui-actionsheet__cell"><%= menus[i].label %></div>
+            <div class="weui-actionsheet__cell" role="button"><%= menus[i].label %></div>
             <% } %>
         </div>
         <div class="weui-actionsheet__action">
             <% for(var j = 0; j < actions.length; j++){ %>
-            <div class="weui-actionsheet__cell"><%= actions[j].label %></div>
+            <div class="weui-actionsheet__cell" role="button"><%= actions[j].label %></div>
             <% } %>
         </div>
     </div>

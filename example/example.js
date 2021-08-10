@@ -75,7 +75,10 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
         className: "custom-classname",
         onClose: function(){
             console.log('关闭');
-        }
+        },
+        onClickMask: function() {
+            console.log('点击mask');
+        },
     });
 });
 
@@ -139,7 +142,8 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
             console.log(result);
         },
         id: 'picker',
-        title: '单列选择器'        
+        title: '单列选择器',
+        desc: '单列选择器描述',
     });
 });
 
@@ -170,7 +174,7 @@ document.querySelector('#datePickerBtn').addEventListener('click', function () {
             console.log(result);
         },
         id: 'datePicker',
-        title: '日期选择器'        
+        title: '日期选择器'
     });
 });
 

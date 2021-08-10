@@ -93,8 +93,8 @@ function dialog(options = {}) {
     $mask.addClass('weui-animate-fade-in');
     $dialog
         .addClass('weui-animate-fade-in')
-        .on('animationend webkitAnimationEnd', function () {
-            $dialog[0].focus();
+        .on('animationend webkitAnimationEnd', function (evt) {
+            evt.target.focus();
         });
 
     $dialogWrap

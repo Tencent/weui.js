@@ -72,8 +72,8 @@ function gallery(url, options = {}) {
     $gallery
         .show()
         .addClass('weui-animate-fade-in')
-        .on('animationend webkitAnimationEnd', function () {
-            $gallery[0].focus();
+        .on('animationend webkitAnimationEnd', function (evt) {
+            evt.target.focus();
         });
 
     _sington = $gallery[0];

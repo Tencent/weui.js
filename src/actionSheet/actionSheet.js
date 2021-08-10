@@ -106,12 +106,13 @@ function actionSheet(menus = [], actions = [], options = {}) {
     // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
     $.getStyle($actionSheet[0], 'transform');
 
-    $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
+    $actionSheet
+        .addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up')
+        .on('animationend webkitAnimationEnd', function (evt) {
+            evt.target.focus();
+        });
     $actionSheetMask
         .addClass('weui-animate-fade-in')
-        .on('animationend webkitAnimationEnd', function () {
-            $actionSheet[0].focus();
-        })
         .on('click', function () {
             options.onClickMask();
             hide();

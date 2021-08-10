@@ -221,6 +221,7 @@ function picker() {
     const result = [];
     const lineTemp = temp[defaults.id];
     const $picker = $($.render(pickerTpl, defaults));
+    const $confirm = $picker.find('#weui-picker-confirm');
     let depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])), groups = '';
 
     // 显示与隐藏的方法
@@ -232,7 +233,12 @@ function picker() {
 
         //更改标题
         $picker.find('.weui-mask').addClass('weui-animate-fade-in');
-        $picker.find('.weui-picker').addClass('weui-animate-slide-up');
+        $picker
+            .find('.weui-picker')
+            .addClass('weui-animate-slide-up')
+            .on('animationend webkitAnimationEnd', function (evt) {
+                evt.target.focus();
+            });
     }
     function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
@@ -250,6 +256,7 @@ function picker() {
     function hide(callback){ _hide(callback); }
 
     // 初始化滚动的方法
+    let ariaFocusTimeout;
     function scroll(items, level) {
         if (lineTemp[level] === undefined && defaults.defaultValue && defaults.defaultValue[level] !== undefined) {
             // 没有缓存选项，而且存在defaultValue
@@ -286,6 +293,7 @@ function picker() {
                 if (isMulti) {
                     if(result.length == depth){
                         defaults.onChange(result);
+                        $picker.find('#weui-picker-confirm')[0].focus();
                     }
                 } else {
                     /**
@@ -300,6 +308,11 @@ function picker() {
                     if (item.children && item.children.length > 0) {
                         $picker.find('.weui-picker__group').eq(level + 1).show();
                         !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
+
+                        clearTimeout(ariaFocusTimeout);
+                        ariaFocusTimeout = setTimeout(function() {
+                            $picker.find('.weui-picker__group').eq(level + 1)[0].focus();
+                        }, 100);
                     } else {
                         //如果子列表test不通过，子孙列表都隐藏。
                         const $items = $picker.find('.weui-picker__group');
@@ -312,6 +325,8 @@ function picker() {
                         result.splice(level + 1);
 
                         defaults.onChange(result);
+                        $confirm[0].blur();
+                        $confirm[0].focus();
                     }
                 }
             },
@@ -337,11 +352,12 @@ function picker() {
     }
 
     $picker
-        .on('click', '.weui-mask', function () { hide(); })
-        .on('click', '.weui-picker__btn', function () { hide(); })
-        .on('click', '#weui-picker-confirm', function () {
-            defaults.onConfirm(result);
-        });
+        .on('touchend', '.weui-mask', function () { hide(); })
+        .on('click', '.weui-picker__btn', function () { hide(); });
+
+    $confirm.on('click', function () {
+        defaults.onConfirm(result);
+    });
 
     _sington = $picker[0];
     _sington.hide = hide;

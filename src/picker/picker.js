@@ -222,6 +222,7 @@ function picker() {
     const lineTemp = temp[defaults.id];
     const $picker = $($.render(pickerTpl, defaults));
     const $confirm = $picker.find('#weui-picker-confirm');
+    const $mask = $picker.find('.weui-mask');
     let depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])), groups = '';
 
     // 显示与隐藏的方法
@@ -352,8 +353,12 @@ function picker() {
     }
 
     $picker
-        .on('touchend', '.weui-mask', function () { hide(); })
+        .on('click', '.weui-mask', function () { hide(); })
         .on('click', '.weui-picker__btn', function () { hide(); });
+
+    $mask
+        .on('click', function () { hide(); })
+        .on('touchmove', function(evt) { evt.preventDefault(); });
 
     $confirm.on('click', function () {
         defaults.onConfirm(result);

@@ -4283,6 +4283,7 @@
 	    var lineTemp = temp[defaults.id];
 	    var $picker = (0, _util2.default)(_util2.default.render(_picker2.default, defaults));
 	    var $confirm = $picker.find('#weui-picker-confirm');
+	    var $mask = $picker.find('.weui-mask');
 	    var depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])),
 	        groups = '';
 
@@ -4410,10 +4411,16 @@
 	        scroll(items, 0);
 	    }
 
-	    $picker.on('touchend', '.weui-mask', function () {
+	    $picker.on('click', '.weui-mask', function () {
 	        hide();
 	    }).on('click', '.weui-picker__btn', function () {
 	        hide();
+	    });
+
+	    $mask.on('click', function () {
+	        hide();
+	    }).on('touchmove', function (evt) {
+	        evt.preventDefault();
 	    });
 
 	    $confirm.on('click', function () {

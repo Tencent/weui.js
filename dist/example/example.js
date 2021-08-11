@@ -1521,14 +1521,14 @@
 
 	/*
 	* Tencent is pleased to support the open source community by making WeUI.js available.
-	* 
+	*
 	* Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-	* 
+	*
 	* Licensed under the MIT License (the "License"); you may not use this file except in compliance
 	* with the License. You may obtain a copy of the License at
-	* 
+	*
 	*       http://opensource.org/licenses/MIT
-	* 
+	*
 	* Unless required by applicable law or agreed to in writing, software distributed under the License is
 	* distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 	* either express or implied. See the License for the specific language governing permissions and
@@ -1565,7 +1565,7 @@
 	 *         onClick: function () { alert('确定') }
 	 *     }]
 	 * });
-	 * 
+	 *
 	 * // 主动关闭
 	 * var $dialog = weui.dialog({...});
 	 * $dialog.hide(function(){
@@ -1611,7 +1611,9 @@
 	    (0, _util2.default)('body').append($dialogWrap);
 	    // 不能直接把.weui-animate-fade-in加到$dialog，会导致mask的z-index有问题
 	    $mask.addClass('weui-animate-fade-in');
-	    $dialog.addClass('weui-animate-fade-in');
+	    $dialog.addClass('weui-animate-fade-in').on('animationend webkitAnimationEnd', function (evt) {
+	        evt.target.focus();
+	    });
 
 	    $dialogWrap.on('click', '.weui-dialog__btn', function (evt) {
 	        var index = (0, _util2.default)(this).index();
@@ -1623,6 +1625,10 @@
 	    }).on('touchmove', function (evt) {
 	        evt.stopPropagation();
 	        evt.preventDefault();
+	    });
+
+	    $dialogWrap.find('.weui-dialog__close').on('click', function () {
+	        hide();
 	    });
 
 	    _sington = $dialogWrap[0];
@@ -2186,7 +2192,7 @@
 /* 8 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"<%=className%>\"> <div class=weui-mask></div> <div class=\"weui-dialog <% if(isAndroid){ %> weui-skin_android <% } %>\"> <% if(title){ %> <div class=weui-dialog__hd><strong class=weui-dialog__title><%=title%></strong></div> <% } %> <div class=weui-dialog__bd><%=content%></div> <div class=weui-dialog__ft> <% for(var i = 0; i < buttons.length; i++){ %> <a href=javascript:; class=\"weui-dialog__btn weui-dialog__btn_<%=buttons[i]['type']%>\"><%=buttons[i]['label']%></a> <% } %> </div> </div> </div> ";
+	module.exports = "<div class=\"<%=className%>\"> <div class=weui-mask></div> <div class=\"weui-dialog <% if(isAndroid){ %> weui-skin_android <% } %>\" role=dialog aria-modal=true tabindex=-1> <button class=\"weui-hidden_abs weui-dialog__close\">关闭</button> <div class=weui-dialog__hd><strong class=weui-dialog__title><%=title%></strong></div> <div class=weui-dialog__bd><%=content%></div> <div class=weui-dialog__ft> <% for(var i = 0; i < buttons.length; i++){ %> <a href=javascript:; class=\"weui-dialog__btn weui-dialog__btn_<%=buttons[i]['type']%>\" role=button><%=buttons[i]['label']%></a> <% } %> </div> </div> </div> ";
 
 /***/ }),
 /* 9 */
@@ -2490,7 +2496,7 @@
 /* 12 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-icon_toast weui-icon-success-no-circle\"></i> <p class=weui-toast__content><%=content%></p> </div> </div> ";
+	module.exports = "<div class=\"<%= className %>\" role=alert> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-icon_toast weui-icon-success-no-circle\"></i> <p class=weui-toast__content><%=content%></p> </div> </div> ";
 
 /***/ }),
 /* 13 */
@@ -2590,7 +2596,7 @@
 /* 14 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"weui-loading_toast <%= className %>\"> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-loading weui-icon_toast\"></i> <p class=weui-toast__content><%=content%></p> </div> </div> ";
+	module.exports = "<div class=\"weui-loading_toast <%= className %>\" role=alert> <div class=weui-mask_transparent></div> <div class=weui-toast> <i class=\"weui-loading weui-icon_toast\"></i> <p class=weui-toast__content><%=content%></p> </div> </div> ";
 
 /***/ }),
 /* 15 */
@@ -2721,10 +2727,14 @@
 	    // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
 	    _util2.default.getStyle($actionSheet[0], 'transform');
 
-	    $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up');
+	    $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up').on('animationend webkitAnimationEnd', function (evt) {
+	        evt.target.focus();
+	    });
 	    $actionSheetMask.addClass('weui-animate-fade-in').on('click', function () {
 	        options.onClickMask();
 	        hide();
+	    }).on('touchmove', function (event) {
+	        event.preventDefault();
 	    });
 	    $actionSheetWrap.find('.weui-actionsheet__menu').on('click', '.weui-actionsheet__cell', function (evt) {
 	        var index = (0, _util2.default)(this).index();
@@ -2734,6 +2744,10 @@
 	    $actionSheetWrap.find('.weui-actionsheet__action').on('click', '.weui-actionsheet__cell', function (evt) {
 	        var index = (0, _util2.default)(this).index();
 	        actions[index].onClick.call(this, evt);
+	        hide();
+	    });
+	    $actionSheetWrap.find('.weui-actionsheet__close').on('click', function () {
+	        options.onClickMask();
 	        hide();
 	    });
 
@@ -2748,7 +2762,7 @@
 /* 16 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"<% if(isAndroid){ %>weui-skin_android <% } %><%= className %>\"> <div class=weui-mask></div> <div class=weui-actionsheet> <% if(!isAndroid && title){ %> <div class=weui-actionsheet__title> <p class=weui-actionsheet__title-text><%= title %></p> </div> <% } %> <div class=weui-actionsheet__menu> <% for(var i = 0; i < menus.length; i++){ %> <div class=weui-actionsheet__cell><%= menus[i].label %></div> <% } %> </div> <div class=weui-actionsheet__action> <% for(var j = 0; j < actions.length; j++){ %> <div class=weui-actionsheet__cell><%= actions[j].label %></div> <% } %> </div> </div> </div> ";
+	module.exports = "<div class=\"<% if(isAndroid){ %>weui-skin_android <% } %><%= className %>\"> <div class=weui-mask></div> <div class=weui-actionsheet role=dialog aria-modal=true tabindex=-1> <button class=\"weui-hidden_abs weui-actionsheet__close\">关闭</button> <% if(!isAndroid && title){ %> <div class=weui-actionsheet__title> <p class=weui-actionsheet__title-text><%= title %></p> </div> <% } %> <div class=weui-actionsheet__menu> <% for(var i = 0; i < menus.length; i++){ %> <div class=weui-actionsheet__cell role=button><%= menus[i].label %></div> <% } %> </div> <div class=weui-actionsheet__action> <% for(var j = 0; j < actions.length; j++){ %> <div class=weui-actionsheet__cell role=button><%= actions[j].label %></div> <% } %> </div> </div> </div> ";
 
 /***/ }),
 /* 17 */
@@ -2868,7 +2882,7 @@
 /* 18 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"weui-toptips weui-toptips_warn <%= className %>\" style=display:block><%= content %></div> ";
+	module.exports = "<div class=\"weui-toptips weui-toptips_warn <%= className %>\" style=display:block role=alert><%= content %></div> ";
 
 /***/ }),
 /* 19 */
@@ -3677,7 +3691,7 @@
 /* 23 */
 /***/ (function(module, exports) {
 
-	module.exports = "<li class=\"weui-uploader__file weui-uploader__file_status\" data-id=\"<%= id %>\"> <div class=weui-uploader__file-content> <i class=weui-loading style=width:30px;height:30px></i> </div> </li> ";
+	module.exports = "<li class=\"weui-uploader__file weui-uploader__file_status\" data-id=\"<%= id %>\" role=img> <div class=weui-uploader__file-content> <i class=weui-loading style=width:30px;height:30px></i> </div> </li> ";
 
 /***/ }),
 /* 24 */
@@ -4268,6 +4282,7 @@
 	    var result = [];
 	    var lineTemp = temp[defaults.id];
 	    var $picker = (0, _util2.default)(_util2.default.render(_picker2.default, defaults));
+	    var $confirm = $picker.find('#weui-picker-confirm');
 	    var depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])),
 	        groups = '';
 
@@ -4280,7 +4295,9 @@
 
 	        //更改标题
 	        $picker.find('.weui-mask').addClass('weui-animate-fade-in');
-	        $picker.find('.weui-picker').addClass('weui-animate-slide-up');
+	        $picker.find('.weui-picker').addClass('weui-animate-slide-up').on('animationend webkitAnimationEnd', function (evt) {
+	            evt.target.focus();
+	        });
 	    }
 	    function _hide(callback) {
 	        _hide = _util2.default.noop; // 防止二次调用导致报错
@@ -4298,6 +4315,7 @@
 	    }
 
 	    // 初始化滚动的方法
+	    var ariaFocusTimeout = void 0;
 	    function scroll(items, level) {
 	        if (lineTemp[level] === undefined && defaults.defaultValue && defaults.defaultValue[level] !== undefined) {
 	            // 没有缓存选项，而且存在defaultValue
@@ -4335,6 +4353,7 @@
 	                if (isMulti) {
 	                    if (result.length == depth) {
 	                        defaults.onChange(result);
+	                        $picker.find('#weui-picker-confirm')[0].focus();
 	                    }
 	                } else {
 	                    /**
@@ -4349,6 +4368,11 @@
 	                    if (item.children && item.children.length > 0) {
 	                        $picker.find('.weui-picker__group').eq(level + 1).show();
 	                        !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
+
+	                        clearTimeout(ariaFocusTimeout);
+	                        ariaFocusTimeout = setTimeout(function () {
+	                            $picker.find('.weui-picker__group').eq(level + 1)[0].focus();
+	                        }, 100);
 	                    } else {
 	                        //如果子列表test不通过，子孙列表都隐藏。
 	                        var $items = $picker.find('.weui-picker__group');
@@ -4361,6 +4385,8 @@
 	                        result.splice(level + 1);
 
 	                        defaults.onChange(result);
+	                        $confirm[0].blur();
+	                        $confirm[0].focus();
 	                    }
 	                }
 	            },
@@ -4384,11 +4410,13 @@
 	        scroll(items, 0);
 	    }
 
-	    $picker.on('click', '.weui-mask', function () {
+	    $picker.on('touchend', '.weui-mask', function () {
 	        hide();
 	    }).on('click', '.weui-picker__btn', function () {
 	        hide();
-	    }).on('click', '#weui-picker-confirm', function () {
+	    });
+
+	    $confirm.on('click', function () {
 	        defaults.onConfirm(result);
 	    });
 
@@ -4760,14 +4788,14 @@
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /*
 	                                                                                                                                                                                                                                                                              * Tencent is pleased to support the open source community by making WeUI.js available.
-	                                                                                                                                                                                                                                                                              * 
+	                                                                                                                                                                                                                                                                              *
 	                                                                                                                                                                                                                                                                              * Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-	                                                                                                                                                                                                                                                                              * 
+	                                                                                                                                                                                                                                                                              *
 	                                                                                                                                                                                                                                                                              * Licensed under the MIT License (the "License"); you may not use this file except in compliance
 	                                                                                                                                                                                                                                                                              * with the License. You may obtain a copy of the License at
-	                                                                                                                                                                                                                                                                              * 
+	                                                                                                                                                                                                                                                                              *
 	                                                                                                                                                                                                                                                                              *       http://opensource.org/licenses/MIT
-	                                                                                                                                                                                                                                                                              * 
+	                                                                                                                                                                                                                                                                              *
 	                                                                                                                                                                                                                                                                              * Unless required by applicable law or agreed to in writing, software distributed under the License is
 	                                                                                                                                                                                                                                                                              * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 	                                                                                                                                                                                                                                                                              * either express or implied. See the License for the specific language governing permissions and
@@ -4994,25 +5022,21 @@
 	        _end(evt.changedTouches[0].pageY);
 	    }).find(defaults.scrollable);
 
-	    // 判断是否支持touch事件 https://github.com/Modernizr/Modernizr/blob/master/feature-detects/touchevents.js
-	    var isSupportTouch = 'ontouchstart' in window || window.DocumentTouch && document instanceof window.DocumentTouch;
-	    if (!isSupportTouch) {
-	        $this.on('mousedown', function (evt) {
-	            _start(evt.pageY);
-	            evt.stopPropagation();
-	            evt.preventDefault();
-	        }).on('mousemove', function (evt) {
-	            if (!start) return;
+	    $this.on('mousedown', function (evt) {
+	        _start(evt.pageY);
+	        evt.stopPropagation();
+	        evt.preventDefault();
+	    }).on('mousemove', function (evt) {
+	        if (!start) return;
 
-	            _move(evt.pageY);
-	            evt.stopPropagation();
-	            evt.preventDefault();
-	        }).on('mouseup mouseleave', function (evt) {
-	            _end(evt.pageY);
-	            evt.stopPropagation();
-	            evt.preventDefault();
-	        });
-	    }
+	        _move(evt.pageY);
+	        evt.stopPropagation();
+	        evt.preventDefault();
+	    }).on('mouseup mouseleave', function (evt) {
+	        _end(evt.pageY);
+	        evt.stopPropagation();
+	        evt.preventDefault();
+	    });
 	};
 
 /***/ }),
@@ -5052,13 +5076,13 @@
 /* 30 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\"> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn\">关闭</button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title><%= title %></strong> <span class=weui-half-screen-dialog__subtitle><%= desc %></span> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select>确定</a> </div> </div> </div> ";
+	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\" role=dialog aria-modal=true tabindex=-1> <button class=\"weui-hidden_abs weui-picker__close weui-picker__btn\">关闭</button> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn\" aria-hidden=true>关闭</button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title><%= title %></strong> <span class=weui-half-screen-dialog__subtitle><%= desc %></span> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select role=button>确定</a> </div> </div> </div> ";
 
 /***/ }),
 /* 31 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=weui-picker__group> <div class=weui-picker__mask></div> <div class=weui-picker__indicator></div> <div class=weui-picker__content></div> </div>";
+	module.exports = "<div class=weui-picker__group tabindex=-1> <div class=weui-picker__mask></div> <div class=weui-picker__indicator></div> <div class=weui-picker__content></div> </div> ";
 
 /***/ }),
 /* 32 */
@@ -5082,14 +5106,14 @@
 
 	/*
 	* Tencent is pleased to support the open source community by making WeUI.js available.
-	* 
+	*
 	* Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
-	* 
+	*
 	* Licensed under the MIT License (the "License"); you may not use this file except in compliance
 	* with the License. You may obtain a copy of the License at
-	* 
+	*
 	*       http://opensource.org/licenses/MIT
-	* 
+	*
 	* Unless required by applicable law or agreed to in writing, software distributed under the License is
 	* distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 	* either express or implied. See the License for the specific language governing permissions and
@@ -5147,11 +5171,16 @@
 	    $gallery.find('.weui-gallery__img').on('click', function () {
 	        hide();
 	    });
+	    $gallery.find('.weui-gallery__close').on('click', function () {
+	        hide();
+	    });
 	    $gallery.find('.weui-gallery__del').on('click', function () {
 	        options.onDelete.call(this, url);
 	    });
 
-	    $gallery.show().addClass('weui-animate-fade-in');
+	    $gallery.show().addClass('weui-animate-fade-in').on('animationend webkitAnimationEnd', function (evt) {
+	        evt.target.focus();
+	    });
 
 	    _sington = $gallery[0];
 	    _sington.hide = hide;
@@ -5164,7 +5193,7 @@
 /* 33 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"weui-gallery <%= className %>\"> <span class=weui-gallery__img style=\"background-image:url(<%= url %>)\"></span> <div class=weui-gallery__opr> <a href=javascript: class=weui-gallery__del> <i class=\"weui-icon-delete weui-icon_gallery-delete\"></i> </a> </div> </div> ";
+	module.exports = "<div class=\"weui-gallery <%= className %>\" role=dialog aria-modal=true tabindex=-1> <button class=\"weui-hidden_abs weui-gallery__close\">关闭</button> <span class=weui-gallery__img style=\"background-image:url(<%= url %>)\" role=img src=\"<%= url %>\"></span> <div class=weui-gallery__opr> <a href=javascript: class=weui-gallery__del role=button aria-label=删除> <i class=\"weui-icon-delete weui-icon_gallery-delete\"></i> </a> </div> </div> ";
 
 /***/ }),
 /* 34 */

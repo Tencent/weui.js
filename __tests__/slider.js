@@ -22,7 +22,7 @@ describe('slider', function(){
     });
 
     it('should render slider', () => {
-        assert(ret == 40);
+        assert(parseInt(ret) == 40);
     });
 
     after(() => {

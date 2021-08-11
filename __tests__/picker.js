@@ -200,7 +200,7 @@ describe('picker', function () {
             },
             id: 'DatePicker'
         });
-        $('.weui-picker__action[data-action="cancel"]').click();
+        $('.weui-icon-btn_close.weui-picker__btn').click();
         assert(JSON.stringify(changeRet) !== null);
         assert(confirmRet === null);
 

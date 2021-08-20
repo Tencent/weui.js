@@ -133,12 +133,14 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
     }], {
         defaultValue: [2],
         className: 'custom-classname',
+        confirmText: 'OK',
+        closeText: 'close',
         onChange: function (result) {
             //console.log(item, index);
             console.log(result);
         },
         onConfirm: function (result) {
-            console.log('confirm')
+            console.log('confirm');
             console.log(result);
         },
         id: 'picker',

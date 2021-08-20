@@ -27,6 +27,8 @@ picker 多列选择器。
 | [options.desc] | <code>string</code> |  | 自定义描述 |
 | [options.container] | <code>string</code> |  | 指定容器 |
 | [options.defaultValue] | <code>array</code> |  | 默认选项的value数组 |
+| [options.confirmText] | <code>string</code> |  | 确定按钮的wording |
+| [options.closeText] | <code>string</code> |  | 关闭的wording |
 | [options.onChange] | <code>function</code> |  | 在picker选中的值发生变化的时候回调 |
 | [options.onConfirm] | <code>function</code> |  | 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。 |
 | [options.onClose] | <code>function</code> |  | picker关闭后的回调 |

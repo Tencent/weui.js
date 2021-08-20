@@ -1,10 +1,10 @@
 <div class="<%= className %>">
     <div class="weui-mask"></div>
     <div class="weui-half-screen-dialog weui-picker" role="dialog" aria-modal="true" tabindex="-1">
-        <button class="weui-hidden_abs weui-picker__close weui-picker__btn">关闭</button>
+        <button class="weui-hidden_abs weui-picker__close weui-picker__btn"><%= closeText %></button>
         <div class="weui-half-screen-dialog__hd">
             <div class="weui-half-screen-dialog__hd__side">
-                <button class="weui-icon-btn weui-icon-btn_close weui-picker__btn weui-wa-hotarea" aria-hidden="true">关闭</button>
+                <button class="weui-icon-btn weui-icon-btn_close weui-picker__btn weui-wa-hotarea" aria-hidden="true"><%= closeText %></button>
             </div>
             <div class="weui-half-screen-dialog__hd__main">
                 <strong class="weui-half-screen-dialog__title"><%= title %></strong>
@@ -17,7 +17,7 @@
         </div>
 
         <div class="weui-half-screen-dialog__ft">
-            <a href="javascript:;" class="weui-btn weui-btn_primary weui-picker__btn" id="weui-picker-confirm"  data-action="select" role="button">确定</a>
+            <a href="javascript:;" class="weui-btn weui-btn_primary weui-picker__btn" id="weui-picker-confirm"  data-action="select" role="button"><%= confirmText %></a>
         </div>
     </div>
 </div>

@@ -1,5 +1,5 @@
 /*!
- * weui.js v1.2.5 (https://weui.io)
+ * weui.js v1.2.6 (https://weui.io)
  * Copyright 2021, wechat ui team
  * MIT license
  */
@@ -2769,6 +2769,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {string=} [options.desc] 自定义描述
 	 * @param {string=} [options.container] 指定容器
 	 * @param {array=} [options.defaultValue] 默认选项的value数组
+	 * @param {string=} [options.confirmText] 确定按钮的wording
+	 * @param {string=} [options.closeText] 关闭的wording
 	 * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
 	 * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
 	 * @param {function=} [options.onClose] picker关闭后的回调
@@ -2915,6 +2917,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        container: 'body',
 	        title: '',
 	        desc: '',
+	        confirmText: '确定',
+	        closeText: '关闭',
 	        onChange: _util2.default.noop,
 	        onConfirm: _util2.default.noop,
 	        onClose: _util2.default.noop
@@ -3740,7 +3744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 28 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\" role=dialog aria-modal=true tabindex=-1> <button class=\"weui-hidden_abs weui-picker__close weui-picker__btn\">关闭</button> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn\" aria-hidden=true>关闭</button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title><%= title %></strong> <span class=weui-half-screen-dialog__subtitle><%= desc %></span> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select role=button>确定</a> </div> </div> </div> ";
+	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\" role=dialog aria-modal=true tabindex=-1> <button class=\"weui-hidden_abs weui-picker__close weui-picker__btn\"><%= closeText %></button> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn weui-wa-hotarea\" aria-hidden=true><%= closeText %></button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title><%= title %></strong> <span class=weui-half-screen-dialog__subtitle><%= desc %></span> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select role=button><%= confirmText %></a> </div> </div> </div> ";
 
 /***/ }),
 /* 29 */

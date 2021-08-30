@@ -4392,6 +4392,9 @@
 	                        result.splice(level + 1);
 
 	                        defaults.onChange(result);
+	                        $picker.find('#weui-picker-aria-content').html(result.map(function (r) {
+	                            return r.label;
+	                        }).join(' '));
 	                        $confirm[0].blur();
 	                        $confirm[0].focus();
 	                    }
@@ -5089,7 +5092,7 @@
 /* 30 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\" role=dialog aria-modal=true tabindex=-1> <button class=\"weui-hidden_abs weui-picker__close weui-picker__btn\"><%= closeText %></button> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn weui-wa-hotarea\" aria-hidden=true><%= closeText %></button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title><%= title %></strong> <span class=weui-half-screen-dialog__subtitle><%= desc %></span> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select role=button><%= confirmText %></a> </div> </div> </div> ";
+	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\" role=dialog aria-modal=true tabindex=-1> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn weui-wa-hotarea\"><%= closeText %></button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title><%= title %></strong> <span class=weui-half-screen-dialog__subtitle><%= desc %></span> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <div class=weui-hidden_abs id=weui-picker-aria-content aria-live=polite></div> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select role=button><%= confirmText %></a> </div> </div> </div> ";
 
 /***/ }),
 /* 31 */

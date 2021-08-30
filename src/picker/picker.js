@@ -330,6 +330,7 @@ function picker() {
                         result.splice(level + 1);
 
                         defaults.onChange(result);
+                        $picker.find('#weui-picker-aria-content').html(result.map(r => r.label).join(' '));
                         $confirm[0].blur();
                         $confirm[0].focus();
                     }

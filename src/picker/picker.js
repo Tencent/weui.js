@@ -299,6 +299,7 @@ function picker() {
                 } else {
                     result[level] = null;
                 }
+
                 lineTemp[level] = index;
 
                 if (isMulti) {

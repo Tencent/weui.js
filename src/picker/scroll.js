@@ -100,7 +100,6 @@ $.fn.scroll = function (options) {
         return `<div role="option" aria-hidden="true" tabindex="0" class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${typeof item == 'object' ? item.label : item}</div>`;
     }).join('');
     const $this = $(this);
-
     $this.find('.weui-picker__content').html(items);
 
     let $scrollable = $this.find(defaults.scrollable);        // 可滚动的元素

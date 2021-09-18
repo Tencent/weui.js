@@ -290,6 +290,12 @@ function picker() {
                 //为当前的result赋值。
                 if (item) {
                     result[level] = new Result(item);
+                    $picker.find('.weui-picker__group').eq(level).find('.weui-picker__item').attr('aria-hidden','true');
+                    $picker.find('.weui-picker__group').eq(level).attr('aria-label',item.label);
+                    if(navigator.userAgent.indexOf("Android") < 0){
+                      $picker.find('.weui-picker__group').eq(level).find('.weui-picker__item').eq(index).attr('aria-hidden','false');
+                      $picker.find('.weui-picker__group').eq(level)[0].focus();
+                    }
                 } else {
                     result[level] = null;
                 }
@@ -298,7 +304,7 @@ function picker() {
                 if (isMulti) {
                     if(result.length == depth){
                         defaults.onChange(result);
-                        $picker.find('#weui-picker-confirm')[0].focus();
+                        //$picker.find('#weui-picker-confirm')[0].focus();
                     }
                 } else {
                     /**
@@ -313,11 +319,13 @@ function picker() {
                     if (item.children && item.children.length > 0) {
                         $picker.find('.weui-picker__group').eq(level + 1).show();
                         !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
-
-                        clearTimeout(ariaFocusTimeout);
-                        ariaFocusTimeout = setTimeout(function() {
-                            $picker.find('.weui-picker__group').eq(level + 1)[0].focus();
-                        }, 100);
+                        
+                        if(navigator.userAgent.indexOf("Android") < 0){
+                          clearTimeout(ariaFocusTimeout);
+                          ariaFocusTimeout = setTimeout(function() {
+                            //$picker.find('.weui-picker__group').eq(level + 1)[0].focus();
+                          }, 100);
+                        }
                     } else {
                         //如果子列表test不通过，子孙列表都隐藏。
                         const $items = $picker.find('.weui-picker__group');
@@ -331,8 +339,8 @@ function picker() {
 
                         defaults.onChange(result);
                         $picker.find('#weui-picker-aria-content').html(result.map(r => r.label).join(' '));
-                        $confirm[0].blur();
-                        $confirm[0].focus();
+                        //$confirm[0].blur();
+                        //$confirm[0].focus();
                     }
                 }
             },

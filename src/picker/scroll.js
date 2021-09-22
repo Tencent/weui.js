@@ -107,7 +107,7 @@ $.fn.scroll = function (options) {
     let end;                                                    // 保存结束时的位置
     let startTime;                                              // 开始触摸的时间
     let translate;                                              // 缓存 translate
-    let lastIndex = -1;                                         // 记录上一次触发onChange时的索引值
+    let lastIndex = null;                                       // 记录上一次触发onChange时的索引值
     const points = [];                                          // 记录移动点
 
     // 首次触发选中事件
@@ -149,7 +149,7 @@ $.fn.scroll = function (options) {
 
         // 触发选择事件
         index !== lastIndex && defaults.onChange.call(this, defaults.items[index], index);
-        lastIndex = -1; // 重置
+        lastIndex = null; // 重置
     };
 
     function _start(pageY){

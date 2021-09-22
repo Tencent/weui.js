@@ -102,11 +102,12 @@ $.fn.scroll = function (options) {
     const $this = $(this);
     $this.find('.weui-picker__content').html(items);
 
-    let $scrollable = $this.find(defaults.scrollable);        // 可滚动的元素
+    let $scrollable = $this.find(defaults.scrollable);          // 可滚动的元素
     let start;                                                  // 保存开始按下的位置
     let end;                                                    // 保存结束时的位置
     let startTime;                                              // 开始触摸的时间
     let translate;                                              // 缓存 translate
+    let lastIndex = -1;                                         // 记录上一次触发onChange时的索引值
     const points = [];                                          // 记录移动点
 
     // 首次触发选中事件
@@ -147,7 +148,8 @@ $.fn.scroll = function (options) {
         setTranslate($scrollable, translate);
 
         // 触发选择事件
-        defaults.onChange.call(this, defaults.items[index], index);
+        index !== lastIndex && defaults.onChange.call(this, defaults.items[index], index);
+        lastIndex = -1; // 重置
     };
 
     function _start(pageY){
@@ -156,14 +158,31 @@ $.fn.scroll = function (options) {
     }
     function _move(pageY){
         end = pageY;
-        const diff = end - start;
+        let newTranslate = translate + (end - start);
 
         setTransition($scrollable, 0);
-        setTranslate($scrollable, (translate + diff));
+        setTranslate($scrollable, newTranslate);
         startTime = +new Date();
         points.push({time: startTime, y: end});
         if (points.length > 40) {
             points.shift();
+        }
+
+        // 移动到最接近的那一行
+        newTranslate = Math.round(newTranslate / defaults.rowHeight) * defaults.rowHeight;
+
+        // 超过最大值或者最小值时不响应 onChange
+        const max = getMax(defaults.offset, defaults.rowHeight);
+        const min = getMin(defaults.offset, defaults.rowHeight, defaults.items.length);
+        if (newTranslate > max || newTranslate < min) return;
+
+        // 如果是 disabled 也不响应 onChange
+        const index = defaults.offset - newTranslate / defaults.rowHeight;
+        if (!!defaults.items[index] && defaults.items[index].disabled) return;
+
+        if (index !== lastIndex) { // 如果和上次的索引值不一样，则触发 onChange 事件，并更新上次的索引值
+            defaults.onChange.call(this, defaults.items[index], index);
+            lastIndex = index;
         }
     }
     function _end(pageY){

@@ -294,7 +294,6 @@ function picker() {
                     $picker.find('.weui-picker__group').eq(level).attr('aria-label',item.label);
                     if(navigator.userAgent.indexOf("Android") < 0){
                       $picker.find('.weui-picker__group').eq(level).find('.weui-picker__item').eq(index).attr('aria-hidden','false');
-                      $picker.find('.weui-picker__group').eq(level)[0].focus();
                     }
                 } else {
                     result[level] = null;
@@ -324,7 +323,7 @@ function picker() {
                         if(navigator.userAgent.indexOf("Android") < 0){
                           clearTimeout(ariaFocusTimeout);
                           ariaFocusTimeout = setTimeout(function() {
-                            //$picker.find('.weui-picker__group').eq(level + 1)[0].focus();
+                            $picker.find('.weui-picker__group').eq(level)[0].focus();
                           }, 100);
                         }
                     } else {

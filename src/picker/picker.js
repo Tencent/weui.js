@@ -289,16 +289,25 @@ function picker() {
             onChange: function (item, index) {
                 //为当前的result赋值。
                 if (item) {
+                    const $currentGroup = $picker.find('.weui-picker__group').eq(level);
+                    $currentGroup.find('.weui-picker__item').attr('aria-hidden','true');
+                    $currentGroup.attr('aria-label',item.label);
+                    if($.os.ios){
+                        $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden','false');
+                        $currentGroup[0].focus();
+                    }
+
                     result[level] = new Result(item);
                 } else {
                     result[level] = null;
                 }
+
                 lineTemp[level] = index;
 
                 if (isMulti) {
                     if(result.length == depth){
                         defaults.onChange(result);
-                        $picker.find('#weui-picker-confirm')[0].focus();
+                        //$picker.find('#weui-picker-confirm')[0].focus();
                     }
                 } else {
                     /**
@@ -312,12 +321,14 @@ function picker() {
                      */
                     if (item.children && item.children.length > 0) {
                         $picker.find('.weui-picker__group').eq(level + 1).show();
-                        !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
+                        scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
 
-                        clearTimeout(ariaFocusTimeout);
-                        ariaFocusTimeout = setTimeout(function() {
-                            $picker.find('.weui-picker__group').eq(level + 1)[0].focus();
-                        }, 100);
+                        if($.os.ios){
+                            clearTimeout(ariaFocusTimeout);
+                            ariaFocusTimeout = setTimeout(function() {
+                            //$picker.find('.weui-picker__group').eq(level + 1)[0].focus();
+                            }, 100);
+                        }
                     } else {
                         //如果子列表test不通过，子孙列表都隐藏。
                         const $items = $picker.find('.weui-picker__group');
@@ -331,8 +342,8 @@ function picker() {
 
                         defaults.onChange(result);
                         $picker.find('#weui-picker-aria-content').html(result.map(r => r.label).join(' '));
-                        $confirm[0].blur();
-                        $confirm[0].focus();
+                        //$confirm[0].blur();
+                        //$confirm[0].focus();
                     }
                 }
             },

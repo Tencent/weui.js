@@ -320,12 +320,6 @@ function picker() {
                         $picker.find('.weui-picker__group').eq(level + 1).show();
                         !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
                         
-                        if(navigator.userAgent.indexOf("Android") < 0){
-                          clearTimeout(ariaFocusTimeout);
-                          ariaFocusTimeout = setTimeout(function() {
-                            $picker.find('.weui-picker__group').eq(level)[0].focus();
-                          }, 100);
-                        }
                     } else {
                         //如果子列表test不通过，子孙列表都隐藏。
                         const $items = $picker.find('.weui-picker__group');
@@ -341,6 +335,13 @@ function picker() {
                         $picker.find('#weui-picker-aria-content').html(result.map(r => r.label).join(' '));
                         //$confirm[0].blur();
                         //$confirm[0].focus();
+                    }
+
+                    if(navigator.userAgent.indexOf("Android") < 0){
+                      clearTimeout(ariaFocusTimeout);
+                      ariaFocusTimeout = setTimeout(function() {
+                        $picker.find('.weui-picker__group').eq(level)[0].focus();
+                      }, 100);
                     }
                 }
             },

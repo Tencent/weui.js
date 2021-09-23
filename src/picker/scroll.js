@@ -93,6 +93,7 @@ $.fn.scroll = function (options) {
         offset: 2,                                  // 列表初始化时的偏移量（列表初始化时，选项是聚焦在中间的，通过offset强制往上挪3项，以达到初始选项是为顶部的那项）
         rowHeight: 48,                              // 列表每一行的高度
         onChange: $.noop,                           // onChange回调
+        onScroll: $.noop,                           // onScroll回调
         temp: null,                                 // translate的缓存
         bodyHeight: 5 * 48                          // picker的高度，用于辅助点击滚动的计算
     }, options);
@@ -148,7 +149,10 @@ $.fn.scroll = function (options) {
         setTranslate($scrollable, translate);
 
         // 触发选择事件
-        index !== lastIndex && defaults.onChange.call(this, defaults.items[index], index);
+        if (index !== lastIndex) {
+            defaults.onScroll.call(this, defaults.items[index], index);
+            defaults.onChange.call(this, defaults.items[index], index);
+        }
         lastIndex = null; // 重置
     };
 
@@ -181,8 +185,8 @@ $.fn.scroll = function (options) {
         if (!!defaults.items[index] && defaults.items[index].disabled) return;
 
         if (index !== lastIndex) { // 如果和上次的索引值不一样，则触发 onChange 事件，并更新上次的索引值
-            defaults.onChange.call(this, defaults.items[index], index);
-            lastIndex = index;
+            defaults.onScroll.call(this, defaults.items[index], index);
+            // lastIndex = index;
         }
     }
     function _end(pageY){

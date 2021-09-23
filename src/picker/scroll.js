@@ -186,7 +186,6 @@ $.fn.scroll = function (options) {
 
         if (index !== lastIndex) { // 如果和上次的索引值不一样，则触发 onChange 事件，并更新上次的索引值
             defaults.onScroll.call(this, defaults.items[index], index);
-            // lastIndex = index;
         }
     }
     function _end(pageY){

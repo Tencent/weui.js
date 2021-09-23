@@ -292,11 +292,8 @@ function picker() {
                     const $currentGroup = $picker.find('.weui-picker__group').eq(level);
                     $currentGroup.find('.weui-picker__item').attr('aria-hidden','true');
                     $currentGroup.attr('aria-label',item.label);
-                    if(!$.os.android){
-                      $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden','false');
-                    }
+                    $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden','false');
                     $currentGroup.find('.weui-picker__item').eq(index)[0].focus();
-
                     result[level] = new Result(item);
                 } else {
                     result[level] = null;
@@ -335,15 +332,21 @@ function picker() {
                         result.splice(level + 1);
 
                         defaults.onChange(result);
-                        $picker.find('#weui-picker-aria-content').html(result.map(r => r.label).join(' '));
                         //$confirm[0].blur();
                         //$confirm[0].focus();
                     }
                 }
 
                 if(!$.os.android){
-                  $picker.find('.weui-picker__group').eq(level)[0].focus();
+                  setTimeout(function() {
+                    $picker.find('#weui-picker-aria-content').attr('role', 'alert');
+                  }, 200);
+                  $picker.find('#weui-picker-aria-content').html(result[level].label);
+                  setTimeout(function() {
+                    $picker.find('#weui-picker-aria-content').html('');
+                  }, 100);
                 }
+                $picker.find('.weui-picker__group').eq(level)[0].focus();
             },
             onConfirm: defaults.onConfirm
         });

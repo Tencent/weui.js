@@ -97,7 +97,7 @@ $.fn.scroll = function (options) {
         bodyHeight: 5 * 48                          // picker的高度，用于辅助点击滚动的计算
     }, options);
     const items = defaults.items.map((item) => {
-        return `<div role="option" aria-hidden="true" tabindex="0" class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${typeof item == 'object' ? item.label : item}</div>`;
+        return `<div role="option" tabindex="0" class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${typeof item == 'object' ? item.label : item}</div>`;
     }).join('');
     const $this = $(this);
     $this.find('.weui-picker__content').html(items);

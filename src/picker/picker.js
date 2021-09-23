@@ -340,8 +340,29 @@ function picker() {
                 }
 
                 $picker.find('.weui-picker__group').eq(level)[0].focus();
+                clearTimeout(ariaFocusTimeout);
+                ariaFocusTimeout = setTimeout(function() {
+                  $picker.find('#weui-picker-aria-content').html('');
+                }, 100);
             },
-            onScroll: function (item) {
+            onScroll: function (item, index) {
+                if (item) {
+                    const $currentGroup = $picker.find('.weui-picker__group').eq(level);
+                    $currentGroup.find('.weui-picker__item').attr('aria-hidden','true');
+                    if(!$.os.android){
+                        $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden','false');
+                        $currentGroup.find('.weui-picker__item').eq(index)[0].focus();
+                    }else{
+                        $currentGroup.attr('title','按住上下可调');
+                        $currentGroup.attr('aria-label',item.label);
+                    }
+                    result[level] = new Result(item);
+                } else {
+                    result[level] = null;
+                }
+
+                lineTemp[level] = index;
+
                 if($.os.android){
                     clearTimeout(ariaFocusTimeout);
                     ariaFocusTimeout = setTimeout(function() {

@@ -292,11 +292,11 @@ function picker() {
                     const $currentGroup = $picker.find('.weui-picker__group').eq(level);
                     $currentGroup.find('.weui-picker__item').attr('aria-hidden','true');
                     if(!$.os.android){
-                      $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden','false');
-                      $currentGroup.find('.weui-picker__item').eq(index)[0].focus();
+                        $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden','false');
+                        $currentGroup.find('.weui-picker__item').eq(index)[0].focus();
                     }else{
-                      $currentGroup.attr('title','按住上下可调');
-                      $currentGroup.attr('aria-label',item.label);
+                        $currentGroup.attr('title','按住上下可调');
+                        $currentGroup.attr('aria-label',item.label);
                     }
                     result[level] = new Result(item);
                 } else {
@@ -336,23 +336,18 @@ function picker() {
                         result.splice(level + 1);
 
                         defaults.onChange(result);
-                        //$confirm[0].blur();
-                        //$confirm[0].focus();
                     }
                 }
 
-                if($.os.android){
-                  setTimeout(function() {
-                    $picker.find('#weui-picker-aria-content').attr('role', 'alert');
-                  }, 200);
-
-                  $picker.find('#weui-picker-aria-content').html(result[level].label);
-
-                  setTimeout(function() {
-                    $picker.find('#weui-picker-aria-content').html('');
-                  }, 100);
-                }
                 $picker.find('.weui-picker__group').eq(level)[0].focus();
+            },
+            onScroll: function (item) {
+                if($.os.android){
+                    clearTimeout(ariaFocusTimeout);
+                    ariaFocusTimeout = setTimeout(function() {
+                        $picker.find('#weui-picker-aria-content').html(item.label).attr('role', 'alert');
+                    }, 50);
+                }
             },
             onConfirm: defaults.onConfirm
         });

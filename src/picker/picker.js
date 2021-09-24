@@ -289,16 +289,26 @@ function picker() {
             onChange: function (item, index) {
                 //为当前的result赋值。
                 if (item) {
+                    const $currentGroup = $picker.find('.weui-picker__group').eq(level);
+                    $currentGroup.find('.weui-picker__item').attr('aria-hidden','true');
+                    if(!$.os.android){
+                        $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden','false');
+                        $currentGroup.find('.weui-picker__item').eq(index)[0].focus();
+                    }else{
+                        $currentGroup.attr('title','按住上下可调');
+                        $currentGroup.attr('aria-label',item.label);
+                    }
                     result[level] = new Result(item);
                 } else {
                     result[level] = null;
                 }
+
                 lineTemp[level] = index;
 
                 if (isMulti) {
                     if(result.length == depth){
                         defaults.onChange(result);
-                        $picker.find('#weui-picker-confirm')[0].focus();
+                        //$picker.find('#weui-picker-confirm')[0].focus();
                     }
                 } else {
                     /**
@@ -312,12 +322,8 @@ function picker() {
                      */
                     if (item.children && item.children.length > 0) {
                         $picker.find('.weui-picker__group').eq(level + 1).show();
-                        !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
+                        scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
 
-                        clearTimeout(ariaFocusTimeout);
-                        ariaFocusTimeout = setTimeout(function() {
-                            $picker.find('.weui-picker__group').eq(level + 1)[0].focus();
-                        }, 100);
                     } else {
                         //如果子列表test不通过，子孙列表都隐藏。
                         const $items = $picker.find('.weui-picker__group');
@@ -330,10 +336,38 @@ function picker() {
                         result.splice(level + 1);
 
                         defaults.onChange(result);
-                        $picker.find('#weui-picker-aria-content').html(result.map(r => r.label).join(' '));
-                        $confirm[0].blur();
-                        $confirm[0].focus();
                     }
+                }
+
+                $picker.find('.weui-picker__group').eq(level)[0].focus();
+                clearTimeout(ariaFocusTimeout);
+                ariaFocusTimeout = setTimeout(function() {
+                  $picker.find('#weui-picker-aria-content').html('');
+                }, 100);
+            },
+            onScroll: function (item, index) {
+                if (item) {
+                    const $currentGroup = $picker.find('.weui-picker__group').eq(level);
+                    $currentGroup.find('.weui-picker__item').attr('aria-hidden','true');
+                    if(!$.os.android){
+                        $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden','false');
+                        $currentGroup.find('.weui-picker__item').eq(index)[0].focus();
+                    }else{
+                        $currentGroup.attr('title','按住上下可调');
+                        $currentGroup.attr('aria-label',item.label);
+                    }
+                    result[level] = new Result(item);
+                } else {
+                    result[level] = null;
+                }
+
+                lineTemp[level] = index;
+
+                if($.os.android){
+                    clearTimeout(ariaFocusTimeout);
+                    ariaFocusTimeout = setTimeout(function() {
+                        $picker.find('#weui-picker-aria-content').html(item.label).attr('role', 'alert');
+                    }, 50);
                 }
             },
             onConfirm: defaults.onConfirm

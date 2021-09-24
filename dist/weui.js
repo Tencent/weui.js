@@ -3006,16 +3006,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	            onChange: function onChange(item, index) {
 	                //为当前的result赋值。
 	                if (item) {
+	                    var $currentGroup = $picker.find('.weui-picker__group').eq(level);
+	                    $currentGroup.find('.weui-picker__item').attr('aria-hidden', 'true');
+	                    if (!_util2.default.os.android) {
+	                        $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden', 'false');
+	                        $currentGroup.find('.weui-picker__item').eq(index)[0].focus();
+	                    } else {
+	                        $currentGroup.attr('title', '按住上下可调');
+	                        $currentGroup.attr('aria-label', item.label);
+	                    }
 	                    result[level] = new Result(item);
 	                } else {
 	                    result[level] = null;
 	                }
+
 	                lineTemp[level] = index;
 
 	                if (isMulti) {
 	                    if (result.length == depth) {
 	                        defaults.onChange(result);
-	                        $picker.find('#weui-picker-confirm')[0].focus();
+	                        //$picker.find('#weui-picker-confirm')[0].focus();
 	                    }
 	                } else {
 	                    /**
@@ -3029,12 +3039,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                     */
 	                    if (item.children && item.children.length > 0) {
 	                        $picker.find('.weui-picker__group').eq(level + 1).show();
-	                        !isMulti && scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
-
-	                        clearTimeout(ariaFocusTimeout);
-	                        ariaFocusTimeout = setTimeout(function () {
-	                            $picker.find('.weui-picker__group').eq(level + 1)[0].focus();
-	                        }, 100);
+	                        scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
 	                    } else {
 	                        //如果子列表test不通过，子孙列表都隐藏。
 	                        var $items = $picker.find('.weui-picker__group');
@@ -3047,12 +3052,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        result.splice(level + 1);
 
 	                        defaults.onChange(result);
-	                        $picker.find('#weui-picker-aria-content').html(result.map(function (r) {
-	                            return r.label;
-	                        }).join(' '));
-	                        $confirm[0].blur();
-	                        $confirm[0].focus();
 	                    }
+	                }
+
+	                $picker.find('.weui-picker__group').eq(level)[0].focus();
+	                clearTimeout(ariaFocusTimeout);
+	                ariaFocusTimeout = setTimeout(function () {
+	                    $picker.find('#weui-picker-aria-content').html('');
+	                }, 100);
+	            },
+	            onScroll: function onScroll(item, index) {
+	                if (item) {
+	                    var $currentGroup = $picker.find('.weui-picker__group').eq(level);
+	                    $currentGroup.find('.weui-picker__item').attr('aria-hidden', 'true');
+	                    if (!_util2.default.os.android) {
+	                        $currentGroup.find('.weui-picker__item').eq(index).attr('aria-hidden', 'false');
+	                        $currentGroup.find('.weui-picker__item').eq(index)[0].focus();
+	                    } else {
+	                        $currentGroup.attr('title', '按住上下可调');
+	                        $currentGroup.attr('aria-label', item.label);
+	                    }
+	                    result[level] = new Result(item);
+	                } else {
+	                    result[level] = null;
+	                }
+
+	                lineTemp[level] = index;
+
+	                if (_util2.default.os.android) {
+	                    clearTimeout(ariaFocusTimeout);
+	                    ariaFocusTimeout = setTimeout(function () {
+	                        $picker.find('#weui-picker-aria-content').html(item.label).attr('role', 'alert');
+	                    }, 50);
 	                }
 	            },
 	            onConfirm: defaults.onConfirm
@@ -3557,14 +3588,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        offset: 2, // 列表初始化时的偏移量（列表初始化时，选项是聚焦在中间的，通过offset强制往上挪3项，以达到初始选项是为顶部的那项）
 	        rowHeight: 48, // 列表每一行的高度
 	        onChange: _util2.default.noop, // onChange回调
+	        onScroll: _util2.default.noop, // onScroll回调
 	        temp: null, // translate的缓存
 	        bodyHeight: 5 * 48 // picker的高度，用于辅助点击滚动的计算
 	    }, options);
 	    var items = defaults.items.map(function (item) {
-	        return '<div class="weui-picker__item' + (item.disabled ? ' weui-picker__item_disabled' : '') + '">' + ((typeof item === 'undefined' ? 'undefined' : _typeof(item)) == 'object' ? item.label : item) + '</div>';
+	        return '<div role="option" title="\u6309\u4F4F\u4E0A\u4E0B\u53EF\u8C03" tabindex="0" class="weui-picker__item' + (item.disabled ? ' weui-picker__item_disabled' : '') + '">' + ((typeof item === 'undefined' ? 'undefined' : _typeof(item)) == 'object' ? item.label : item) + '</div>';
 	    }).join('');
 	    var $this = (0, _util2.default)(this);
-
 	    $this.find('.weui-picker__content').html(items);
 
 	    var $scrollable = $this.find(defaults.scrollable); // 可滚动的元素
@@ -3572,6 +3603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var end = void 0; // 保存结束时的位置
 	    var startTime = void 0; // 开始触摸的时间
 	    var translate = void 0; // 缓存 translate
+	    var lastIndex = null; // 记录上一次触发onChange时的索引值
 	    var points = []; // 记录移动点
 
 	    // 首次触发选中事件
@@ -3612,7 +3644,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        setTranslate($scrollable, translate);
 
 	        // 触发选择事件
-	        defaults.onChange.call(_this, defaults.items[index], index);
+	        if (index !== lastIndex) {
+	            defaults.onScroll.call(_this, defaults.items[index], index);
+	            defaults.onChange.call(_this, defaults.items[index], index);
+	        }
+	        lastIndex = null; // 重置
 	    };
 
 	    function _start(pageY) {
@@ -3621,14 +3657,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    function _move(pageY) {
 	        end = pageY;
-	        var diff = end - start;
+	        var newTranslate = translate + (end - start);
 
 	        setTransition($scrollable, 0);
-	        setTranslate($scrollable, translate + diff);
+	        setTranslate($scrollable, newTranslate);
 	        startTime = +new Date();
 	        points.push({ time: startTime, y: end });
 	        if (points.length > 40) {
 	            points.shift();
+	        }
+
+	        // 移动到最接近的那一行
+	        newTranslate = Math.round(newTranslate / defaults.rowHeight) * defaults.rowHeight;
+
+	        // 超过最大值或者最小值时不响应 onChange
+	        var max = getMax(defaults.offset, defaults.rowHeight);
+	        var min = getMin(defaults.offset, defaults.rowHeight, defaults.items.length);
+	        if (newTranslate > max || newTranslate < min) return;
+
+	        // 如果是 disabled 也不响应 onChange
+	        var index = defaults.offset - newTranslate / defaults.rowHeight;
+	        if (!!defaults.items[index] && defaults.items[index].disabled) return;
+
+	        if (index !== lastIndex) {
+	            // 如果和上次的索引值不一样，则触发 onChange 事件，并更新上次的索引值
+	            defaults.onScroll.call(this, defaults.items[index], index);
 	        }
 	    }
 	    function _end(pageY) {
@@ -3747,13 +3800,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 28 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\" role=dialog aria-modal=true tabindex=-1> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn weui-wa-hotarea\"><%= closeText %></button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title><%= title %></strong> <span class=weui-half-screen-dialog__subtitle><%= desc %></span> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <div class=weui-hidden_abs id=weui-picker-aria-content aria-live=polite></div> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select role=button><%= confirmText %></a> </div> </div> </div> ";
+	module.exports = "<div class=\"<%= className %>\"> <div class=weui-mask></div> <div class=\"weui-half-screen-dialog weui-picker\" role=dialog aria-modal=true tabindex=-1> <div class=weui-half-screen-dialog__hd> <div class=weui-half-screen-dialog__hd__side> <button class=\"weui-icon-btn weui-icon-btn_close weui-picker__btn weui-wa-hotarea\"><%= closeText %></button> </div> <div class=weui-half-screen-dialog__hd__main> <strong class=weui-half-screen-dialog__title><%= title %></strong> <span class=weui-half-screen-dialog__subtitle><%= desc %></span> </div> </div> <div class=weui-half-screen-dialog__bd> <div class=weui-picker__bd></div> </div> <div class=weui-half-screen-dialog__ft> <div class=weui-hidden_abs id=weui-picker-aria-content></div> <a href=javascript:; class=\"weui-btn weui-btn_primary weui-picker__btn\" id=weui-picker-confirm data-action=select role=button><%= confirmText %></a> </div> </div> </div> ";
 
 /***/ }),
 /* 29 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=weui-picker__group tabindex=-1> <div class=weui-picker__mask></div> <div class=weui-picker__indicator></div> <div class=weui-picker__content></div> </div> ";
+	module.exports = "<div class=weui-picker__group role=listbox tabindex=0> <div class=weui-picker__mask></div> <div class=weui-picker__indicator></div> <div class=weui-picker__content></div> </div> ";
 
 /***/ }),
 /* 30 */

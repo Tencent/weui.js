@@ -1,5 +1,5 @@
 /*!
- * weui.js v1.2.7 (https://weui.io)
+ * weui.js v1.2.8 (https://weui.io)
  * Copyright 2021, wechat ui team
  * MIT license
  */

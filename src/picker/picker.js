@@ -342,7 +342,7 @@ function picker() {
                 $picker.find('.weui-picker__group').eq(level)[0].focus();
                 clearTimeout(ariaFocusTimeout);
                 ariaFocusTimeout = setTimeout(function() {
-                  $picker.find('#weui-picker-aria-content').html('');
+                    $picker.find('#weui-picker-aria-content').html('');
                 }, 100);
             },
             onScroll: function (item, index) {

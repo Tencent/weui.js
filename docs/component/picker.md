@@ -26,7 +26,7 @@ picker 多列选择器。
 | [options.title] | <code>string</code> |  | 自定义标题 |
 | [options.desc] | <code>string</code> |  | 自定义描述 |
 | [options.container] | <code>string</code> |  | 指定容器 |
-| [options.defaultValue] | <code>array</code> |  | 默认选项的value数组 |
+| [options.defaultValue] | <code>array</code> |  | 默认选项的value数组。（picker本身会根据id进行缓存选择操作，如遇到设置defaultValue无效请参见上方id配置说明） |
 | [options.confirmText] | <code>string</code> |  | 确定按钮的wording |
 | [options.closeText] | <code>string</code> |  | 关闭的wording |
 | [options.onChange] | <code>function</code> |  | 在picker选中的值发生变化的时候回调 |

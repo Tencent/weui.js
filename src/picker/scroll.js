@@ -87,23 +87,26 @@ const getMin = (offset, rowHeight, length) => {
 };
 
 $.fn.scroll = function (options) {
+    const $this = $(this).offAll();
+    const $content = $this.find('.weui-picker__content');
+
+    const itemHeight = Math.round($content.find('.weui-picker__item')[0].clientHeight);
     const defaults = $.extend({
         items: [],                                  // 数据
-        scrollable: '.weui-picker__content',        // 滚动的元素
         offset: 2,                                  // 列表初始化时的偏移量（列表初始化时，选项是聚焦在中间的，通过offset强制往上挪3项，以达到初始选项是为顶部的那项）
-        rowHeight: 48,                              // 列表每一行的高度
+        rowHeight: itemHeight,                              // 列表每一行的高度
         onChange: $.noop,                           // onChange回调
         onScroll: $.noop,                           // onScroll回调
         temp: null,                                 // translate的缓存
-        bodyHeight: 5 * 48                          // picker的高度，用于辅助点击滚动的计算
+        bodyHeight: 5 * itemHeight                          // picker的高度，用于辅助点击滚动的计算
     }, options);
     const items = defaults.items.map((item) => {
         return `<div role="option" title="按住上下可调" tabindex="0" class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${typeof item == 'object' ? item.label : item}</div>`;
     }).join('');
-    const $this = $(this);
-    $this.find('.weui-picker__content').html(items);
+    $this[0].parentElement.style.height = defaults.bodyHeight + 'px';
+    $content.html(items);
 
-    let $scrollable = $this.find(defaults.scrollable);          // 可滚动的元素
+    let $scrollable = $content;          // 可滚动的元素
     let start;                                                  // 保存开始按下的位置
     let end;                                                    // 保存结束时的位置
     let startTime;                                              // 开始触摸的时间
@@ -124,7 +127,7 @@ $.fn.scroll = function (options) {
     }
     setTranslate($scrollable, translate);
 
-    const stop = (diff) => {
+    function stop(diff) {
         translate += diff;
 
         // 移动到最接近的那一行
@@ -154,7 +157,7 @@ $.fn.scroll = function (options) {
             defaults.onChange.call(this, defaults.items[index], index);
         }
         lastIndex = null; // 重置
-    };
+    }
 
     function _start(pageY){
         start = pageY;
@@ -239,39 +242,34 @@ $.fn.scroll = function (options) {
         start = null;
     }
 
-    /**
-     * 因为现在没有移除匿名函数的方法，所以先暴力移除（offAll），并且改变$scrollable。
-     */
-    $scrollable = $this
-        .offAll()
-        .on('touchstart', function (evt) {
-            _start(evt.changedTouches[0].pageY);
-        })
-        .on('touchmove', function (evt) {
-            _move(evt.changedTouches[0].pageY);
-            evt.preventDefault();
-        })
-        .on('touchend', function (evt) {
-            _end(evt.changedTouches[0].pageY);
-        })
-        .find(defaults.scrollable);
+    $this
+    .on('touchstart', function (evt) {
+        _start(evt.changedTouches[0].pageY);
+    })
+    .on('touchmove', function (evt) {
+        _move(evt.changedTouches[0].pageY);
+        evt.preventDefault();
+    })
+    .on('touchend', function (evt) {
+        _end(evt.changedTouches[0].pageY);
+    });
 
     $this
-        .on('mousedown', function(evt){
-            _start(evt.pageY);
-            evt.stopPropagation();
-            evt.preventDefault();
-        })
-        .on('mousemove', function(evt){
-            if(!start) return;
+    .on('mousedown', function(evt){
+        _start(evt.pageY);
+        evt.stopPropagation();
+        evt.preventDefault();
+    })
+    .on('mousemove', function(evt){
+        if(!start) return;
 
-            _move(evt.pageY);
-            evt.stopPropagation();
-            evt.preventDefault();
-        })
-        .on('mouseup mouseleave', function(evt){
-            _end(evt.pageY);
-            evt.stopPropagation();
-            evt.preventDefault();
-        });
+        _move(evt.pageY);
+        evt.stopPropagation();
+        evt.preventDefault();
+    })
+    .on('mouseup mouseleave', function(evt){
+        _end(evt.pageY);
+        evt.stopPropagation();
+        evt.preventDefault();
+    });
 };

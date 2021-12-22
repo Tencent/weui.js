@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
     <title>weui.js</title>
-    <link rel="stylesheet" href="https://res.wx.qq.com/t/wx_fed/weui-source/res/2.5.0/weui.min.css">
+    <link rel="stylesheet" href="https://res.wx.qq.com/t/wx_fed/weui-source/res/2.5.4/weui.min.css">
     <style>
         html, body{
             height: 100%;
@@ -37,6 +37,17 @@
         /*fix fastclick很难点中的bug*/
         label > * { pointer-events: none; }
 
+        .weui-picker__indicator {
+            top: 50%;
+            padding: 18px 0;
+            height: 1.42em;
+            transform: translateY(-50%);
+        }
+        .weui-picker__item {
+            padding: 14px 0;
+            height: auto;
+            line-height: 1.42;
+        }
     </style>
 </head>
 <body ontouchstart>

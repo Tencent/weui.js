@@ -4925,25 +4925,26 @@
 	};
 
 	_util2.default.fn.scroll = function (options) {
-	    var _this = this;
+	    var $this = (0, _util2.default)(this).offAll();
+	    var $content = $this.find('.weui-picker__content');
 
+	    var itemHeight = Math.round($content.find('.weui-picker__item')[0].clientHeight);
 	    var defaults = _util2.default.extend({
 	        items: [], // 数据
-	        scrollable: '.weui-picker__content', // 滚动的元素
 	        offset: 2, // 列表初始化时的偏移量（列表初始化时，选项是聚焦在中间的，通过offset强制往上挪3项，以达到初始选项是为顶部的那项）
-	        rowHeight: 48, // 列表每一行的高度
+	        rowHeight: itemHeight, // 列表每一行的高度
 	        onChange: _util2.default.noop, // onChange回调
 	        onScroll: _util2.default.noop, // onScroll回调
 	        temp: null, // translate的缓存
-	        bodyHeight: 5 * 48 // picker的高度，用于辅助点击滚动的计算
+	        bodyHeight: 5 * itemHeight // picker的高度，用于辅助点击滚动的计算
 	    }, options);
 	    var items = defaults.items.map(function (item) {
 	        return '<div role="option" title="\u6309\u4F4F\u4E0A\u4E0B\u53EF\u8C03" tabindex="0" class="weui-picker__item' + (item.disabled ? ' weui-picker__item_disabled' : '') + '">' + ((typeof item === 'undefined' ? 'undefined' : _typeof(item)) == 'object' ? item.label : item) + '</div>';
 	    }).join('');
-	    var $this = (0, _util2.default)(this);
-	    $this.find('.weui-picker__content').html(items);
+	    $this[0].parentElement.style.height = defaults.bodyHeight + 'px';
+	    $content.html(items);
 
-	    var $scrollable = $this.find(defaults.scrollable); // 可滚动的元素
+	    var $scrollable = $content; // 可滚动的元素
 	    var start = void 0; // 保存开始按下的位置
 	    var end = void 0; // 保存结束时的位置
 	    var startTime = void 0; // 开始触摸的时间
@@ -4964,7 +4965,7 @@
 	    }
 	    setTranslate($scrollable, translate);
 
-	    var stop = function stop(diff) {
+	    function stop(diff) {
 	        translate += diff;
 
 	        // 移动到最接近的那一行
@@ -4990,11 +4991,11 @@
 
 	        // 触发选择事件
 	        if (index !== lastIndex) {
-	            defaults.onScroll.call(_this, defaults.items[index], index);
-	            defaults.onChange.call(_this, defaults.items[index], index);
+	            defaults.onScroll.call(this, defaults.items[index], index);
+	            defaults.onChange.call(this, defaults.items[index], index);
 	        }
 	        lastIndex = null; // 重置
-	    };
+	    }
 
 	    function _start(pageY) {
 	        start = pageY;
@@ -5079,17 +5080,14 @@
 	        start = null;
 	    }
 
-	    /**
-	     * 因为现在没有移除匿名函数的方法，所以先暴力移除（offAll），并且改变$scrollable。
-	     */
-	    $scrollable = $this.offAll().on('touchstart', function (evt) {
+	    $this.on('touchstart', function (evt) {
 	        _start(evt.changedTouches[0].pageY);
 	    }).on('touchmove', function (evt) {
 	        _move(evt.changedTouches[0].pageY);
 	        evt.preventDefault();
 	    }).on('touchend', function (evt) {
 	        _end(evt.changedTouches[0].pageY);
-	    }).find(defaults.scrollable);
+	    });
 
 	    $this.on('mousedown', function (evt) {
 	        _start(evt.pageY);
@@ -5151,7 +5149,7 @@
 /* 31 */
 /***/ (function(module, exports) {
 
-	module.exports = "<div class=weui-picker__group role=listbox tabindex=0> <div class=weui-picker__mask></div> <div class=weui-picker__indicator></div> <div class=weui-picker__content></div> </div> ";
+	module.exports = "<div class=weui-picker__group role=listbox tabindex=0> <div class=weui-picker__mask></div> <div class=weui-picker__indicator></div> <div class=weui-picker__content> <div class=weui-picker__item>&nbsp;</div> </div> </div> ";
 
 /***/ }),
 /* 32 */

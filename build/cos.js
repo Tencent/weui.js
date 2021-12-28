@@ -1,3 +1,5 @@
+/* 配合蓝盾发布到腾讯CDN */
+
 const pkg = require('../package.json');
 const { exec } = require('child_process');
 

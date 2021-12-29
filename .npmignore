@@ -1,5 +1,7 @@
 .idea/
+__tests__/
+build/
+docs/
 node_modules/
 *.log
-/docs/_book/
-uploader-server/uploads
+uploader-server/

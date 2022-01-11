@@ -11,7 +11,8 @@
     "lint": "eslint ./src/**/*.js",
     "clean": "rimraf ./dist",
     "server": "node uploader-server/index.js",
-    "version": "npm run build && git add -A ."
+    "version": "npm run build && git add -A .",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "weui",

@@ -393,7 +393,10 @@ function picker() {
 
     $picker
         .on('click', '.weui-mask', function () { hide(); })
-        .on('click', '.weui-picker__btn', function () { hide(); });
+        .on('click', '.weui-picker__btn', function () { hide(); })
+        .on('click', '.weui-btn_icon', function () { hide(); })
+        .on('touchmove', '.weui-half-screen-dialog__hd', function (evt) { evt.preventDefault(); })
+        .on('touchmove', '.weui-half-screen-dialog__ft', function (evt) { evt.preventDefault(); });
 
     $mask
         .on('click', function () { hide(); })

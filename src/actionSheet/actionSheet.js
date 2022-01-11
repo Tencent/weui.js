@@ -135,6 +135,8 @@ function actionSheet(menus = [], actions = [], options = {}) {
         hide();
     });
 
+    $actionSheetWrap.on('touchmove', function (evt) { evt.preventDefault(); });
+
     _sington = $actionSheetWrap[0];
     _sington.hide = hide;
     return _sington;

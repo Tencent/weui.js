@@ -111,10 +111,6 @@ function dialog(options = {}) {
             evt.preventDefault();
         });
 
-    $dialogWrap.find('.weui-dialog__close').on('click', function () {
-        hide();
-    });
-
     _sington = $dialogWrap[0];
     _sington.hide = hide;
     return _sington;

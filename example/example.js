@@ -16,12 +16,10 @@ document.querySelector('#alertBtn').addEventListener('click', function () {
 
 /* confirm */
 document.querySelector('#confirmBtn').addEventListener('click', function () {
-    weui.confirm('自定义标题的confirm', function () {
+    weui.confirm('自定义内容的confirm', function () {
         console.log('yes')
     }, function () {
         console.log('no')
-    }, {
-        title: '自定义标题'
     });
 });
 

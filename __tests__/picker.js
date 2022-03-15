@@ -187,7 +187,7 @@ describe('picker', function () {
         }, closeDur);
     });
 
-    it('test cancelBtn click', (done) => {
+    it('test close btn click', (done) => {
         changeRet = confirmRet = null;
         weui.datePicker({
             start: 1990,
@@ -200,7 +200,7 @@ describe('picker', function () {
             },
             id: 'DatePicker'
         });
-        $('.weui-icon-btn_close.weui-picker__btn').click();
+        $('.weui-icon-close-thin').click();
         assert(JSON.stringify(changeRet) !== null);
         assert(confirmRet === null);
 

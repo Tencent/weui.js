@@ -1,0 +1,7 @@
+.idea/
+__tests__/
+build/
+docs/
+node_modules/
+*.log
+uploader-server/

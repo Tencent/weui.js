@@ -1,6 +1,6 @@
 {
   "name": "weui.js",
-  "version": "1.2.5",
+  "version": "1.2.14",
   "description": "weui.js",
   "main": "./dist/weui.min.js",
   "scripts": {
@@ -10,7 +10,9 @@
     "deploy": "npm run docs && gh-pages -d docs/_book",
     "lint": "eslint ./src/**/*.js",
     "clean": "rimraf ./dist",
-    "server": "node uploader-server/index.js"
+    "server": "node uploader-server/index.js",
+    "version": "npm run build && git add -A .",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "weui",

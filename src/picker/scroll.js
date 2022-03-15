@@ -87,27 +87,31 @@ const getMin = (offset, rowHeight, length) => {
 };
 
 $.fn.scroll = function (options) {
+    const $this = $(this).offAll();
+    const $content = $this.find('.weui-picker__content');
+
+    const itemHeight = Math.round($content.find('.weui-picker__item')[0].clientHeight);
     const defaults = $.extend({
         items: [],                                  // 数据
-        scrollable: '.weui-picker__content',        // 滚动的元素
         offset: 2,                                  // 列表初始化时的偏移量（列表初始化时，选项是聚焦在中间的，通过offset强制往上挪3项，以达到初始选项是为顶部的那项）
-        rowHeight: 48,                              // 列表每一行的高度
+        rowHeight: itemHeight,                              // 列表每一行的高度
         onChange: $.noop,                           // onChange回调
+        onScroll: $.noop,                           // onScroll回调
         temp: null,                                 // translate的缓存
-        bodyHeight: 5 * 48                          // picker的高度，用于辅助点击滚动的计算
+        bodyHeight: 5 * itemHeight                          // picker的高度，用于辅助点击滚动的计算
     }, options);
     const items = defaults.items.map((item) => {
-        return `<div class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${typeof item == 'object' ? item.label : item}</div>`;
+        return `<div role="option" title="按住上下可调" tabindex="0" class="weui-picker__item${item.disabled ? ' weui-picker__item_disabled' : ''}">${typeof item == 'object' ? item.label : item}</div>`;
     }).join('');
-    const $this = $(this);
+    $this[0].parentElement.style.height = defaults.bodyHeight + 'px';
+    $content.html(items);
 
-    $this.find('.weui-picker__content').html(items);
-
-    let $scrollable = $this.find(defaults.scrollable);        // 可滚动的元素
+    let $scrollable = $content;          // 可滚动的元素
     let start;                                                  // 保存开始按下的位置
     let end;                                                    // 保存结束时的位置
     let startTime;                                              // 开始触摸的时间
     let translate;                                              // 缓存 translate
+    let lastIndex = null;                                       // 记录上一次触发onChange时的索引值
     const points = [];                                          // 记录移动点
 
     // 首次触发选中事件
@@ -123,7 +127,7 @@ $.fn.scroll = function (options) {
     }
     setTranslate($scrollable, translate);
 
-    const stop = (diff) => {
+    function stop(diff) {
         translate += diff;
 
         // 移动到最接近的那一行
@@ -148,8 +152,12 @@ $.fn.scroll = function (options) {
         setTranslate($scrollable, translate);
 
         // 触发选择事件
-        defaults.onChange.call(this, defaults.items[index], index);
-    };
+        if (index !== lastIndex) {
+            defaults.onScroll.call(this, defaults.items[index], index);
+            defaults.onChange.call(this, defaults.items[index], index);
+        }
+        lastIndex = null; // 重置
+    }
 
     function _start(pageY){
         start = pageY;
@@ -157,14 +165,30 @@ $.fn.scroll = function (options) {
     }
     function _move(pageY){
         end = pageY;
-        const diff = end - start;
+        let newTranslate = translate + (end - start);
 
         setTransition($scrollable, 0);
-        setTranslate($scrollable, (translate + diff));
+        setTranslate($scrollable, newTranslate);
         startTime = +new Date();
         points.push({time: startTime, y: end});
         if (points.length > 40) {
             points.shift();
+        }
+
+        // 移动到最接近的那一行
+        newTranslate = Math.round(newTranslate / defaults.rowHeight) * defaults.rowHeight;
+
+        // 超过最大值或者最小值时不响应 onChange
+        const max = getMax(defaults.offset, defaults.rowHeight);
+        const min = getMin(defaults.offset, defaults.rowHeight, defaults.items.length);
+        if (newTranslate > max || newTranslate < min) return;
+
+        // 如果是 disabled 也不响应 onChange
+        const index = defaults.offset - newTranslate / defaults.rowHeight;
+        if (!!defaults.items[index] && defaults.items[index].disabled) return;
+
+        if (index !== lastIndex) { // 如果和上次的索引值不一样，则触发 onChange 事件，并更新上次的索引值
+            defaults.onScroll.call(this, defaults.items[index], index);
         }
     }
     function _end(pageY){
@@ -218,39 +242,34 @@ $.fn.scroll = function (options) {
         start = null;
     }
 
-    /**
-     * 因为现在没有移除匿名函数的方法，所以先暴力移除（offAll），并且改变$scrollable。
-     */
-    $scrollable = $this
-        .offAll()
-        .on('touchstart', function (evt) {
-            _start(evt.changedTouches[0].pageY);
-        })
-        .on('touchmove', function (evt) {
-            _move(evt.changedTouches[0].pageY);
-            evt.preventDefault();
-        })
-        .on('touchend', function (evt) {
-            _end(evt.changedTouches[0].pageY);
-        })
-        .find(defaults.scrollable);
+    $this
+    .on('touchstart', function (evt) {
+        _start(evt.changedTouches[0].pageY);
+    })
+    .on('touchmove', function (evt) {
+        _move(evt.changedTouches[0].pageY);
+        evt.preventDefault();
+    })
+    .on('touchend', function (evt) {
+        _end(evt.changedTouches[0].pageY);
+    });
 
     $this
-        .on('mousedown', function(evt){
-            _start(evt.pageY);
-            evt.stopPropagation();
-            evt.preventDefault();
-        })
-        .on('mousemove', function(evt){
-            if(!start) return;
+    .on('mousedown', function(evt){
+        _start(evt.pageY);
+        evt.stopPropagation();
+        evt.preventDefault();
+    })
+    .on('mousemove', function(evt){
+        if(!start) return;
 
-            _move(evt.pageY);
-            evt.stopPropagation();
-            evt.preventDefault();
-        })
-        .on('mouseup mouseleave', function(evt){
-            _end(evt.pageY);
-            evt.stopPropagation();
-            evt.preventDefault();
-        });
+        _move(evt.pageY);
+        evt.stopPropagation();
+        evt.preventDefault();
+    })
+    .on('mouseup mouseleave', function(evt){
+        _end(evt.pageY);
+        evt.stopPropagation();
+        evt.preventDefault();
+    });
 };

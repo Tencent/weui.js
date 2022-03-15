@@ -106,11 +106,6 @@ function actionSheet(menus = [], actions = [], options = {}) {
     // 这里获取一下计算后的样式，强制触发渲染. fix IOS10下闪现的问题
     $.getStyle($actionSheet[0], 'transform');
 
-    $actionSheet
-        .addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up')
-        .on('animationend webkitAnimationEnd', function (evt) {
-            evt.target.focus();
-        });
     $actionSheetMask
         .addClass('weui-animate-fade-in')
         .on('click', function () {
@@ -119,6 +114,11 @@ function actionSheet(menus = [], actions = [], options = {}) {
         })
         .on('touchmove', function(event) {
             event.preventDefault();
+        });
+    $actionSheet
+        .addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up')
+        .on('animationend webkitAnimationEnd', function (evt) {
+            evt.target.focus();
         });
     $actionSheetWrap.find('.weui-actionsheet__menu').on('click', '.weui-actionsheet__cell', function (evt) {
         const index = $(this).index();

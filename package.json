@@ -40,7 +40,7 @@
     "express": "^4.14.0",
     "fastclick": "^1.0.6",
     "formidable": "^1.0.17",
-    "gh-pages": "^0.12.0",
+    "gh-pages": "^4.0.0",
     "gitbook-cli": "^2.3.0",
     "glob": "^7.1.1",
     "html-loader": "^0.4.4",

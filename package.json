@@ -48,7 +48,7 @@
     "jest-cli": "^16.0.1",
     "jsdoc-to-markdown": "^2.0.0",
     "less-loader": "^2.2.3",
-    "mocha": "^3.1.2",
+    "mocha": "^10.2.0",
     "node-uuid": "^1.4.7",
     "open-browser-webpack-plugin": "0.0.2",
     "postcss-loader": "^0.13.0",

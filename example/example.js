@@ -144,6 +144,7 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
         id: 'picker',
         title: '单列选择器',
         desc: '单列选择器描述',
+        showClose: false,
     });
 });
 

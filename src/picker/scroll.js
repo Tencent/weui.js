@@ -89,8 +89,10 @@ const getMin = (offset, rowHeight, length) => {
 $.fn.scroll = function (options) {
     const $this = $(this).offAll();
     const $content = $this.find('.weui-picker__content');
+    const item = $content.find('.weui-picker__item')[0];
+    if (!item) return;
 
-    const itemHeight = Math.round($content.find('.weui-picker__item')[0].clientHeight);
+    const itemHeight = Math.round(item.clientHeight);
     const defaults = $.extend({
         items: [],                                  // 数据
         offset: 2,                                  // 列表初始化时的偏移量（列表初始化时，选项是聚焦在中间的，通过offset强制往上挪3项，以达到初始选项是为顶部的那项）

@@ -248,4 +248,10 @@ describe('picker', function () {
             done();
         }, closeDur);
     });
+
+    it('test datePicker depth', () => {
+        weui.datePicker({
+            depth: 2
+        });
+    });
 });

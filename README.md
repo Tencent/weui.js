@@ -40,7 +40,7 @@ npm run build
 #### global 
 
 ```html
-<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/2.5.16/weui.min.css">
+<link rel="stylesheet" href="https://res.wx.qq.com/t/wx_fed/weui-source/res/2.5.16/weui.min.css">
 <script type="text/javascript" src="https://res.wx.qq.com/t/wx_fed/weui.js/res/1.2.18/weui.min.js"></script>
 <script type="text/javascript">
     weui.alert('alert');

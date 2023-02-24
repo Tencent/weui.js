@@ -8,11 +8,12 @@
     "build": "npm run clean && npm run lint && webpack --config ./build/webpack.example.config.js && node build/build.js",
     "docs": "node ./build/docs.js",
     "deploy": "npm run docs && gh-pages -d docs/_book",
+    "devops": "curl -X POST https://devops.woa.com/ms/process/api/external/pipelines/234a733a6b41457dbc504bfe7b1d334e/build -H \"Content-Type: application/json\" -H \"X-DEVOPS-PROJECT-ID: we-source\" -H \"X-DEVOPS-UID: \" -d \"{}\"",
     "lint": "eslint ./src/**/*.js",
     "clean": "rimraf ./dist",
     "server": "node uploader-server/index.js",
     "version": "npm run build && git add -A .",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags && npm run devops"
   },
   "keywords": [
     "weui",

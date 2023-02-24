@@ -64,6 +64,7 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
     ], [
         {
             label: '取消',
+            className: 'weui-actionsheet__cell_warn',
             onClick: function () {
                 console.log('取消');
             }

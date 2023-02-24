@@ -9,12 +9,12 @@
         <% } %>
         <div class="weui-actionsheet__menu">
             <% for(var i = 0; i < menus.length; i++){ %>
-            <div class="weui-actionsheet__cell" role="button"><%= menus[i].label %></div>
+            <div class="weui-actionsheet__cell <%= menus[i].className %>" role="button"><%= menus[i].label %></div>
             <% } %>
         </div>
         <div class="weui-actionsheet__action">
             <% for(var j = 0; j < actions.length; j++){ %>
-            <div class="weui-actionsheet__cell" role="button"><%= actions[j].label %></div>
+            <div class="weui-actionsheet__cell <%= actions[j].className %>" role="button"><%= actions[j].label %></div>
             <% } %>
         </div>
     </div>

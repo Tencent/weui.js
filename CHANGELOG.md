@@ -1,3 +1,7 @@
+#### v1.2.18 (2023-02-24)
+- 【增强】 `actionSheet`的cell支持`className`字段
+
+
 #### v1.2.17 (2023-01-13)
 - 【增强】 `picker`支持`showClose`字段
 

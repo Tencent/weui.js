@@ -1,4 +1,7 @@
 #### v1.2.18 (2023-02-24)
+- 【增强】 `toast`支持`extName`字段
+
+#### v1.2.18 (2023-02-24)
 - 【增强】 `actionSheet`的cell支持`className`字段
 
 

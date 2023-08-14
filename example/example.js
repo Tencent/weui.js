@@ -28,7 +28,8 @@ document.querySelector('#confirmBtn').addEventListener('click', function () {
 document.querySelector('#toastBtn').addEventListener('click', function () {
     weui.toast('操作成功', {
         duration: 3000,
-        className: "bears"
+        className: "bears",
+        extClass: "x"
     });
 });
 

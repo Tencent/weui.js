@@ -26,12 +26,14 @@ let _sington;
  * @param {number=} [options.duration=3000] 多少毫秒后关闭toast
  * @param {function=} options.callback 关闭后的回调
  * @param {string=} options.className 自定义类名
+ * @param {string=} options.extClass 自定义toast节点类名
  *
  * @example
  * weui.toast('操作成功', 3000);
  * weui.toast('操作成功', {
  *     duration: 3000,
  *     className: 'custom-classname',
+ *     extClass: 'toast-classname',
  *     callback: function(){ console.log('close') }
  * });
  */
@@ -53,7 +55,8 @@ function toast(content = '', options = {}) {
         content: content,
         duration: 3000,
         callback: $.noop,
-        className: ''
+        className: '',
+        extClass: ''
     }, options);
 
     const $toastWrap = $($.render(tpl, options));

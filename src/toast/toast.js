@@ -32,6 +32,7 @@ let _sington;
  * weui.toast('操作成功', 3000);
  * weui.toast('操作成功', {
  *     duration: 3000,
+ *     type: 'success' | 'warning' | 'error'| 'none'
  *     className: 'custom-classname',
  *     extClass: 'toast-classname',
  *     callback: function(){ console.log('close') }
@@ -54,6 +55,7 @@ function toast(content = '', options = {}) {
     options = $.extend({
         content: content,
         duration: 3000,
+        type: 'success',
         callback: $.noop,
         className: '',
         extClass: ''

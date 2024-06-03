@@ -10,6 +10,7 @@ toast 一般用于操作成功时的提示场景
 | content | <code>string</code> |  | toast的文字 |
 | options | <code>Object</code> &#124; <code>function</code> |  | 配置项或回调 |
 | [options.duration] | <code>number</code> | <code>3000</code> | 多少毫秒后关闭toast |
+| [options.type] | <code>'success' | 'warning' | 'error'| 'none'</code> | <code>'success'</code> | 显示的图标 |
 | [options.callback] | <code>function</code> |  | 关闭后的回调 |
 | [options.className] | <code>string</code> |  | 自定义类名 |
 
@@ -18,6 +19,7 @@ toast 一般用于操作成功时的提示场景
 weui.toast('操作成功', 3000);
 weui.toast('操作成功', {
     duration: 3000,
+    type: 'none'
     className: 'custom-classname',
     callback: function(){ console.log('close') }
 });

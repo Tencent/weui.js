@@ -4,3 +4,4 @@ node_modules/
 *.log
 /docs/_book/
 uploader-server/uploads
+.DS_Store

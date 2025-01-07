@@ -1,6 +1,6 @@
 {
   "name": "weui.js",
-  "version": "1.2.22",
+  "version": "1.2.23",
   "description": "weui.js",
   "main": "./dist/weui.min.js",
   "scripts": {

@@ -64,7 +64,7 @@ export default function upload(options) {
     xhr.upload.addEventListener('progress', function (evt) {
         if(evt.total == 0) return;
 
-        const percent = Math.ceil(evt.loaded / evt.total) * 100;
+        const percent = Math.ceil(evt.loaded / evt.total * 100);
 
         onProgress(file, percent);
     }, false);

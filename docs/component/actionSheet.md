@@ -17,7 +17,6 @@ actionsheet 弹出式菜单
 | [options.title] | <code>string</code> | actionSheet的title，如果isAndroid=true，则不会显示 |
 | [options.className] | <code>string</code> | 自定义类名 |
 | [options.onClose] | <code>function</code> | actionSheet关闭后的回调 |
-| [options.onClickMask] | <code>function</code> | 点击actionSheet Mask的回调 |
 
 **Example**  
 ```js
@@ -49,6 +48,9 @@ weui.actionSheet([
     className: 'custom-classname',
     onClose: function(){
         console.log('关闭');
+    },
+    onClickMask: function() {
+        console.log('点击mask');
     }
 });
 ```

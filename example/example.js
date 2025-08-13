@@ -28,7 +28,8 @@ document.querySelector('#confirmBtn').addEventListener('click', function () {
 document.querySelector('#toastBtn').addEventListener('click', function () {
     weui.toast('操作成功', {
         duration: 3000,
-        className: "bears"
+        className: "bears",
+        extClass: "x"
     });
 });
 
@@ -64,6 +65,7 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
     ], [
         {
             label: '取消',
+            className: 'weui-actionsheet__cell_warn',
             onClick: function () {
                 console.log('取消');
             }
@@ -144,6 +146,7 @@ document.querySelector('#pickerBtn').addEventListener('click', function () {
         id: 'picker',
         title: '单列选择器',
         desc: '单列选择器描述',
+        showClose: false,
     });
 });
 

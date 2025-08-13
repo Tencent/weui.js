@@ -2,9 +2,11 @@
     <div class="weui-mask"></div>
     <div class="weui-half-screen-dialog weui-picker" role="dialog" aria-modal="true" tabindex="-1">
         <div class="weui-half-screen-dialog__hd">
+            <% if(showClose){ %>
             <div class="weui-half-screen-dialog__hd__side">
                 <button class="weui-btn_icon weui-wa-hotarea"><%= closeText %><i class="weui-icon-close-thin"></i></button>
             </div>
+            <% } %>
             <div class="weui-half-screen-dialog__hd__main">
                 <strong class="weui-half-screen-dialog__title"><%= title %></strong>
                 <span class="weui-half-screen-dialog__subtitle"><%= desc %></span>

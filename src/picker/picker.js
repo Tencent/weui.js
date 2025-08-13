@@ -53,6 +53,7 @@ let temp = {}; // temp 存在上一次滑动的位置
  * @param {array=} [options.defaultValue] 默认选项的value数组
  * @param {string=} [options.confirmText] 确定按钮的wording
  * @param {string=} [options.closeText] 关闭的wording
+ * @param {boolean=} [options.showClose] 是否显示左上角关闭
  * @param {function=} [options.onChange] 在picker选中的值发生变化的时候回调
  * @param {function=} [options.onConfirm] 在点击"确定"之后的回调。回调返回选中的结果(Array)，数组长度依赖于picker的层级。
  * @param {function=} [options.onClose] picker关闭后的回调
@@ -201,6 +202,7 @@ function picker() {
         desc: '',
         confirmText: '确定',
         closeText: '关闭',
+        showClose: true,
         onChange: $.noop,
         onConfirm: $.noop,
         onClose: $.noop
@@ -490,9 +492,21 @@ function datePicker(options) {
         start: nowDate.getFullYear() - 20,
         end: nowDate.getFullYear() + 20,
         defaultValue: [nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate()],
-        cron: '* * *'
+        cron: '* * *',
+        depth: 3,
     }, options);
 
+    
+    // 约束depth
+    if(defaults.depth > 3){
+        console.warn(`max depth is 3, but you passed depth = ${defaults.depth}, set depth = 3`);
+        defaults.depth = 3;
+    }
+    if(defaults.depth < 1){
+        console.warn(`min depth is 1, but you passed depth = ${defaults.depth}, set depth = 1`);
+        defaults.depth = 1;
+    }
+    
     // 兼容原来的 start、end 传 Number 的用法
     if (typeof defaults.start === 'number') {
         defaults.start = new Date(`${defaults.start}/01/01`);
@@ -535,19 +549,27 @@ function datePicker(options) {
             };
             date.push(Y);
         }
-        let M = findBy(Y.children, 'value', month);
-        if (!M) {
-            M = {
-                label: month + '月',
-                value: month,
-                children: []
-            };
-            Y.children.push(M);
+
+        // 如果深度是大于1，加入月份
+        if(defaults.depth > 1){
+            let M = findBy(Y.children, 'value', month);
+            if (!M) {
+                M = {
+                    label: month + '月',
+                    value: month,
+                    children: []
+                };
+                Y.children.push(M);
+            }
+            
+            // 如果深度大于2，加入日期
+            if(defaults.depth > 2){
+                M.children.push({
+                    label: day + '日',
+                    value: day
+                });
+            }
         }
-        M.children.push({
-            label: day + '日',
-            value: day
-        });
     }
     while (!obj.done);
 

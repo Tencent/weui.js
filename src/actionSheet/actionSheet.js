@@ -23,6 +23,7 @@ let _sington;
  * actionsheet 弹出式菜单
  * @param {array} menus 上层的选项
  * @param {string} menus[].label 选项的文字
+ * @param {string} menus[].desc 选项的副标题
  * @param {function} menus[].onClick 选项点击时的回调
  *
  * @param {array} actions 下层的选项

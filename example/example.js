@@ -57,6 +57,12 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
                 console.log('从相册选择');
             }
         }, {
+            label: '标题',
+            desc: '副标题',
+            onClick: function () {
+                console.log('标题');
+            }
+        },{
             label: '其他',
             onClick: function () {
                 console.log('其他');

@@ -58,7 +58,7 @@ document.querySelector('#actionSheetBtn').addEventListener('click', function () 
             }
         }, {
             label: '标题',
-            des: '副标题',
+            desc: '副标题',
             onClick: function () {
                 console.log('标题');
             }

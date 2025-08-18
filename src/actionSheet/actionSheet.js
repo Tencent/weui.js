@@ -122,8 +122,11 @@ function actionSheet(menus = [], actions = [], options = {}) {
             evt.target.focus();
         });
     $actionSheetWrap.find('.weui-actionsheet__menu').on('click', '.weui-actionsheet__cell', function (evt) {
-        const index = $(this).index();
-        menus[index].onClick.call(this, evt);
+        const cell = evt.target.closest('.weui-actionsheet__cell');
+        if (!cell) return; 
+        const $cell = $(cell);
+        const index = $cell.index();
+        menus[index].onClick.call(cell, evt);
         hide();
     });
     $actionSheetWrap.find('.weui-actionsheet__action').on('click', '.weui-actionsheet__cell', function (evt) {

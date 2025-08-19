@@ -1,3 +1,6 @@
+#### v1.2.25 (2025-08-14)
+- 【增强】 `actionSheet`的`menus`选项新增`desc`参数
+
 #### v1.2.22 (2025-01-07)
 - 【增强】 `dialog`统一UI，不区分iOS和Android
 

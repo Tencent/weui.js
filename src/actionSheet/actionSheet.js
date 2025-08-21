@@ -33,6 +33,7 @@ let _sington;
  * @param {object=} options 配置项
  * @param {string=} options.title actionSheet的title，如果isAndroid=true，则不会显示
  * @param {string=} options.className 自定义类名
+ * @param {string=} options.notUseAndroidStyle 是否使用安卓样式规范,不传就使用系统判断
  * @param {function=} [options.onClose] actionSheet关闭后的回调
  *
  * @example
@@ -79,7 +80,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
         actions: actions,
         title: '',
         className: '',
-        isAndroid: isAndroid,
+        isAndroid: options.notUseAndroidStyle ? false : isAndroid,
         onClose: $.noop,
         onClickMask: $.noop
     }, options);

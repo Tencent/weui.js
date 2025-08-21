@@ -25,7 +25,6 @@ let _sington;
  * @param {string} menus[].label 选项的文字
  * @param {string} menus[].desc 选项的副标题
  * @param {function} menus[].onClick 选项点击时的回调
- * @param {function} menus[].notUseAndroidStyle 选项点击时的回调
  *
  * @param {array} actions 下层的选项
  * @param {string} actions[].label 选项的文字
@@ -75,7 +74,7 @@ let _sington;
 function actionSheet(menus = [], actions = [], options = {}) {
     if(_sington) return _sington;
 
-    const isAndroid =true;
+    const isAndroid = $.os.android;
     options = $.extend({
         menus: menus,
         actions: actions,

@@ -20,7 +20,7 @@ import tpl from './actionSheet.html';
 let _sington;
 
 /**
- * actionsheet 弹出式菜单
+ * actionSheet 弹出式菜单
  * @param {array} menus 上层的选项
  * @param {string} menus[].label 选项的文字
  * @param {string} menus[].desc 选项的副标题
@@ -31,9 +31,10 @@ let _sington;
  * @param {function} actions[].onClick 选项点击时的回调
  *
  * @param {object=} options 配置项
- * @param {string=} options.title actionSheet的title，如果isAndroid=true，则不会显示
+ * @param {string=} options.title actionSheet的title
  * @param {string=} options.className 自定义类名
  * @param {function=} [options.onClose] actionSheet关闭后的回调
+ * @param {function=} [options.onClickMask] 点击mask时的回调
  *
  * @example
  * weui.actionSheet([
@@ -73,13 +74,11 @@ let _sington;
 function actionSheet(menus = [], actions = [], options = {}) {
     if(_sington) return _sington;
 
-    const isAndroid = $.os.android;
     options = $.extend({
         menus: menus,
         actions: actions,
         title: '',
         className: '',
-        isAndroid: isAndroid,
         onClose: $.noop,
         onClickMask: $.noop
     }, options);
@@ -90,7 +89,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
     function _hide(callback){
         _hide = $.noop; // 防止二次调用导致报错
 
-        $actionSheet.addClass(options.isAndroid ? 'weui-animate-fade-out' : 'weui-animate-slide-down');
+        $actionSheet.addClass('weui-animate-slide-down');
         $actionSheetMask
             .addClass('weui-animate-fade-out')
             .on('animationend webkitAnimationEnd', function () {
@@ -117,7 +116,7 @@ function actionSheet(menus = [], actions = [], options = {}) {
             event.preventDefault();
         });
     $actionSheet
-        .addClass(options.isAndroid ? 'weui-animate-fade-in' : 'weui-animate-slide-up')
+        .addClass('weui-animate-slide-up')
         .on('animationend webkitAnimationEnd', function (evt) {
             evt.target.focus();
         });

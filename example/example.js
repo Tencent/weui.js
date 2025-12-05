@@ -537,3 +537,4 @@ document.querySelector('#uploaderCustomFiles').addEventListener('click', functio
         }
     });
 });
+window.weui = weui;

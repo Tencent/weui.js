@@ -18,6 +18,7 @@ import $ from '../util/util';
 import tpl from './toast.html';
 
 let _sington;
+let _timer;
 
 /**
  * toast 一般用于操作成功时的提示场景
@@ -38,7 +39,12 @@ let _sington;
  * });
  */
 function toast(content = '', options = {}) {
-    if(_sington) return _sington;
+    // 重复调用的时候先销毁旧的再创建新的，并重新计时
+    if(_sington) {
+        clearTimeout(_timer);
+        $(_sington).remove();
+        _sington = null;
+    }
 
     if (typeof options === 'number') {
         options = {
@@ -67,13 +73,14 @@ function toast(content = '', options = {}) {
     $toast.addClass('weui-animate-fade-in');
     $mask.addClass('weui-animate-fade-in');
 
-    setTimeout(() => {
+    _timer = setTimeout(() => {
         $mask.addClass('weui-animate-fade-out');
         $toast
             .addClass('weui-animate-fade-out')
             .on('animationend webkitAnimationEnd', function () {
                 $toastWrap.remove();
-                _sington = false;
+                _timer = null;
+                _sington = null;
                 options.callback();
             });
     }, options.duration);

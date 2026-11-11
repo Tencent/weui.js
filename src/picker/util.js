@@ -15,9 +15,23 @@
 */
 
 export const depthOf = (object) => {
+    if (!object) return 1;
+
     let depth = 1;
-    if (object.children && object.children[0]) {
-        depth = depthOf(object.children[0]) + 1;
+    if (object.children && object.children.length) {
+        object.children.forEach((child) => {
+            const childDepth = depthOf(child) + 1;
+            if (childDepth > depth) depth = childDepth;
+        });
     }
+    return depth;
+};
+
+export const maxDepthOf = (items) => {
+    let depth = 1;
+    (items || []).forEach((item) => {
+        const itemDepth = depthOf(item);
+        if (itemDepth > depth) depth = itemDepth;
+    });
     return depth;
 };

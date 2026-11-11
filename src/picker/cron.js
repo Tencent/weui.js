@@ -57,12 +57,25 @@ class Schedule {
          * @type {Date}
          * @private
          */
-        this._pointer = start;
+        this._pointer = this._normalize(new Date(start.getTime()));
+        this._end = this._normalize(new Date(end.getTime()));
+    }
+
+    /**
+     * 把指针归一到当天 0 点
+     * 否则按天递增时，跨夏令时的日期会带上非 0 的时分秒，
+     * 累积到 end 当天就会因为时分秒大于 end 而被判成越界
+     */
+    _normalize(date) {
+        date.setHours(0, 0, 0, 0);
+        return date;
     }
 
     _findNext() {
         let next;
         while (true) {
+            this._normalize(this._pointer);
+
             if (this._end.getTime() - this._pointer.getTime() < 0) {
                 throw new Error(`out of range, end is ${this._end}, current is ${this._pointer}`);
             }

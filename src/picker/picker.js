@@ -229,7 +229,7 @@ function picker() {
     const $picker = $($.render(pickerTpl, defaults));
     const $confirm = $picker.find('#weui-picker-confirm');
     const $mask = $picker.find('.weui-mask');
-    let depth = options.depth || (isMulti ? items.length : util.depthOf(items[0])), groups = '';
+    let depth = options.depth || (isMulti ? items.length : util.maxDepthOf(items)), groups = '';
 
     // 显示与隐藏的方法
     function show(){
@@ -322,7 +322,7 @@ function picker() {
                      * 1. 因为滑动实际上是一层一层传递的：父列表滚动完成之后，会call子列表的onChange，从而带动子列表的滑动。
                      * 2. 所以，使用者的传进来onChange回调应该在最后一个子列表滑动时再call
                      */
-                    if (item.children && item.children.length > 0) {
+                    if (item.children && item.children.length > 0 && level + 1 < depth) {
                         $picker.find('.weui-picker__group').eq(level + 1).show();
                         scroll(item.children, level + 1); // 不是多列的情况下才继续处理children
 

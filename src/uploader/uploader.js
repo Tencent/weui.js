@@ -264,7 +264,12 @@ function uploader(selector, options) {
     }
 
     $uploader.find('input[type="file"]').on('change', function (evt) {
-        const files = evt.target.files;
+        // 部分 WebView（如微信 8.0.38 安卓内核）在 multiple 多选时，
+        // 若在 change 回调内同步重置 input.value，会破坏文件选择流程，
+        // 导致后续选择无响应（issue #378）。因此：
+        // 1. 先快照 FileList（重置后部分 WebView 会清空原引用）；
+        // 2. 重置 value 延迟到下一个宏任务执行。
+        const files = Array.prototype.slice.call(evt.target.files || []);
 
         if (files.length === 0) {
             return;
@@ -292,7 +297,10 @@ function uploader(selector, options) {
             });
         }
 
-        this.value = '';
+        const input = this;
+        setTimeout(function () {
+            input.value = '';
+        }, 0);
     });
 }
 export default uploader;
